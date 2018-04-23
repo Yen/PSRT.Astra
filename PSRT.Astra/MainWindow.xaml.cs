@@ -19,7 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
-namespace PSO2Patcher
+namespace PSRT.Astra
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

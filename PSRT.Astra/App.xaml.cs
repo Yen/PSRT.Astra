@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace PSO2Patcher
+namespace PSRT.Astra
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PSO2Patcher
+namespace PSRT.Astra
 {
     public class AquaHttpClient : HttpClient
     {

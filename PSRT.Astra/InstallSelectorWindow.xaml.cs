@@ -13,7 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace PSO2Patcher
+namespace PSRT.Astra
 {
     /// <summary>
     /// Interaction logic for InstallSelectorWindow.xaml

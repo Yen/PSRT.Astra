@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace PSO2Patcher
+namespace PSRT.Astra
 {
     [AddINotifyPropertyChangedInterface]
     public class InstallSelectorWindowViewModel

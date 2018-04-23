@@ -14,9 +14,9 @@ using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.Command;
 using PropertyChanged;
-using PSO2Patcher.Models;
+using PSRT.Astra.Models;
 
-namespace PSO2Patcher
+namespace PSRT.Astra
 {
     [AddINotifyPropertyChangedInterface]
     public class MainWindowViewModel

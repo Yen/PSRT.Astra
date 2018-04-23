@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PSO2Patcher.Models
+namespace PSRT.Astra.Models
 {
     public class PatchCache
     {
