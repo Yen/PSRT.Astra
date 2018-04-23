@@ -28,8 +28,8 @@ namespace PSRT.Astra.Models
         public string PSO2DownloadExecutable { get; }
 
         public string TweakerBin { get; }
-
         public string PatchCacheDatabase { get; }
+        public string CensorFile { get; }
 
         public InstallConfiguration(string pso2BinDirectory)
         {
@@ -50,8 +50,8 @@ namespace PSRT.Astra.Models
             PSO2DownloadExecutable = Path.Combine(PSO2BinDirectory, "pso2download.exe");
 
             TweakerBin = Path.Combine(PSO2BinDirectory, "tweaker.bin");
-
             PatchCacheDatabase = Path.Combine(PSO2BinDirectory, "patchcache.db");
+            CensorFile = Path.Combine(DataWin32Directory, "ffbff2ac5b7a7948961212cefd4d402c");
         }
     }
 }

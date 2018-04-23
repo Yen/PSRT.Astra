@@ -72,7 +72,7 @@ namespace PSRT.Astra
 
             Log("Verify", "Downloading patch list");
 
-            var patches = await PatchInfo.FetchPatchInfosAsync(DownloadConfiguration);
+            var patches = await PatchInfo.FetchPatchInfosAsync(InstallConfiguration, DownloadConfiguration);
 
             Log("Verify", "Fetching patch cache data");
 
@@ -113,6 +113,10 @@ namespace PSRT.Astra
             Log("Verify", $"{toUpdate.Count} files to update");
             if (toUpdate.Count == 0)
             {
+                _DeleteCensorFile();
+
+                Log("Verify", "All files verified");
+
                 _ActivityCount -= 1;
                 return;
             }
@@ -150,17 +154,17 @@ namespace PSRT.Astra
 
                         var (name, info) = toUpdate[index];
                         var path = Path.Combine(InstallConfiguration.PSO2BinDirectory, name.Substring(0, name.Length - 4));
-                        
+
                         if (File.Exists(path))
                         {
                             using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None, 4096, true))
                             {
                                 var bytes = new byte[fs.Length];
                                 await fs.ReadAsync(bytes, 0, bytes.Length);
-                                
+
                                 var hashBytes = md5.ComputeHash(bytes);
                                 var hashString = string.Concat(hashBytes.Select(b => b.ToString("X2")));
-                                
+
                                 if (hashString == info.Hash)
                                 {
                                     entries.Add(new PatchCacheEntry()
@@ -185,7 +189,7 @@ namespace PSRT.Astra
                             await Application.Current.Dispatcher.InvokeAsync(() => Log("Verify Error", ex.Message));
                             continue;
                         }
-                        
+
                         entries.Add(new PatchCacheEntry()
                         {
                             Name = name,
@@ -243,6 +247,19 @@ namespace PSRT.Astra
             await VerifyAsync();
 
             Log("Verify", "All files verified");
+
+            _ActivityCount -= 1;
+        }
+
+        private void _DeleteCensorFile()
+        {
+            _ActivityCount += 1;
+
+            if (File.Exists(InstallConfiguration.CensorFile))
+            {
+                Log("Verify", "Removing censor file");
+                File.Delete(InstallConfiguration.CensorFile);
+            }
 
             _ActivityCount -= 1;
         }
