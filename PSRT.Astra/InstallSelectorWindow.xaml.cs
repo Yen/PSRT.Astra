@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+
+namespace PSO2Patcher
+{
+    /// <summary>
+    /// Interaction logic for InstallSelectorWindow.xaml
+    /// </summary>
+    public partial class InstallSelectorWindow : Window
+    {
+        private InstallSelectorWindowViewModel _ViewModel;
+
+        public InstallSelectorWindow()
+        {
+            InitializeComponent();
+
+            _ViewModel = new InstallSelectorWindowViewModel();
+            DataContext = _ViewModel;
+        }
+
+        private void _SelectDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            using (var dialog = new FolderBrowserDialog())
+            {
+                dialog.Description = "Select the PSO2 installation directory";
+                var result = dialog.ShowDialog();
+                
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    _ViewModel.SelectedPath = dialog.SelectedPath;
+                }
+            }
+        }
+
+        private void _AcceptButton_Click(object sender, RoutedEventArgs e)
+        {
+            var mainWindow = new MainWindow(Path.Combine(_ViewModel.SelectedPath, "pso2_bin"));
+            mainWindow.Show();
+            Close();
+        }
+    }
+}

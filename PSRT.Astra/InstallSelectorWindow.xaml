@@ -1,0 +1,25 @@
+﻿<Window x:Class="PSO2Patcher.InstallSelectorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PSO2Patcher"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance local:InstallSelectorWindowViewModel}"
+        Title="InstallSelectorWindow" Height="240" Width="480" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <Label Content="Enter your PSO2 install directory" HorizontalAlignment="Center"/>
+        <Button Content="Select directory" Grid.Row="1" Click="_SelectDirectory_Click" />
+        <TextBox Grid.Row="2" Text="{Binding SelectedPath, UpdateSourceTrigger=PropertyChanged}" Background="{Binding SelectedPathColor}"/>
+        <TextBlock Grid.Row="3" Text="{Binding SelectionMessage}" TextAlignment="Center" TextWrapping="Wrap"/>
+        <Button Content="Accept" Grid.Row="4" IsEnabled="{Binding SelectedPathValid}" Click="_AcceptButton_Click" />
+    </Grid>
+</Window>
