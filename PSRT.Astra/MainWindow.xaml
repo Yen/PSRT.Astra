@@ -6,28 +6,51 @@
         xmlns:local="clr-namespace:PSRT.Astra"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
-        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="PSRT Astra" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ListView ItemsSource="{Binding LogEntries}" Grid.ColumnSpan="2" ScrollViewer.ScrollChanged="_Log_ScrollChanged">
+        <ListView ItemsSource="{Binding LogEntries}" Grid.Column="1" Grid.RowSpan="1" ScrollViewer.ScrollChanged="_Log_ScrollChanged">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock>
                         <Run Text="{Binding \Source}" FontWeight="Bold"/>
-                        <Run Text=")"/>
+                        <Run Text="→"/>
                         <Run Text="{Binding Message}"/>
                     </TextBlock>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button IsEnabled="{Binding Ready}" Content="Play" Grid.Row="1" Command="{Binding LaunchCommand}"/>
-        <Button IsEnabled="{Binding Ready}" Content="Verify" Grid.Row="2" Command="{Binding VerifyCommand}"/>
+        <Button IsEnabled="{Binding Ready}" Content="Launch PSO2" ToolTip="Start the game!" Grid.Row="0" Grid.Column="0" Command="{Binding LaunchCommand}" FontSize="48" FontWeight="Bold"/>
+        <Button IsEnabled="{Binding Ready}" Content="PSO2 Options" ToolTip="Change PSO2's graphics settings, including fullscreen mode and UI scale." Grid.Row="1" Grid.Column="0" FontSize="20"/>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button IsEnabled="{Binding Ready}" Content="Verify (File Check)" ToolTip="Redownloads missing or corrupt game files. May resolve various game issues." Grid.Row="0" Grid.Column="1" Command="{Binding VerifyCommand}"/>
+            <Button IsEnabled="{Binding Ready}" Content="Reset GameGuard" ToolTip="Forces GameGuard files to be redownloaded the next time you launch PSO2. May resolve GameGuard errors." Grid.Row="1" Grid.Column="1"/>
+            <Button IsEnabled="{Binding Ready}" Content="About Astra" ToolTip="Check your Astra version, get support, and see the credits." Grid.Row="2" Grid.Column="1"/>
+            <CheckBox ToolTip="Enables PSRT Core. Some tools may need this to function." Grid.Row="2" Grid.Column="0">
+                <TextBlock Text="PSRT Extended Features" />
+            </CheckBox>
+            <CheckBox ToolTip="Downloads and enables ARKS Layer's translation tools. Use this if you want to play PSO2 in English." Grid.Row="0" Grid.Column="0">
+                <TextBlock Text="English Patch (ARKS Layer)" />
+            </CheckBox>
+            <CheckBox ToolTip="Downloads and enables ARKS Layer's translation tools. Use this if PSO2 is blocked in your country." Grid.Row="1" Grid.Column="0">
+                <TextBlock Text="Telepipe Proxy (ARKS Layer)" />
+            </CheckBox>
+        </Grid>
     </Grid>
 </Window>
