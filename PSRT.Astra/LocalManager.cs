@@ -59,7 +59,7 @@ namespace PSRT.Astra
             }
         }
 
-        public LocaleDynamicBindingExtension(Binding binding)
+        public LocaleDynamicBindingExtension(BindingBase binding)
         {
             Mode = BindingMode.OneWay;
             Converter = new LocalConverter();
