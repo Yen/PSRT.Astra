@@ -29,6 +29,8 @@ namespace PSRT.Astra
 
             _ViewModel = new InstallSelectorWindowViewModel();
             DataContext = _ViewModel;
+
+            _ViewModel.SelectedPath = Properties.Settings.Default.LastSelectedInstallLocation;
         }
 
         private void _SelectDirectory_Click(object sender, RoutedEventArgs e)
@@ -47,6 +49,9 @@ namespace PSRT.Astra
 
         private void _AcceptButton_Click(object sender, RoutedEventArgs e)
         {
+            Properties.Settings.Default.LastSelectedInstallLocation = _ViewModel.SelectedPath;
+            Properties.Settings.Default.Save();
+
             var mainWindow = new MainWindow(Path.Combine(_ViewModel.SelectedPath, "pso2_bin"));
             mainWindow.Show();
             Close();
