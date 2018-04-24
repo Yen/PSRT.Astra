@@ -61,11 +61,29 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Install PSO2.
+        /// </summary>
+        internal static string InstallSelectorWindow_InstallPSO2 {
+            get {
+                return ResourceManager.GetString("InstallSelectorWindow_InstallPSO2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter your PSO2 install directory.
         /// </summary>
         internal static string InstallSelectorWindow_SelectInstallDirectory {
             get {
                 return ResourceManager.GetString("InstallSelectorWindow_SelectInstallDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update PSO2.
+        /// </summary>
+        internal static string InstallSelectorWindow_UpdatePSO2 {
+            get {
+                return ResourceManager.GetString("InstallSelectorWindow_UpdatePSO2", resourceCulture);
             }
         }
     }

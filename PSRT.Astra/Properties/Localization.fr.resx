@@ -118,12 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InstallSelectorWindow_InstallPSO2" xml:space="preserve">
-    <value>Install PSO2</value>
-  </data>
-  <data name="InstallSelectorWindow_SelectInstallDirectory" xml:space="preserve">
-    <value>Enter your PSO2 install directory</value>
+    <value>Baguette</value>
   </data>
   <data name="InstallSelectorWindow_UpdatePSO2" xml:space="preserve">
-    <value>Update PSO2</value>
+    <value>Croissant</value>
   </data>
 </root>

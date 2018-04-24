@@ -39,9 +39,9 @@ namespace PSRT.Astra
             get
             {
                 if (SelectedPathValid && SelectedPathContainsPSO2Bin)
-                    return "Update PSO2";
+                    return "InstallSelectorWindow_UpdatePSO2";
 
-                return "Install PSO2";
+                return "InstallSelectorWindow_InstallPSO2";
             }
         }
 
