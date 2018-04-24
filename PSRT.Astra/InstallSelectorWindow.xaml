@@ -6,20 +6,24 @@
         xmlns:local="clr-namespace:PSRT.Astra"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:InstallSelectorWindowViewModel}"
-        Title="InstallSelectorWindow" Height="240" Width="480" ResizeMode="NoResize">
+        Title="PSRT Astra - Setup" Height="240" Width="480" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
-        <Label Content="Enter your PSO2 install directory" HorizontalAlignment="Center"/>
-        <Button Content="Select directory" Grid.Row="1" Click="_SelectDirectory_Click" />
-        <TextBox Grid.Row="2" Text="{Binding SelectedPath, UpdateSourceTrigger=PropertyChanged}" Background="{Binding SelectedPathColor}"/>
-        <TextBlock Grid.Row="3" Text="{Binding SelectionMessage}" TextAlignment="Center" TextWrapping="Wrap"/>
-        <Button Content="Accept" Grid.Row="4" IsEnabled="{Binding SelectedPathValid}" Click="_AcceptButton_Click" />
-    </Grid>
+
+        <Label Content="{Binding SelectionMessage}" HorizontalAlignment="Center"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Row="2" Text="{Binding SelectedPath, UpdateSourceTrigger=PropertyChanged}" Background="{Binding SelectedPathColor}"/>
+            <Button Content="Browse" ToolTip="Open a file browser to choose your PSO2 directory." Grid.Column="1" Click="_SelectDirectory_Click"/>
+        </Grid>
+        <Button Grid.Row="3" Content="{Binding ConfirmationMessage}" Grid.Column="1" IsEnabled="{Binding SelectedPathValid}" Click="_AcceptButton_Click" FontSize="36" />
+        </Grid>
 </Window>
