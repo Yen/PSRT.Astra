@@ -10,7 +10,7 @@ namespace PSRT.Astra.Models
 {
     public static class PatchInfo
     {
-        public static async Task<Dictionary<string, (string Hash, Uri DownloadPath)>> FetchPatchInfosAsync(DownloadConfiguration downloadConfiguration, CancellationToken ct = default)
+        public static async Task<Dictionary<string, (string Hash, Uri DownloadPath)>> FetchPatchInfosAsync(InstallConfiguration installConfiguration, DownloadConfiguration downloadConfiguration, CancellationToken ct = default)
         {
             ct.ThrowIfCancellationRequested();
 
@@ -37,6 +37,9 @@ namespace PSRT.Astra.Models
                     var name = parts[0];
                     var hash = parts[1];
                     var type = parts[3];
+
+                    if (Path.GetFileNameWithoutExtension(name) == Path.GetFileName(installConfiguration.CensorFile))
+                        continue;
 
                     Uri root;
                     switch (type)
