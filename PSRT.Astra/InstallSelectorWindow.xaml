@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Row="2" Text="{Binding SelectedPath, UpdateSourceTrigger=PropertyChanged}" Background="{Binding SelectedPathColor}"/>
-            <Button Content="Browse" ToolTip="Open a file browser to choose your PSO2 directory." Grid.Column="1" Click="_SelectDirectory_Click"/>
+            <Button Content="Browse" ToolTip="Open a file browser to choose your PSO2 directory" Grid.Column="1" Click="_SelectDirectory_Click"/>
         </Grid>
         <Button Grid.Row="3" Content="{local:LocaleDynamicBinding {Binding ConfirmationMessage}}" Grid.Column="1" IsEnabled="{Binding SelectedPathValid}" Click="_AcceptButton_Click" FontSize="36" />
         </Grid>
