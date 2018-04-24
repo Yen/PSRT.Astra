@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.Command;
+using Microsoft.Win32;
 using PropertyChanged;
 using PSRT.Astra.Models;
 
@@ -23,6 +24,7 @@ namespace PSRT.Astra
     {
         public RelayCommand VerifyCommand => new RelayCommand(async () => await VerifyAsync());
         public RelayCommand LaunchCommand => new RelayCommand(async () => await LaunchAsync());
+        public RelayCommand ResetGameGuardCommand => new RelayCommand(async () => await ResetGameGuardAsync());
 
         //
 
@@ -358,6 +360,51 @@ namespace PSRT.Astra
             var hexed = string.Concat(hexedStrings);
 
             return hexed.ToLower(CultureInfo.InvariantCulture);
+        }
+
+        public async Task ResetGameGuardAsync()
+        {
+            _ActivityCount += 1;
+
+            Log("GameGuard", "Removing GameGuard files and directories");
+
+            try
+            {
+                if (Directory.Exists(InstallConfiguration.GameGuardDirectory))
+                    Directory.Delete(InstallConfiguration.GameGuardDirectory, true);
+
+                await Task.Yield();
+
+                if (File.Exists(InstallConfiguration.GameGuardFile))
+                    File.Delete(InstallConfiguration.GameGuardFile);
+
+                await Task.Yield();
+
+                foreach (var file in InstallConfiguration.GameGuardSystemFiles)
+                    if (File.Exists(file))
+                        File.Delete(file);
+            }
+            catch
+            {
+                Log("GameGuard", "Error. Could not delete all GameGuard files as GameGuard is still running, ensure PSO2 is closed and restart your PC");
+            }
+
+            await Task.Yield();
+
+            Log("GameGuard", "Removing GameGuard registries");
+
+            try
+            {
+                if (Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\npggsvc", true) != null)
+                    Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services", true).DeleteSubKeyTree("npggsvc");
+            }
+            catch
+            {
+                Log("GameGuard", "Error. Unable to delete GameGuard registry files");
+            }
+
+            await VerifyAsync();
+            _ActivityCount -= 1;
         }
     }
 }

@@ -40,7 +40,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button IsEnabled="{Binding Ready}" Content="Verify (File Check)" ToolTip="Redownloads missing or corrupt game files—may resolve various game issues" Grid.Row="0" Grid.Column="1" Command="{Binding VerifyCommand}"/>
-            <Button IsEnabled="{Binding Ready}" Content="Reset GameGuard" ToolTip="Forces GameGuard files to be redownloaded the next time you launch PSO2—may resolve GameGuard errors" Grid.Row="1" Grid.Column="1"/>
+            <Button IsEnabled="{Binding Ready}" Content="Reset GameGuard" ToolTip="Forces GameGuard files to be redownloaded the next time you launch PSO2—may resolve GameGuard errors" Grid.Row="1" Grid.Column="1" Command="{Binding ResetGameGuardCommand}"/>
             <Button IsEnabled="{Binding Ready}" Content="About Astra" ToolTip="Check your Astra version, get support, and see the credits" Grid.Row="2" Grid.Column="1"/>
             <CheckBox ToolTip="Enables PSRT Core—some tools may need this to function" Grid.Row="2" Grid.Column="0">
                 <TextBlock Text="PSRT Extended Features" />

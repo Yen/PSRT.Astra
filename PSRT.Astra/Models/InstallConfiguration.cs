@@ -31,6 +31,26 @@ namespace PSRT.Astra.Models
         public string PatchCacheDatabase { get; }
         public string CensorFile { get; }
 
+        public string GameGuardDirectory { get; }
+        public string GameGuardFile { get; }
+
+        public static string[] GameGuardSystemFiles { get; }
+
+        static InstallConfiguration()
+        {
+            var gameGuardDir = Environment.GetFolderPath(
+                Environment.Is64BitOperatingSystem
+                    ? Environment.SpecialFolder.SystemX86
+                    : Environment.SpecialFolder.System);
+
+            GameGuardSystemFiles = new string[]
+            {
+                Path.Combine(gameGuardDir, "npptnt2.sys"),
+                Path.Combine(gameGuardDir, "nppt9x.vxd"),
+                Path.Combine(gameGuardDir, "GameMon.des")
+            };
+        }
+
         public InstallConfiguration(string pso2BinDirectory)
         {
             PSO2BinDirectory = pso2BinDirectory;
@@ -52,6 +72,9 @@ namespace PSRT.Astra.Models
             TweakerBin = Path.Combine(PSO2BinDirectory, "tweaker.bin");
             PatchCacheDatabase = Path.Combine(PSO2BinDirectory, "patchcache.db");
             CensorFile = Path.Combine(DataWin32Directory, "ffbff2ac5b7a7948961212cefd4d402c");
+
+            GameGuardDirectory = Path.Combine(PSO2BinDirectory, "GameGuard");
+            GameGuardFile = Path.Combine(PSO2BinDirectory, "GameGuard.des");
         }
     }
 }
