@@ -61,11 +61,74 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select your PSO2 installation directory.
+        /// </summary>
+        internal static string InstallSelectorWindow {
+            get {
+                return ResourceManager.GetString("InstallSelectorWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        internal static string InstallSelectorWindow_Browse {
+            get {
+                return ResourceManager.GetString("InstallSelectorWindow_Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open a file browser to choose your PSO2 directory.
+        /// </summary>
+        internal static string InstallSelectorWindow_BrowseTooltip {
+            get {
+                return ResourceManager.GetString("InstallSelectorWindow_BrowseTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found a PSO2 installation! Astra will update and launch the game from here..
+        /// </summary>
+        internal static string InstallSelectorWindow_InstallFoundHint {
+            get {
+                return ResourceManager.GetString("InstallSelectorWindow_InstallFoundHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Install PSO2.
         /// </summary>
         internal static string InstallSelectorWindow_InstallPSO2 {
             get {
                 return ResourceManager.GetString("InstallSelectorWindow_InstallPSO2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path invalid—the folder doesn&apos;t exist or the path is malformed..
+        /// </summary>
+        internal static string InstallSelectorWindow_InvalidDirectoryHint {
+            get {
+                return ResourceManager.GetString("InstallSelectorWindow_InvalidDirectoryHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t find a PSO2 installation here. Astra will install PSO2 to this folder..
+        /// </summary>
+        internal static string InstallSelectorWindow_NoInstallFoundHint {
+            get {
+                return ResourceManager.GetString("InstallSelectorWindow_NoInstallFoundHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select your PSO2 installation directory..
+        /// </summary>
+        internal static string InstallSelectorWindow_PathEmptyHint {
+            get {
+                return ResourceManager.GetString("InstallSelectorWindow_PathEmptyHint", resourceCulture);
             }
         }
         
@@ -79,11 +142,182 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Setup.
+        /// </summary>
+        internal static string InstallSelectorWindow_Title {
+            get {
+                return ResourceManager.GetString("InstallSelectorWindow_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update PSO2.
         /// </summary>
         internal static string InstallSelectorWindow_UpdatePSO2 {
             get {
                 return ResourceManager.GetString("InstallSelectorWindow_UpdatePSO2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ArksLayer.
+        /// </summary>
+        internal static string Log_ArksLayer {
+            get {
+                return ResourceManager.GetString("Log_ArksLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Astra Options.
+        /// </summary>
+        internal static string MainWindow_AstraOptions {
+            get {
+                return ResourceManager.GetString("MainWindow_AstraOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launcher tweaks for advanced users—tread carefully!.
+        /// </summary>
+        internal static string MainWindow_AstraOptionsTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_AstraOptionsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English Patch (ARKS Layer).
+        /// </summary>
+        internal static string MainWindow_EnglishPatchCheckbox {
+            get {
+                return ResourceManager.GetString("MainWindow_EnglishPatchCheckbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloads and enables ARKS Layer&apos;s translation tools—use this if you want to play PSO2 in English.
+        /// </summary>
+        internal static string MainWindow_EnglishPatchCheckboxTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_EnglishPatchCheckboxTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch PSO2.
+        /// </summary>
+        internal static string MainWindow_LaunchPSO2 {
+            get {
+                return ResourceManager.GetString("MainWindow_LaunchPSO2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start the game!.
+        /// </summary>
+        internal static string MainWindow_LaunchPSO2Tooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_LaunchPSO2Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PSO2 Options.
+        /// </summary>
+        internal static string MainWindow_PSO2Options {
+            get {
+                return ResourceManager.GetString("MainWindow_PSO2Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change PSO2&apos;s graphics settings, including fullscreen mode and UI scale.
+        /// </summary>
+        internal static string MainWindow_PSO2OptionsTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_PSO2OptionsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PSRT Extended Features.
+        /// </summary>
+        internal static string MainWindow_PSRTCheckbox {
+            get {
+                return ResourceManager.GetString("MainWindow_PSRTCheckbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enables PSRT Core—some tools may need this to function.
+        /// </summary>
+        internal static string MainWindow_PSRTCheckboxTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_PSRTCheckboxTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset GameGuard.
+        /// </summary>
+        internal static string MainWindow_ResetGameGuard {
+            get {
+                return ResourceManager.GetString("MainWindow_ResetGameGuard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forces GameGuard files to be redownloaded the next time you launch PSO2—may resolve GameGuard errors.
+        /// </summary>
+        internal static string MainWindow_ResetGameGuardTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_ResetGameGuardTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Telepipe Proxy (ARKS Layer).
+        /// </summary>
+        internal static string MainWindow_TelepipeCheckbox {
+            get {
+                return ResourceManager.GetString("MainWindow_TelepipeCheckbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloads and enables ARKS Layer&apos;s translation tools—use this if PSO2 is blocked in your country.
+        /// </summary>
+        internal static string MainWindow_TelepipeCheckboxTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_TelepipeCheckboxTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify (File Check).
+        /// </summary>
+        internal static string MainWindow_VerifyFiles {
+            get {
+                return ResourceManager.GetString("MainWindow_VerifyFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redownloads missing or corrupt game files—may resolve various game issues.
+        /// </summary>
+        internal static string MainWindow_VerifyFilesTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_VerifyFilesTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PSRT Astra.
+        /// </summary>
+        internal static string PSRTAstra {
+            get {
+                return ResourceManager.GetString("PSRTAstra", resourceCulture);
             }
         }
     }

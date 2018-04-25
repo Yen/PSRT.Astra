@@ -37,7 +37,7 @@ namespace PSRT.Astra
         {
             using (var dialog = new FolderBrowserDialog())
             {
-                dialog.Description = "Select the PSO2 installation directory";
+                dialog.Description = LocaleManager.Instance["InstallSelectorWindow"];
                 var result = dialog.ShowDialog();
                 
                 if (result == System.Windows.Forms.DialogResult.OK)

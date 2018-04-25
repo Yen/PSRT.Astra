@@ -117,13 +117,91 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="InstallSelectorWindow" xml:space="preserve">
+    <value>Select your PSO2 installation directory</value>
+  </data>
+  <data name="InstallSelectorWindow_Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="InstallSelectorWindow_BrowseTooltip" xml:space="preserve">
+    <value>Open a file browser to choose your PSO2 directory</value>
+  </data>
+  <data name="InstallSelectorWindow_InstallFoundHint" xml:space="preserve">
+    <value>Found a PSO2 installation! Astra will update and launch the game from here.</value>
+  </data>
   <data name="InstallSelectorWindow_InstallPSO2" xml:space="preserve">
     <value>Install PSO2</value>
+  </data>
+  <data name="InstallSelectorWindow_InvalidDirectoryHint" xml:space="preserve">
+    <value>Path invalid—the folder doesn't exist or the path is malformed.</value>
+  </data>
+  <data name="InstallSelectorWindow_NoInstallFoundHint" xml:space="preserve">
+    <value>Couldn't find a PSO2 installation here. Astra will install PSO2 to this folder.</value>
+  </data>
+  <data name="InstallSelectorWindow_PathEmptyHint" xml:space="preserve">
+    <value>Please select your PSO2 installation directory.</value>
   </data>
   <data name="InstallSelectorWindow_SelectInstallDirectory" xml:space="preserve">
     <value>Enter your PSO2 install directory</value>
   </data>
+  <data name="InstallSelectorWindow_Title" xml:space="preserve">
+    <value>Setup</value>
+  </data>
   <data name="InstallSelectorWindow_UpdatePSO2" xml:space="preserve">
     <value>Update PSO2</value>
+  </data>
+  <data name="Log_ArksLayer" xml:space="preserve">
+    <value>ArksLayer</value>
+  </data>
+  <data name="MainWindow_AstraOptions" xml:space="preserve">
+    <value>Astra Options</value>
+  </data>
+  <data name="MainWindow_AstraOptionsTooltip" xml:space="preserve">
+    <value>Launcher tweaks for advanced users—tread carefully!</value>
+  </data>
+  <data name="MainWindow_EnglishPatchCheckbox" xml:space="preserve">
+    <value>English Patch (ARKS Layer)</value>
+  </data>
+  <data name="MainWindow_EnglishPatchCheckboxTooltip" xml:space="preserve">
+    <value>Downloads and enables ARKS Layer's translation tools—use this if you want to play PSO2 in English</value>
+  </data>
+  <data name="MainWindow_LaunchPSO2" xml:space="preserve">
+    <value>Launch PSO2</value>
+  </data>
+  <data name="MainWindow_LaunchPSO2Tooltip" xml:space="preserve">
+    <value>Start the game!</value>
+  </data>
+  <data name="MainWindow_PSO2Options" xml:space="preserve">
+    <value>PSO2 Options</value>
+  </data>
+  <data name="MainWindow_PSO2OptionsTooltip" xml:space="preserve">
+    <value>Change PSO2's graphics settings, including fullscreen mode and UI scale</value>
+  </data>
+  <data name="MainWindow_PSRTCheckbox" xml:space="preserve">
+    <value>PSRT Extended Features</value>
+  </data>
+  <data name="MainWindow_PSRTCheckboxTooltip" xml:space="preserve">
+    <value>Enables PSRT Core—some tools may need this to function</value>
+  </data>
+  <data name="MainWindow_ResetGameGuard" xml:space="preserve">
+    <value>Reset GameGuard</value>
+  </data>
+  <data name="MainWindow_ResetGameGuardTooltip" xml:space="preserve">
+    <value>Forces GameGuard files to be redownloaded the next time you launch PSO2—may resolve GameGuard errors</value>
+  </data>
+  <data name="MainWindow_TelepipeCheckbox" xml:space="preserve">
+    <value>Telepipe Proxy (ARKS Layer)</value>
+  </data>
+  <data name="MainWindow_TelepipeCheckboxTooltip" xml:space="preserve">
+    <value>Downloads and enables ARKS Layer's translation tools—use this if PSO2 is blocked in your country</value>
+  </data>
+  <data name="MainWindow_VerifyFiles" xml:space="preserve">
+    <value>Verify (File Check)</value>
+  </data>
+  <data name="MainWindow_VerifyFilesTooltip" xml:space="preserve">
+    <value>Redownloads missing or corrupt game files—may resolve various game issues</value>
+  </data>
+  <data name="PSRTAstra" xml:space="preserve">
+    <value>PSRT Astra</value>
   </data>
 </root>

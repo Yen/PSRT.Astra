@@ -6,7 +6,13 @@
         xmlns:local="clr-namespace:PSRT.Astra"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:InstallSelectorWindowViewModel}"
-        Title="PSRT Astra - Setup" Height="240" Width="480" ResizeMode="NoResize">
+        Height="240" Width="480" ResizeMode="NoResize">
+    <Window.Title>
+        <MultiBinding StringFormat="{}{0} - {1}">
+            <Binding Path="InstallSelectorWindow_Title" />
+            <Binding Path="PSRTAstra" />
+        </MultiBinding>
+    </Window.Title>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,14 +21,14 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Label Content="{Binding SelectionMessage}" HorizontalAlignment="Center"/>
+        <Label Content="{local:LocaleDynamicBinding {Binding SelectionMessage}}" HorizontalAlignment="Center"/>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Row="2" Text="{Binding SelectedPath, UpdateSourceTrigger=PropertyChanged}" Background="{Binding SelectedPathColor}"/>
-            <Button Content="Browse" ToolTip="Open a file browser to choose your PSO2 directory" Grid.Column="1" Click="_SelectDirectory_Click"/>
+            <Button Content="{local:LocaleBinding InstallSelectorWindow_Browse}" ToolTip="{local:LocaleBinding InstallSelectorWindow_BrowseTooltip}" Grid.Column="1" Click="_SelectDirectory_Click"/>
         </Grid>
         <Button Grid.Row="3" Content="{local:LocaleDynamicBinding {Binding ConfirmationMessage}}" Grid.Column="1" IsEnabled="{Binding SelectedPathValid}" Click="_AcceptButton_Click" FontSize="36" />
         </Grid>

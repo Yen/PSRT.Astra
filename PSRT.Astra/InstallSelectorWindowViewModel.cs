@@ -22,15 +22,15 @@ namespace PSRT.Astra
             get
             {
                 if (string.IsNullOrEmpty(SelectedPath))
-                    return "Please select your PSO2 installation directory.";
+                    return "InstallSelectorWindow_PathEmptyHint";
 
                 if (SelectedPathValid == false)
-                    return "Path is not a valid PSO2 installation directory";
+                    return "InstallSelectorWindow_InvalidDirectoryHint";
 
                 if (SelectedPathContainsPSO2Bin == false)
-                    return "Couldn't find a PSO2 installation here. Astra will install PSO2 to this folder.";
+                    return "InstallSelectorWindow_NoInstallFoundHint";
 
-                return "Found a PSO2 installation! Astra will update and launch the game from here.";
+                return "InstallSelectorWindow_InstallFoundHint";
             }
         }
 
