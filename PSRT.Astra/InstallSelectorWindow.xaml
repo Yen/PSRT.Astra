@@ -9,8 +9,8 @@
         Height="240" Width="480" ResizeMode="NoResize">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
-            <Binding Path="InstallSelectorWindow_Title" />
-            <Binding Path="PSRTAstra" />
+            <local:LocaleBinding LocaleKey="InstallSelectorWindow_Title" />
+            <local:LocaleBinding LocaleKey="PSRTAstra" />
         </MultiBinding>
     </Window.Title>
     <Grid>
