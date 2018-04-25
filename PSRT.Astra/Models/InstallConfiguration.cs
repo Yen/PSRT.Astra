@@ -45,12 +45,16 @@ namespace PSRT.Astra.Models
         public string PluginPSO2ItemTranslatorDll { get; }
         public string PluginPSO2TitleTranslatorDll { get; }
         public string PluginPSO2RAISERSystemDll { get; }
+        public string PluginTelepipeProxyDll { get; }
 
         public string EnglishBlockPatch { get; }
         public string EnglishItemPatch { get; }
         public string EnglishRaiserPatch { get; }
         public string EnglishTextPatch { get; }
         public string EnglishTitlePatch { get; }
+
+        public string TelepipeProxyConfig { get; }
+        public string TelepipeProxyPublicKey { get; }
 
         static InstallConfiguration()
         {
@@ -101,12 +105,16 @@ namespace PSRT.Astra.Models
             PluginPSO2ItemTranslatorDll = Path.Combine(PluginsDirectory, "PSO2ItemTranslator.dll");
             PluginPSO2TitleTranslatorDll = Path.Combine(PluginsDirectory, "PSO2TitleTranslator.dll");
             PluginPSO2RAISERSystemDll = Path.Combine(PluginsDirectory, "PSO2RAISERSystem.dll");
+            PluginTelepipeProxyDll = Path.Combine(PluginsDirectory, "TelepipeProxy.dll");
 
             EnglishBlockPatch = Path.Combine(PatchesDirectory, "translation_blocks.bin");
             EnglishItemPatch = Path.Combine(PatchesDirectory, "translation_items.bin");
             EnglishRaiserPatch = Path.Combine(PatchesDirectory, "translation_raiser.bin");
             EnglishTextPatch = Path.Combine(PatchesDirectory, "patch.tar");
             EnglishTitlePatch = Path.Combine(PatchesDirectory, "translation_titles.bin");
+
+            TelepipeProxyConfig = Path.Combine(PSO2BinDirectory, "proxy.txt");
+            TelepipeProxyPublicKey = Path.Combine(PSO2BinDirectory, "publickey.blob");
         }
     }
 }

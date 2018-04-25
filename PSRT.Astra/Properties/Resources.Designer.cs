@@ -119,5 +119,15 @@ namespace PSRT.Astra.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] TelepipeProxyDll {
+            get {
+                object obj = ResourceManager.GetObject("TelepipeProxyDll", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

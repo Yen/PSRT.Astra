@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using PropertyChanged;
 using PSRT.Astra.Models;
 using SharpCompress.Archives.Rar;
@@ -388,6 +389,13 @@ namespace PSRT.Astra
                         File.Delete(InstallConfiguration.PluginPSO2TitleTranslatorDll);
                     if (File.Exists(InstallConfiguration.PluginPSO2RAISERSystemDll))
                         File.Delete(InstallConfiguration.PluginPSO2RAISERSystemDll);
+                    if (File.Exists(InstallConfiguration.PluginTelepipeProxyDll))
+                        File.Delete(InstallConfiguration.PluginTelepipeProxyDll);
+
+                    if (File.Exists(InstallConfiguration.TelepipeProxyConfig))
+                        File.Delete(InstallConfiguration.TelepipeProxyConfig);
+                    if (File.Exists(InstallConfiguration.TelepipeProxyPublicKey))
+                        File.Delete(InstallConfiguration.TelepipeProxyPublicKey);
                 });
             }
             catch
@@ -500,26 +508,52 @@ namespace PSRT.Astra
                             }});
                         }
                     }
+
+                    Log("ArksLayer", "Copying english patch plugins");
+                    await Task.Run(() =>
+                    {
+                        File.WriteAllBytes(InstallConfiguration.PluginPSO2BlockRenameDll, Properties.Resources.PSO2BlockRenameDll);
+                        File.WriteAllBytes(InstallConfiguration.PluginPSO2ItemTranslatorDll, Properties.Resources.PSO2ItemTranslatorDll);
+                        File.WriteAllBytes(InstallConfiguration.PluginPSO2TitleTranslatorDll, Properties.Resources.PSO2TitleTranslatorDll);
+                        File.WriteAllBytes(InstallConfiguration.PluginPSO2RAISERSystemDll, Properties.Resources.PSO2RAISERSystemDll);
+                    });
                 }
             }
             catch
             {
                 Log("ArksLayer", "Error installing english patch");
+                _ActivityCount -= 1;
                 return false;
             }
 
-            Log("ArksLayer", "Copying english patch plugins");
-            await Task.Run(() =>
-            {
-                File.WriteAllBytes(InstallConfiguration.PluginPSO2BlockRenameDll, Properties.Resources.PSO2BlockRenameDll);
-                File.WriteAllBytes(InstallConfiguration.PluginPSO2ItemTranslatorDll, Properties.Resources.PSO2ItemTranslatorDll);
-                File.WriteAllBytes(InstallConfiguration.PluginPSO2TitleTranslatorDll, Properties.Resources.PSO2TitleTranslatorDll);
-                File.WriteAllBytes(InstallConfiguration.PluginPSO2RAISERSystemDll, Properties.Resources.PSO2RAISERSystemDll);
-            });
-
             if (ArksLayerTelepipeProxyEnabled)
             {
-                // TODO
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        Log("ArksLayer", "Downloading Telepipe proxy information");
+                        var configString = await client.GetStringAsync("http://telepipe.io/config.json");
+                        var config = JsonConvert.DeserializeObject<ProxyInfo>(configString);
+                        var publicKey = await client.GetByteArrayAsync(config.PublicKeyUrl);
+
+                        Log("ArksLayer", "Writing Telepipe proxy config files");
+                        await Task.Run(() =>
+                        {
+                            File.WriteAllText(InstallConfiguration.TelepipeProxyConfig, config.Host);
+                            File.WriteAllBytes(InstallConfiguration.TelepipeProxyPublicKey, publicKey);
+                        });
+                    }
+
+                    Log("ArksLayer", "Copying Telepipe proxy plugin");
+                    await Task.Run(() => File.WriteAllBytes(InstallConfiguration.PluginTelepipeProxyDll, Properties.Resources.TelepipeProxyDll));
+                }
+                catch
+                {
+                    Log("ArksLayer", "Error installing Telepipe proxy");
+                    _ActivityCount -= 1;
+                    return false;
+                }
             }
 
             Log("ArksLayer", "Writing tweaker.bin file");
