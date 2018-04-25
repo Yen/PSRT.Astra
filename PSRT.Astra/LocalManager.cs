@@ -6,8 +6,10 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
+using PropertyChanged;
 
 namespace PSRT.Astra
 {
@@ -28,8 +30,23 @@ namespace PSRT.Astra
         public string this[string key] => Properties.Localization.ResourceManager.GetString(key, CurrentCulture) ?? key;
     }
 
+    [AddINotifyPropertyChangedInterface]
     public class LocaleBindingExtension : Binding
     {
+        public static readonly DependencyProperty LocaleKeyProperty =
+            DependencyProperty.Register(nameof(LocaleKey), typeof(string), typeof(LocaleBindingExtension));
+
+        public string LocaleKey
+        {
+            set => Path = new PropertyPath($"[{value}]");
+        }
+
+        public LocaleBindingExtension()
+        {
+            Mode = BindingMode.OneWay;
+            Source = LocaleManager.Instance;
+        }
+
         public LocaleBindingExtension(string path) : base($"[{path}]")
         {
             Mode = BindingMode.OneWay;
