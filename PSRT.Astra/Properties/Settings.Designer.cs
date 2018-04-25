@@ -34,5 +34,41 @@ namespace PSRT.Astra.Properties {
                 this["LastSelectedInstallLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnglishPatchEnabled {
+            get {
+                return ((bool)(this["EnglishPatchEnabled"]));
+            }
+            set {
+                this["EnglishPatchEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TelepipeProxyEnabled {
+            get {
+                return ((bool)(this["TelepipeProxyEnabled"]));
+            }
+            set {
+                this["TelepipeProxyEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PSRTFeaturesEnabled {
+            get {
+                return ((bool)(this["PSRTFeaturesEnabled"]));
+            }
+            set {
+                this["PSRTFeaturesEnabled"] = value;
+            }
+        }
     }
 }

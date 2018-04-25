@@ -39,7 +39,7 @@ namespace PSRT.Astra
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             await _ViewModel.InitializeAsync();
-            await _ViewModel.VerifyAsync();
+            await _ViewModel.VerifyGameFilesAsync();
         }
 
         private void _Log_ScrollChanged(object sender, ScrollChangedEventArgs e)

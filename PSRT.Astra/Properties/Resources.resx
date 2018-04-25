@@ -121,4 +121,19 @@
   <data name="DDrawDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ddraw.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="PSO2BlockRenameDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PSO2BlockRename.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PSO2hDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pso2h.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PSO2ItemTranslatorDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PSO2ItemTranslator.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PSO2RAISERSystemDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PSO2RAISERSystem.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PSO2TitleTranslatorDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PSO2TitleTranslator.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

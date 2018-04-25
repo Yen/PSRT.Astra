@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -16,13 +17,14 @@ using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
 using PropertyChanged;
 using PSRT.Astra.Models;
+using SharpCompress.Archives.Rar;
 
 namespace PSRT.Astra
 {
     [AddINotifyPropertyChangedInterface]
     public class MainWindowViewModel
     {
-        public RelayCommand VerifyCommand => new RelayCommand(async () => await VerifyAsync());
+        public RelayCommand VerifyGameFilesCommand => new RelayCommand(async () => await VerifyGameFilesAsync());
         public RelayCommand LaunchCommand => new RelayCommand(async () => await LaunchAsync());
         public RelayCommand ResetGameGuardCommand => new RelayCommand(async () => await ResetGameGuardAsync());
 
@@ -40,6 +42,9 @@ namespace PSRT.Astra
         public PatchCache PatchCache { get; set; }
 
         public ObservableCollection<LogEntry> LogEntries { get; } = new ObservableCollection<LogEntry>();
+
+        public bool ArksLayerEnglishPatchEnabled { get; set; } = Properties.Settings.Default.EnglishPatchEnabled;
+        public bool ArksLayerTelepipeProxyEnabled { get; set; } = Properties.Settings.Default.TelepipeProxyEnabled;
 
         private int _ActivityCount { get; set; } = 0;
         public bool Ready => _ActivityCount == 0 && DownloadConfiguration != null;
@@ -66,21 +71,32 @@ namespace PSRT.Astra
             _ActivityCount -= 1;
         }
 
-        public async Task VerifyAsync()
+        public async Task VerifyGameFilesAsync()
+        {
+            _ActivityCount += 1;
+
+            var logSource = "Verify PSO2";
+
+            Log(logSource, "Downloading patch list");
+
+            var patches = await PatchInfo.FetchPatchInfosAsync(InstallConfiguration, DownloadConfiguration);
+
+            await VerifyAsync(logSource, patches);
+
+            _ActivityCount -= 1;
+        }
+
+        public async Task VerifyAsync(string logSource, Dictionary<string, (string Hash, Uri DownloadPath)> patches)
         {
             _ActivityCount += 1;
 
             await _CreateKeyDirectoriesAsync();
 
-            Log("Verify", "Downloading patch list");
-
-            var patches = await PatchInfo.FetchPatchInfosAsync(InstallConfiguration, DownloadConfiguration);
-
-            Log("Verify", "Fetching patch cache data");
+            Log(logSource, "Fetching patch cache data");
 
             var cacheData = await PatchCache.SelectAllAsync();
 
-            Log("Verify", "Comparing game files");
+            Log(logSource, "Comparing files");
 
             var toUpdate = new List<(string Name, (string Hash, Uri DownloadPath))>();
 
@@ -112,12 +128,12 @@ namespace PSRT.Astra
                 }
             });
 
-            Log("Verify", $"{toUpdate.Count} files to update");
+            Log(logSource, $"{toUpdate.Count} files to update");
             if (toUpdate.Count == 0)
             {
                 _DeleteCensorFile();
 
-                Log("Verify", "All files verified");
+                Log(logSource, "All files verified");
 
                 _ActivityCount -= 1;
                 return;
@@ -188,7 +204,7 @@ namespace PSRT.Astra
                         }
                         catch (Exception ex)
                         {
-                            await Application.Current.Dispatcher.InvokeAsync(() => Log("Verify Error", ex.Message));
+                            await Application.Current.Dispatcher.InvokeAsync(() => Log(logSource, $"Error: {ex.Message}"));
                             continue;
                         }
 
@@ -225,7 +241,7 @@ namespace PSRT.Astra
 
             var logEntry = new LogEntry()
             {
-                Source = "Verify"
+                Source = logSource
             };
 
             async Task LogLoopAsync()
@@ -246,9 +262,9 @@ namespace PSRT.Astra
             await cacheInsertLoopTask;
 
             // Rerun
-            await VerifyAsync();
+            await VerifyAsync(logSource, patches);
 
-            Log("Verify", "All files verified");
+            Log(logSource, "All files verified");
 
             _ActivityCount -= 1;
         }
@@ -275,6 +291,9 @@ namespace PSRT.Astra
             await Task.Run(() =>
             {
                 Directory.CreateDirectory(InstallConfiguration.PSO2BinDirectory);
+                Directory.CreateDirectory(InstallConfiguration.PluginsDirectory);
+                Directory.CreateDirectory(InstallConfiguration.PluginsDisabledDirectory);
+                Directory.CreateDirectory(InstallConfiguration.PatchesDirectory);
                 Directory.CreateDirectory(InstallConfiguration.DataDirectory);
                 Directory.CreateDirectory(InstallConfiguration.DataLicenseDirectory);
                 Directory.CreateDirectory(InstallConfiguration.DataWin32Directory);
@@ -302,7 +321,20 @@ namespace PSRT.Astra
         {
             _ActivityCount += 1;
 
-            await _PerformArksLayerPatches();
+            Log("Launch", "Saving client settings");
+            await Task.Run(() =>
+            {
+                Properties.Settings.Default.EnglishPatchEnabled = ArksLayerEnglishPatchEnabled;
+                Properties.Settings.Default.TelepipeProxyEnabled = ArksLayerTelepipeProxyEnabled;
+                Properties.Settings.Default.Save();
+            });
+
+            if (await _PerformArksLayerPatches() == false)
+            {
+                Log("Launch", "Launch canceled due to error");
+                _ActivityCount -= 1;
+                return;
+            }
 
             Log("Launch", "Starting PSO2");
 
@@ -330,9 +362,165 @@ namespace PSRT.Astra
             _ActivityCount -= 1;
         }
 
-        private async Task _PerformArksLayerPatches()
+        private async Task<bool> _PerformArksLayerPatches()
         {
             _ActivityCount += 1;
+
+            Log("ArksLayer", "Deleting existing files");
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    if (File.Exists(InstallConfiguration.TweakerBin))
+                        File.Delete(InstallConfiguration.TweakerBin);
+
+                    if (File.Exists(InstallConfiguration.DDrawDll))
+                        File.Delete(InstallConfiguration.DDrawDll);
+                    if (File.Exists(InstallConfiguration.PSO2hDll))
+                        File.Delete(InstallConfiguration.PSO2hDll);
+
+                    if (File.Exists(InstallConfiguration.PluginPSO2BlockRenameDll))
+                        File.Delete(InstallConfiguration.PluginPSO2BlockRenameDll);
+                    if (File.Exists(InstallConfiguration.PluginPSO2ItemTranslatorDll))
+                        File.Delete(InstallConfiguration.PluginPSO2ItemTranslatorDll);
+                    if (File.Exists(InstallConfiguration.PluginPSO2TitleTranslatorDll))
+                        File.Delete(InstallConfiguration.PluginPSO2TitleTranslatorDll);
+                    if (File.Exists(InstallConfiguration.PluginPSO2RAISERSystemDll))
+                        File.Delete(InstallConfiguration.PluginPSO2RAISERSystemDll);
+                });
+            }
+            catch
+            {
+                Log("ArksLayer", "Error deleting files");
+                _ActivityCount -= 1;
+                return false;
+            }
+
+            if (ArksLayerEnglishPatchEnabled == false && ArksLayerTelepipeProxyEnabled == false)
+            {
+                _ActivityCount -= 1;
+                return true;
+            }
+
+            Log("ArksLayer", "Copying key files");
+            await Task.Run(() =>
+            {
+                File.WriteAllBytes(InstallConfiguration.DDrawDll, Properties.Resources.DDrawDll);
+                File.WriteAllBytes(InstallConfiguration.PSO2hDll, Properties.Resources.PSO2hDll);
+            });
+
+            try
+            {
+                if (ArksLayerEnglishPatchEnabled)
+                {
+                    Log("ArksLayer", "Downloading english translation information");
+                    var translation = await TranslationInfo.FetchAsync();
+
+                    Log("ArksLayer", "Verifying english patch files");
+                    var cacheData = await PatchCache.SelectAllAsync();
+
+                    string CreateRelativePath(string path)
+                    {
+                        var root = new Uri(InstallConfiguration.PSO2BinDirectory);
+                        var relative = root.MakeRelativeUri(new Uri(path));
+                        return relative.OriginalString;
+                    }
+
+                    bool Verify(string path, string hash)
+                    {
+                        var relative = CreateRelativePath(path);
+
+                        var info = new FileInfo(path);
+                        if (info.Exists == false)
+                            return false;
+
+                        if (cacheData.ContainsKey(relative) == false)
+                            return false;
+
+                        var data = cacheData[relative];
+
+                        if (data.Hash != hash)
+                            return false;
+
+                        if (data.LastWriteTime != info.LastWriteTimeUtc.ToFileTimeUtc())
+                            return false;
+
+                        return true;
+                    }
+
+                    using (var client = new HttpClient())
+                    {
+                        client.DefaultRequestHeaders.Add("User-Agent", "ADragonIsFineToo");
+
+                        async Task VerifyAndDownlodRar(string path, string downloadHash, Uri downloadPath)
+                        {
+                            if (Verify(path, downloadHash) == false)
+                            {
+                                Log("ArksLayer", $"Downloading \"{Path.GetFileName(downloadPath.LocalPath)}\"");
+                                using (var response = await client.GetAsync(downloadPath))
+                                using (var stream = await response.Content.ReadAsStreamAsync())
+                                using (var archive = RarArchive.Open(stream))
+                                {
+                                    if (archive.Entries.Count > 0)
+                                    {
+                                        using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
+                                        {
+                                            await archive.Entries.First().OpenEntryStream().CopyToAsync(fs);
+                                        }
+                                        await PatchCache.InsertUnderTransactionAsync(new[] { new PatchCacheEntry()
+                                        {
+                                            Name = CreateRelativePath(path),
+                                            Hash = downloadHash,
+                                            LastWriteTime = new FileInfo(path).LastWriteTimeUtc.ToFileTimeUtc()
+                                        }});
+                                    }
+                                }
+                            }
+                        }
+
+                        await VerifyAndDownlodRar(InstallConfiguration.EnglishBlockPatch, translation.BlockMD5, new Uri(translation.BlockPatch));
+                        await VerifyAndDownlodRar(InstallConfiguration.EnglishItemPatch, translation.ItemMD5, new Uri(translation.ItemPatch));
+                        await VerifyAndDownlodRar(InstallConfiguration.EnglishTextPatch, translation.TextMD5, new Uri(translation.TextPatch));
+                        await VerifyAndDownlodRar(InstallConfiguration.EnglishTitlePatch, translation.TitleMD5, new Uri(translation.TitlePatch));
+
+                        if (Verify(InstallConfiguration.EnglishRaiserPatch, translation.RaiserMD5) == false)
+                        {
+                            Log("ArksLayer", $"Downloading \"{Path.GetFileName(new Uri(translation.RaiserPatch).LocalPath)}\"");
+                            using (var stream = await client.GetStreamAsync(translation.RaiserPatch))
+                            using (var fs = new FileStream(InstallConfiguration.EnglishRaiserPatch, FileMode.Create, FileAccess.Write, FileShare.None))
+                            {
+                                await stream.CopyToAsync(fs);
+                            }
+                            await PatchCache.InsertUnderTransactionAsync(new[] { new PatchCacheEntry()
+                            {
+                                Name = CreateRelativePath(InstallConfiguration.EnglishRaiserPatch),
+                                Hash = translation.RaiserMD5,
+                                LastWriteTime = new FileInfo(InstallConfiguration.EnglishRaiserPatch).LastWriteTimeUtc.ToFileTimeUtc()
+                            }});
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                Log("ArksLayer", "Error installing english patch");
+                return false;
+            }
+
+            Log("ArksLayer", "Copying english patch plugins");
+            await Task.Run(() =>
+            {
+                File.WriteAllBytes(InstallConfiguration.PluginPSO2BlockRenameDll, Properties.Resources.PSO2BlockRenameDll);
+                File.WriteAllBytes(InstallConfiguration.PluginPSO2ItemTranslatorDll, Properties.Resources.PSO2ItemTranslatorDll);
+                File.WriteAllBytes(InstallConfiguration.PluginPSO2TitleTranslatorDll, Properties.Resources.PSO2TitleTranslatorDll);
+                File.WriteAllBytes(InstallConfiguration.PluginPSO2RAISERSystemDll, Properties.Resources.PSO2RAISERSystemDll);
+            });
+
+            if (ArksLayerTelepipeProxyEnabled)
+            {
+                // TODO
+            }
 
             Log("ArksLayer", "Writing tweaker.bin file");
 
@@ -344,6 +532,7 @@ namespace PSRT.Astra
             }
 
             _ActivityCount -= 1;
+            return true;
         }
 
         private string _GenerateTweakerBin()
@@ -403,7 +592,7 @@ namespace PSRT.Astra
                 Log("GameGuard", "Error. Unable to delete GameGuard registry files");
             }
 
-            await VerifyAsync();
+            await VerifyGameFilesAsync();
             _ActivityCount -= 1;
         }
     }

@@ -16,6 +16,8 @@ namespace PSRT.Astra.Models
         public string PluginsDirectory { get; }
         public string PluginsDisabledDirectory { get; }
 
+        public string PatchesDirectory { get; }
+
         public string DataDirectory { get; }
         public string DataLicenseDirectory { get; }
         public string DataWin32Directory { get; }
@@ -35,6 +37,20 @@ namespace PSRT.Astra.Models
         public string GameGuardFile { get; }
 
         public static string[] GameGuardSystemFiles { get; }
+
+        public string DDrawDll { get; }
+        public string PSO2hDll { get; }
+
+        public string PluginPSO2BlockRenameDll { get; }
+        public string PluginPSO2ItemTranslatorDll { get; }
+        public string PluginPSO2TitleTranslatorDll { get; }
+        public string PluginPSO2RAISERSystemDll { get; }
+
+        public string EnglishBlockPatch { get; }
+        public string EnglishItemPatch { get; }
+        public string EnglishRaiserPatch { get; }
+        public string EnglishTextPatch { get; }
+        public string EnglishTitlePatch { get; }
 
         static InstallConfiguration()
         {
@@ -58,6 +74,8 @@ namespace PSRT.Astra.Models
             PluginsDirectory = Path.Combine(PSO2BinDirectory, "plugins");
             PluginsDisabledDirectory = Path.Combine(PluginsDirectory, "disabled");
 
+            PatchesDirectory = Path.Combine(PSO2BinDirectory, "patches");
+
             DataDirectory = Path.Combine(PSO2BinDirectory, "data");
             DataLicenseDirectory = Path.Combine(DataDirectory, "license");
             DataWin32Directory = Path.Combine(DataDirectory, "win32");
@@ -75,6 +93,20 @@ namespace PSRT.Astra.Models
 
             GameGuardDirectory = Path.Combine(PSO2BinDirectory, "GameGuard");
             GameGuardFile = Path.Combine(PSO2BinDirectory, "GameGuard.des");
+
+            DDrawDll = Path.Combine(PSO2BinDirectory, "ddraw.dll");
+            PSO2hDll = Path.Combine(PSO2BinDirectory, "pso2h.dll");
+
+            PluginPSO2BlockRenameDll = Path.Combine(PluginsDirectory, "PSO2BlockRename.dll");
+            PluginPSO2ItemTranslatorDll = Path.Combine(PluginsDirectory, "PSO2ItemTranslator.dll");
+            PluginPSO2TitleTranslatorDll = Path.Combine(PluginsDirectory, "PSO2TitleTranslator.dll");
+            PluginPSO2RAISERSystemDll = Path.Combine(PluginsDirectory, "PSO2RAISERSystem.dll");
+
+            EnglishBlockPatch = Path.Combine(PatchesDirectory, "translation_blocks.bin");
+            EnglishItemPatch = Path.Combine(PatchesDirectory, "translation_items.bin");
+            EnglishRaiserPatch = Path.Combine(PatchesDirectory, "translation_raiser.bin");
+            EnglishTextPatch = Path.Combine(PatchesDirectory, "patch.tar");
+            EnglishTitlePatch = Path.Combine(PatchesDirectory, "translation_titles.bin");
         }
     }
 }
