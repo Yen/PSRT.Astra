@@ -119,8 +119,14 @@ namespace PSRT.Astra
                     }
 
                     var cacheEntry = cacheData[patch.Key];
-                    var info = new FileInfo(filePath);
 
+                    if (patch.Value.Hash != cacheEntry.Hash)
+                    {
+                        toUpdate.Add((patch.Key, patch.Value));
+                        continue;
+                    }
+
+                    var info = new FileInfo(filePath);
                     if (info.LastWriteTimeUtc.ToFileTimeUtc() != cacheEntry.LastWriteTime)
                     {
                         toUpdate.Add((patch.Key, patch.Value));
