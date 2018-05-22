@@ -61,6 +61,15 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discard Changes.
+        /// </summary>
+        internal static string DiscardChanges {
+            get {
+                return ResourceManager.GetString("DiscardChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select your PSO2 installation directory.
         /// </summary>
         internal static string InstallSelectorWindow {
@@ -331,6 +340,15 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to discard your changes?.
+        /// </summary>
+        internal static string PSO2OptionsWindow_DiscardChanges {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_DiscardChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exclusive Fullscreen.
         /// </summary>
         internal static string PSO2OptionsWindow_ExclusiveFullscreen {
@@ -385,7 +403,7 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sets the maximum framerate PSO2 will attempt to run at. Setting this below your monitor&apos;s refresh rate (usually 60) will decrease visual smoothness, but may reduce hitching if your graphics card is struggling. Higher values will place more strain on your graphics card, and have no visual effect on most displays, but will make input slightly more responsive, and may slightly decrease loading times or increase character action speed.
+        ///   Looks up a localized string similar to Sets the maximum framerate PSO2 will run at. Setting this below your monitor&apos;s refresh rate (usually 60) will decrease visual smoothness, but may reduce hitching. Higher values will increase strain on your graphics card, but may make the game feel more responsive.
         ///
         ///If unsure, set this to 60 FPS..
         /// </summary>
@@ -405,7 +423,7 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adjusts your in-game graphics settings. Changing this setting will override any personal in-game changes. Higher values enable more eye-candy, but place more strain on your system. Some options may have no effect when Shader Quality is set to Low or Standard Quality..
+        ///   Looks up a localized string similar to Adjusts your in-game graphics settings, overriding any changes. Higher values enable more eye-candy, but place more strain on your system. Some options may have no effect when Shader Quality is set to Low or Standard Quality..
         /// </summary>
         internal static string PSO2OptionsWindow_GraphicsPresetHelp {
             get {
@@ -569,7 +587,7 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sets whether the game runs in a window or takes up your entire screen. Borderless Fullscreen and Windowed allow you to switch applications quickly, but cause a small amount of display latency on Windows 8+, or Windows 7/Vista with Aero enabled. Exclusive Fullscreen responds slightly faster, but switching applications is slower and may cause crashes.
+        ///   Looks up a localized string similar to Sets whether the game fills your screen. Borderless Fullscreen and Windowed allow you to switch applications quickly, but add a very small amount of display latency on some systems. Exclusive Fullscreen responds slightly faster, but switching applications is slower and may crash.
         ///
         ///If unsure, set this to Borderless Fullscreen..
         /// </summary>
@@ -585,6 +603,15 @@ namespace PSRT.Astra.Properties {
         internal static string PSRTAstra {
             get {
                 return ResourceManager.GetString("PSRTAstra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Changes.
+        /// </summary>
+        internal static string SaveChanges {
+            get {
+                return ResourceManager.GetString("SaveChanges", resourceCulture);
             }
         }
     }

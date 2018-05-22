@@ -104,6 +104,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" x:Name="GraphicsPreset">
                 <Label HorizontalContentAlignment="Center" Content="{local:LocaleBinding PSO2OptionsWindow_GraphicsPreset}"/>
@@ -146,6 +147,7 @@
                     </TextBlock.Style>
                 </TextBlock>
             </GroupBox>
+            <Button Grid.Row="2" Content="{local:LocaleBinding SaveChanges}" FontSize="24"/>
         </Grid>
     </Grid>
 </Window>
