@@ -340,6 +340,15 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to discard your changes?.
+        /// </summary>
+        internal static string PSO2OptionsWindow_DiscardChanges {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_DiscardChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exclusive Fullscreen.
         /// </summary>
         internal static string PSO2OptionsWindow_ExclusiveFullscreen {

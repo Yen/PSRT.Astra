@@ -303,4 +303,7 @@ If unsure, set this to Borderless Fullscreen.</value>
   <data name="DiscardChanges" xml:space="preserve">
     <value>Discard Changes</value>
   </data>
+  <data name="PSO2OptionsWindow_DiscardChanges" xml:space="preserve">
+    <value>Are you sure you want to discard your changes?</value>
+  </data>
 </root>
