@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PSRT.Astra"
         mc:Ignorable="d"
-        MinHeight="300" MinWidth="750" Height="300" Width="750">
+        d:DataContext="{d:DesignInstance local:PSO2OptionsWindowViewModel}"
+        MinHeight="300" MinWidth="750" Height="300" Width="750" Loaded="Window_Loaded">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
             <local:LocaleBinding LocaleKey="MainWindow_PSO2Options" />

@@ -11,6 +11,9 @@ namespace PSRT.Astra.Models
     [AddINotifyPropertyChangedInterface]
     public class InstallConfiguration
     {
+        public static string PSO2DocumentsDirectory { get; }
+        public static string PSO2DocumentsUserFile { get; }
+
         public string PSO2BinDirectory { get; }
 
         public string PluginsDirectory { get; }
@@ -69,6 +72,9 @@ namespace PSRT.Astra.Models
                 Path.Combine(gameGuardDir, "nppt9x.vxd"),
                 Path.Combine(gameGuardDir, "GameMon.des")
             };
+
+            PSO2DocumentsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"SEGA\PHANTASYSTARONLINE2");
+            PSO2DocumentsUserFile = Path.Combine(PSO2DocumentsDirectory, "user.pso2");
         }
 
         public InstallConfiguration(string pso2BinDirectory)

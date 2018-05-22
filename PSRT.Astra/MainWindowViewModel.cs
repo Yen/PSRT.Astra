@@ -72,6 +72,18 @@ namespace PSRT.Astra
             _ActivityCount -= 1;
         }
 
+        public async Task<bool> CanOpenSettingsAsync()
+        {
+            _ActivityCount += 1;
+
+            var userFileExists = await Task.Run(() => File.Exists(InstallConfiguration.PSO2DocumentsUserFile));
+            if (!userFileExists)
+                Log("Error", "User settings file does not exists, please run the game once to generate it");
+
+            _ActivityCount -= 1;
+            return userFileExists;
+        }
+
         public async Task VerifyGameFilesAsync()
         {
             _ActivityCount += 1;

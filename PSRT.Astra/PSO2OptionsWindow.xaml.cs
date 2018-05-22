@@ -19,9 +19,19 @@ namespace PSRT.Astra
     /// </summary>
     public partial class PSO2OptionsWindow : Window
     {
+        private PSO2OptionsWindowViewModel _ViewModel;
+
         public PSO2OptionsWindow()
         {
             InitializeComponent();
+
+            _ViewModel = new PSO2OptionsWindowViewModel();
+            DataContext = _ViewModel;
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            await _ViewModel.InitializeAsync();
         }
     }
 }

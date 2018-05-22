@@ -28,7 +28,7 @@
             </ListView.ItemTemplate>
         </ListView>
         <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_LaunchPSO2}" ToolTip="{local:LocaleBinding MainWindow_LaunchPSO2Tooltip}" Grid.Row="0" Grid.Column="0" Command="{Binding LaunchCommand}" FontSize="48" FontWeight="Bold"/>
-        <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_PSO2Options}" ToolTip="{local:LocaleBinding MainWindow_PSO2OptionsTooltip}" Grid.Row="1" Grid.Column="0" FontSize="20"/>
+        <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_PSO2Options}" ToolTip="{local:LocaleBinding MainWindow_PSO2OptionsTooltip}" Grid.Row="1" Grid.Column="0" FontSize="20" Click="_SettingsButton_Click"/>
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>

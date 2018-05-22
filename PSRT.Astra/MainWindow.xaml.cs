@@ -50,5 +50,14 @@ namespace PSRT.Astra
                     list.ScrollIntoView(list.Items[list.Items.Count - 1]);
             }
         }
+
+        private async void _SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!await _ViewModel.CanOpenSettingsAsync())
+                return;
+
+            var window = new PSO2OptionsWindow();
+            window.ShowDialog();
+        }
     }
 }
