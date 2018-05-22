@@ -313,6 +313,273 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Borderless Fullscreen.
+        /// </summary>
+        internal static string PSO2OptionsWindow_BorderlessFullscreen {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_BorderlessFullscreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hover over an option for more information about its effects on your game..
+        /// </summary>
+        internal static string PSO2OptionsWindow_DefaultHelp {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_DefaultHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclusive Fullscreen.
+        /// </summary>
+        internal static string PSO2OptionsWindow_ExclusiveFullscreen {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_ExclusiveFullscreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Framerate Limit.
+        /// </summary>
+        internal static string PSO2OptionsWindow_FPSLimit {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_FPSLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 120 FPS.
+        /// </summary>
+        internal static string PSO2OptionsWindow_FPSLimit120 {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_FPSLimit120", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 240 FPS.
+        /// </summary>
+        internal static string PSO2OptionsWindow_FPSLimit240 {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_FPSLimit240", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 30 FPS.
+        /// </summary>
+        internal static string PSO2OptionsWindow_FPSLimit30 {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_FPSLimit30", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 60 FPS.
+        /// </summary>
+        internal static string PSO2OptionsWindow_FPSLimit60 {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_FPSLimit60", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets the maximum framerate PSO2 will attempt to run at. Setting this below your monitor&apos;s refresh rate (usually 60) will decrease visual smoothness, but may reduce hitching if your graphics card is struggling. Higher values will place more strain on your graphics card, and have no visual effect on most displays, but will make input slightly more responsive, and may slightly decrease loading times or increase character action speed.
+        ///
+        ///If unsure, set this to 60 FPS..
+        /// </summary>
+        internal static string PSO2OptionsWindow_FPSLimitHelp {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_FPSLimitHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In-Game Presets (Simple Render Setting).
+        /// </summary>
+        internal static string PSO2OptionsWindow_GraphicsPreset {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_GraphicsPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adjusts your in-game graphics settings. Changing this setting will override any personal in-game changes. Higher values enable more eye-candy, but place more strain on your system. Some options may have no effect when Shader Quality is set to Low or Standard Quality..
+        /// </summary>
+        internal static string PSO2OptionsWindow_GraphicsPresetHelp {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_GraphicsPresetHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information.
+        /// </summary>
+        internal static string PSO2OptionsWindow_Information {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to High Quality.
+        /// </summary>
+        internal static string PSO2OptionsWindow_QualityHigh {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_QualityHigh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low Quality.
+        /// </summary>
+        internal static string PSO2OptionsWindow_QualityLow {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_QualityLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard Quality.
+        /// </summary>
+        internal static string PSO2OptionsWindow_QualityStandard {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_QualityStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resolution.
+        /// </summary>
+        internal static string PSO2OptionsWindow_Resolution {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_Resolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets how many pixels the game renders each frame. This typically has the largest impact on performance and visual quality. Higher values place more strain on your graphics card. No effect when Window Mode is set to Borderless Fullscreen.
+        ///
+        ///If unsure, set this to your monitor&apos;s resolution..
+        /// </summary>
+        internal static string PSO2OptionsWindow_ResolutionHelp {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_ResolutionHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shader Quality.
+        /// </summary>
+        internal static string PSO2OptionsWindow_ShaderQuality {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_ShaderQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets the quality of in-game lighting and effects. Higher quality places more strain on your graphics card. Some in-game options will have no effect on Low or Standard Quality..
+        /// </summary>
+        internal static string PSO2OptionsWindow_ShaderQualityHelp {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_ShaderQualityHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Texture Quality.
+        /// </summary>
+        internal static string PSO2OptionsWindow_TextureQuality {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_TextureQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets the resolution of in-game textures. Higher values will use sharper textures, but will also take up more graphics memory. This usually has negligible impact on performance, but a major impact on visual quality. Some low-end systems with weak or integrated graphics may need to lower this..
+        /// </summary>
+        internal static string PSO2OptionsWindow_TextureQualityHelp {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_TextureQualityHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UI Scale.
+        /// </summary>
+        internal static string PSO2OptionsWindow_UIScale {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_UIScale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1.25x Scale.
+        /// </summary>
+        internal static string PSO2OptionsWindow_UIScale1Point25x {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_UIScale1Point25x", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1.5x Scale.
+        /// </summary>
+        internal static string PSO2OptionsWindow_UIScale1Point5x {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_UIScale1Point5x", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1x Scale.
+        /// </summary>
+        internal static string PSO2OptionsWindow_UIScale1x {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_UIScale1x", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets the size of in-game interface elements, like your subpalette and HP bar. This option has no effect on performance..
+        /// </summary>
+        internal static string PSO2OptionsWindow_UIScaleHelp {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_UIScaleHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windowed.
+        /// </summary>
+        internal static string PSO2OptionsWindow_Windowed {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_Windowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Window Mode.
+        /// </summary>
+        internal static string PSO2OptionsWindow_WindowMode {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_WindowMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets whether the game runs in a window or takes up your entire screen. Borderless Fullscreen and Windowed allow you to switch applications quickly, but cause a small amount of display latency on Windows 8+, or Windows 7/Vista with Aero enabled. Exclusive Fullscreen responds slightly faster, but switching applications is slower and may cause crashes.
+        ///
+        ///If unsure, set this to Borderless Fullscreen..
+        /// </summary>
+        internal static string PSO2OptionsWindow_WindowModeHelp {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_WindowModeHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PSRT Astra.
         /// </summary>
         internal static string PSRTAstra {

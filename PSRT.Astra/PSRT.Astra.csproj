@@ -97,6 +97,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AquaHttpClient.cs" />
+    <Compile Include="PSO2OptionsWindow.xaml.cs">
+      <DependentUpon>PSO2OptionsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="InstallSelectorWindow.xaml.cs">
       <DependentUpon>InstallSelectorWindow.xaml</DependentUpon>
     </Compile>
@@ -115,6 +118,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Localization.resx</DependentUpon>
     </Compile>
+    <Page Include="PSO2OptionsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="InstallSelectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -204,4 +204,97 @@
   <data name="PSRTAstra" xml:space="preserve">
     <value>PSRT Astra</value>
   </data>
+  <data name="PSO2OptionsWindow_ExclusiveFullscreen" xml:space="preserve">
+    <value>Exclusive Fullscreen</value>
+  </data>
+  <data name="PSO2OptionsWindow_BorderlessFullscreen" xml:space="preserve">
+    <value>Borderless Fullscreen</value>
+  </data>
+  <data name="PSO2OptionsWindow_Windowed" xml:space="preserve">
+    <value>Windowed</value>
+  </data>
+  <data name="PSO2OptionsWindow_WindowMode" xml:space="preserve">
+    <value>Window Mode</value>
+  </data>
+  <data name="PSO2OptionsWindow_Resolution" xml:space="preserve">
+    <value>Resolution</value>
+  </data>
+  <data name="PSO2OptionsWindow_FPSLimit" xml:space="preserve">
+    <value>Framerate Limit</value>
+  </data>
+  <data name="PSO2OptionsWindow_UIScale" xml:space="preserve">
+    <value>UI Scale</value>
+  </data>
+  <data name="PSO2OptionsWindow_ShaderQuality" xml:space="preserve">
+    <value>Shader Quality</value>
+  </data>
+  <data name="PSO2OptionsWindow_TextureQuality" xml:space="preserve">
+    <value>Texture Quality</value>
+  </data>
+  <data name="PSO2OptionsWindow_GraphicsPreset" xml:space="preserve">
+    <value>In-Game Presets (Simple Render Setting)</value>
+  </data>
+  <data name="PSO2OptionsWindow_QualityLow" xml:space="preserve">
+    <value>Low Quality</value>
+  </data>
+  <data name="PSO2OptionsWindow_QualityStandard" xml:space="preserve">
+    <value>Standard Quality</value>
+  </data>
+  <data name="PSO2OptionsWindow_QualityHigh" xml:space="preserve">
+    <value>High Quality</value>
+  </data>
+  <data name="PSO2OptionsWindow_FPSLimit30" xml:space="preserve">
+    <value>30 FPS</value>
+  </data>
+  <data name="PSO2OptionsWindow_FPSLimit60" xml:space="preserve">
+    <value>60 FPS</value>
+  </data>
+  <data name="PSO2OptionsWindow_FPSLimit120" xml:space="preserve">
+    <value>120 FPS</value>
+  </data>
+  <data name="PSO2OptionsWindow_FPSLimit240" xml:space="preserve">
+    <value>240 FPS</value>
+  </data>
+  <data name="PSO2OptionsWindow_UIScale1x" xml:space="preserve">
+    <value>1x Scale</value>
+  </data>
+  <data name="PSO2OptionsWindow_UIScale1Point25x" xml:space="preserve">
+    <value>1.25x Scale</value>
+  </data>
+  <data name="PSO2OptionsWindow_UIScale1Point5x" xml:space="preserve">
+    <value>1.5x Scale</value>
+  </data>
+  <data name="PSO2OptionsWindow_GraphicsPresetHelp" xml:space="preserve">
+    <value>Adjusts your in-game graphics settings. Changing this setting will override any personal in-game changes. Higher values enable more eye-candy, but place more strain on your system. Some options may have no effect when Shader Quality is set to Low or Standard Quality.</value>
+  </data>
+  <data name="PSO2OptionsWindow_Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="PSO2OptionsWindow_DefaultHelp" xml:space="preserve">
+    <value>Hover over an option for more information about its effects on your game.</value>
+  </data>
+  <data name="PSO2OptionsWindow_ResolutionHelp" xml:space="preserve">
+    <value>Sets how many pixels the game renders each frame. This typically has the largest impact on performance and visual quality. Higher values place more strain on your graphics card. No effect when Window Mode is set to Borderless Fullscreen.
+
+If unsure, set this to your monitor's resolution.</value>
+  </data>
+  <data name="PSO2OptionsWindow_FPSLimitHelp" xml:space="preserve">
+    <value>Sets the maximum framerate PSO2 will attempt to run at. Setting this below your monitor's refresh rate (usually 60) will decrease visual smoothness, but may reduce hitching if your graphics card is struggling. Higher values will place more strain on your graphics card, and have no visual effect on most displays, but will make input slightly more responsive, and may slightly decrease loading times or increase character action speed.
+
+If unsure, set this to 60 FPS.</value>
+  </data>
+  <data name="PSO2OptionsWindow_ShaderQualityHelp" xml:space="preserve">
+    <value>Sets the quality of in-game lighting and effects. Higher quality places more strain on your graphics card. Some in-game options will have no effect on Low or Standard Quality.</value>
+  </data>
+  <data name="PSO2OptionsWindow_TextureQualityHelp" xml:space="preserve">
+    <value>Sets the resolution of in-game textures. Higher values will use sharper textures, but will also take up more graphics memory. This usually has negligible impact on performance, but a major impact on visual quality. Some low-end systems with weak or integrated graphics may need to lower this.</value>
+  </data>
+  <data name="PSO2OptionsWindow_UIScaleHelp" xml:space="preserve">
+    <value>Sets the size of in-game interface elements, like your subpalette and HP bar. This option has no effect on performance.</value>
+  </data>
+  <data name="PSO2OptionsWindow_WindowModeHelp" xml:space="preserve">
+    <value>Sets whether the game runs in a window or takes up your entire screen. Borderless Fullscreen and Windowed allow you to switch applications quickly, but cause a small amount of display latency on Windows 8+, or Windows 7/Vista with Aero enabled. Exclusive Fullscreen responds slightly faster, but switching applications is slower and may cause crashes.
+
+If unsure, set this to Borderless Fullscreen.</value>
+  </data>
 </root>
