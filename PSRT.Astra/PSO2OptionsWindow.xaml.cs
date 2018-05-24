@@ -26,6 +26,8 @@ namespace PSRT.Astra
             InitializeComponent();
 
             _ViewModel = new PSO2OptionsWindowViewModel();
+            _ViewModel.CloseAction = Close;
+
             DataContext = _ViewModel;
         }
 

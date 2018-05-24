@@ -62,8 +62,7 @@ namespace PSRT.Astra
             {
                 if (values.Length != 2)
                     throw new Exception();
-
-
+                
                 var culture = values[0] as CultureInfo;
                 var key = values[1] as string;
 

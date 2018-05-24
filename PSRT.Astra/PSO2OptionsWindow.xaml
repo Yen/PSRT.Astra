@@ -44,10 +44,15 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_WindowMode}"/>
-                <ComboBox Grid.Column="1" SelectedIndex="0">
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_ExclusiveFullscreen}"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding WindowModeItems}" SelectedItem="{Binding WindowModeSelected}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <!--<ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_ExclusiveFullscreen}"/>
                     <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_BorderlessFullscreen}"/>
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_Windowed}"/>
+                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_Windowed}"/>-->
                 </ComboBox>
             </Grid>
             <Grid Grid.Row="2" x:Name="ShaderQuality">
@@ -147,7 +152,7 @@
                     </TextBlock.Style>
                 </TextBlock>
             </GroupBox>
-            <Button Grid.Row="2" Content="{local:LocaleBinding SaveChanges}" FontSize="24"/>
+            <Button Grid.Row="2" Content="{local:LocaleBinding SaveChanges}" Command="{Binding SaveCommand}" FontSize="24"/>
         </Grid>
     </Grid>
 </Window>
