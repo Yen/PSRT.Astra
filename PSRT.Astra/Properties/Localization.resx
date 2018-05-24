@@ -265,7 +265,7 @@
     <value>1.5x Scale</value>
   </data>
   <data name="PSO2OptionsWindow_GraphicsPresetHelp" xml:space="preserve">
-    <value>Adjusts your in-game graphics settings. Changing this setting will override any personal in-game changes. Higher values enable more eye-candy, but place more strain on your system. Some options may have no effect when Shader Quality is set to Low or Standard Quality.</value>
+    <value>Adjusts your in-game graphics settings, overriding any changes. Higher values enable more eye-candy, but place more strain on your system. Some options may have no effect when Shader Quality is set to Low or Standard Quality.</value>
   </data>
   <data name="PSO2OptionsWindow_Information" xml:space="preserve">
     <value>Information</value>
@@ -279,7 +279,7 @@
 If unsure, set this to your monitor's resolution.</value>
   </data>
   <data name="PSO2OptionsWindow_FPSLimitHelp" xml:space="preserve">
-    <value>Sets the maximum framerate PSO2 will attempt to run at. Setting this below your monitor's refresh rate (usually 60) will decrease visual smoothness, but may reduce hitching if your graphics card is struggling. Higher values will place more strain on your graphics card, and have no visual effect on most displays, but will make input slightly more responsive, and may slightly decrease loading times or increase character action speed.
+    <value>Sets the maximum framerate PSO2 will run at. Setting this below your monitor's refresh rate (usually 60) will decrease visual smoothness, but may reduce hitching. Higher values will increase strain on your graphics card, but may make the game feel more responsive.
 
 If unsure, set this to 60 FPS.</value>
   </data>
@@ -293,8 +293,17 @@ If unsure, set this to 60 FPS.</value>
     <value>Sets the size of in-game interface elements, like your subpalette and HP bar. This option has no effect on performance.</value>
   </data>
   <data name="PSO2OptionsWindow_WindowModeHelp" xml:space="preserve">
-    <value>Sets whether the game runs in a window or takes up your entire screen. Borderless Fullscreen and Windowed allow you to switch applications quickly, but cause a small amount of display latency on Windows 8+, or Windows 7/Vista with Aero enabled. Exclusive Fullscreen responds slightly faster, but switching applications is slower and may cause crashes.
+    <value>Sets whether the game fills your screen. Borderless Fullscreen and Windowed allow you to switch applications quickly, but add a very small amount of display latency on some systems. Exclusive Fullscreen responds slightly faster, but switching applications is slower and may crash.
 
 If unsure, set this to Borderless Fullscreen.</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>Save Changes</value>
+  </data>
+  <data name="DiscardChanges" xml:space="preserve">
+    <value>Discard Changes</value>
+  </data>
+  <data name="PSO2OptionsWindow_DiscardChanges" xml:space="preserve">
+    <value>Are you sure you want to discard your changes?</value>
   </data>
 </root>
