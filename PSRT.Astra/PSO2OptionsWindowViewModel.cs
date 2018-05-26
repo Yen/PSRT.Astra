@@ -7,13 +7,57 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Forms;
 
 namespace PSRT.Astra
 {
+    [StructLayout(LayoutKind.Sequential)]
+    struct DEVMODE
+    {
+        [DllImport("User32.dll")]
+        public static extern bool EnumDisplaySettings(string deviceName, int modeNum, ref DEVMODE devMode);
+
+        private const int CCHDEVICENAME = 0x20;
+        private const int CCHFORMNAME = 0x20;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x20)]
+        public string dmDeviceName;
+        public short dmSpecVersion;
+        public short dmDriverVersion;
+        public short dmSize;
+        public short dmDriverExtra;
+        public int dmFields;
+        public int dmPositionX;
+        public int dmPositionY;
+        public ScreenOrientation dmDisplayOrientation;
+        public int dmDisplayFixedOutput;
+        public short dmColor;
+        public short dmDuplex;
+        public short dmYResolution;
+        public short dmTTOption;
+        public short dmCollate;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x20)]
+        public string dmFormName;
+        public short dmLogPixels;
+        public int dmBitsPerPel;
+        public int dmPelsWidth;
+        public int dmPelsHeight;
+        public int dmDisplayFlags;
+        public int dmDisplayFrequency;
+        public int dmICMMethod;
+        public int dmICMIntent;
+        public int dmMediaType;
+        public int dmDitherType;
+        public int dmReserved1;
+        public int dmReserved2;
+        public int dmPanningWidth;
+        public int dmPanningHeight;
+    }
+
     static class LuaTableExtensions
     {
         public static void SetValueEx(this LuaTable table, IEnumerable<string> keys, object value)
@@ -123,9 +167,24 @@ namespace PSRT.Astra
         };
         public TaggedItem<InterfaceScale> InterfaceScaleSelected { get; set; }
 
+        public ObservableCollection<Tuple<int, int>> ResolutionItems { get; set; } = new ObservableCollection<Tuple<int, int>>();
+        public Tuple<int, int> ResolutionSelected { get; set; }
+
         public async Task InitializeAsync()
         {
             _ActivityCount += 1;
+
+            var resolutions = new HashSet<(int x, int y)>();
+
+            await Task.Run(() =>
+            {
+                var devmode = new DEVMODE();
+                for (int i = 0; DEVMODE.EnumDisplaySettings(null, i, ref devmode); i++)
+                    resolutions.Add((devmode.dmPelsWidth, devmode.dmPelsHeight));
+            });
+
+            ResolutionItems = new ObservableCollection<Tuple<int, int>>(resolutions
+                .Select(r => Tuple.Create(r.x, r.y)));
 
             _Table = await _LoadOptionsFileAsync();
             _RefreshFromTable(_Table);
@@ -170,6 +229,13 @@ namespace PSRT.Astra
             if (InterfaceScaleSelected != null)
                 _Table.SetValueEx(new[] { "Config", "Screen", "InterfaceSize" }, (int)InterfaceScaleSelected.Tag);
 
+            // resolution
+            if (ResolutionSelected != null)
+            {
+                _Table.SetValueEx(new[] { "Windows", "Width" }, ResolutionSelected.Item1);
+                _Table.SetValueEx(new[] { "Windows", "Height" }, ResolutionSelected.Item2);
+            }
+
             _RefreshFromTable(_Table);
             await _SaveOptionsFileAsync(_Table);
 
@@ -203,6 +269,13 @@ namespace PSRT.Astra
             // interface scale
             if (table["Config", "Screen", "InterfaceSize"] is int interfaceScale)
                 InterfaceScaleSelected = InterfaceScaleItems.FirstOrDefault(x => (int)x.Tag == interfaceScale);
+
+            // resolution
+            if (table["Windows", "Width"] is int width &&
+                table["Windows", "Height"] is int height)
+            {
+                ResolutionSelected = ResolutionItems.FirstOrDefault(v => v.Item1 == width && v.Item2 == height);
+            }
         }
 
         private async Task<LuaTable> _LoadOptionsFileAsync()
