@@ -170,6 +170,8 @@ namespace PSRT.Astra
         public ObservableCollection<Tuple<int, int>> ResolutionItems { get; set; } = new ObservableCollection<Tuple<int, int>>();
         public Tuple<int, int> ResolutionSelected { get; set; }
 
+        public int DrawLevelSelection { get; set; } = 1;
+
         public async Task InitializeAsync()
         {
             _ActivityCount += 1;
@@ -236,6 +238,102 @@ namespace PSRT.Astra
                 _Table.SetValueEx(new[] { "Windows", "Height" }, ResolutionSelected.Item2);
             }
 
+            // draw level
+            _Table.SetValueEx(new[] { "Config", "Simple", "DrawLevel" }, DrawLevelSelection);
+            switch (DrawLevelSelection)
+            {
+                case 1:
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Shadow", "Quality" }, "low");
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ReflectionQuality" }, 1);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ShadowQuality" }, 1);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "DitailModelNum" }, 5);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, 0);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Blur" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightGeoGraphy" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Depth" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Reflection" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightShaft" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Bloom" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightEffect" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "AntiAliasing" }, false);
+                    break;
+                case 2:
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Shadow", "Quality" }, "low");
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ReflectionQuality" }, 2);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ShadowQuality" }, 2);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "DitailModelNum" }, 5);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, 1);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Blur" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightGeoGraphy" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Depth" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Reflection" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightShaft" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Bloom" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightEffect" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "AntiAliasing" }, false);
+                    break;
+                case 3:
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Shadow", "Quality" }, "middle");
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ReflectionQuality" }, 3);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ShadowQuality" }, 3);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "DitailModelNum" }, 12);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, 1);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Blur" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightGeoGraphy" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Depth" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Reflection" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightShaft" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Bloom" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightEffect" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "AntiAliasing" }, true);
+                    break;
+                case 4:
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Shadow", "Quality" }, "middle");
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ReflectionQuality" }, 4);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ShadowQuality" }, 4);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "DitailModelNum" }, 20);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, 1);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Blur" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightGeoGraphy" }, false);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Depth" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Reflection" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightShaft" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Bloom" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightEffect" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "AntiAliasing" }, true);
+                    break;
+                case 5:
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Shadow", "Quality" }, "high");
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ReflectionQuality" }, 5);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ShadowQuality" }, 5);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "DitailModelNum" }, 30);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, 1);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Blur" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightGeoGraphy" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Depth" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Reflection" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightShaft" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Bloom" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightEffect" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "AntiAliasing" }, true);
+                    break;
+                case 6:
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Shadow", "Quality" }, "high");
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ReflectionQuality" }, 5);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ShadowQuality" }, 5);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Display", "DitailModelNum" }, 30);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, 2);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Blur" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightGeoGraphy" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Depth" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Reflection" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightShaft" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Bloom" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightEffect" }, true);
+                    _Table.SetValueEx(new[] { "Config", "Draw", "Function", "AntiAliasing" }, true);
+                    break;
+            }
+
             _RefreshFromTable(_Table);
             await _SaveOptionsFileAsync(_Table);
 
@@ -276,6 +374,10 @@ namespace PSRT.Astra
             {
                 ResolutionSelected = ResolutionItems.FirstOrDefault(v => v.Item1 == width && v.Item2 == height);
             }
+
+            // draw level
+            if (table["Config", "Simple", "DrawLevel"] is int drawLevel)
+                DrawLevelSelection = drawLevel;
         }
 
         private async Task<LuaTable> _LoadOptionsFileAsync()
