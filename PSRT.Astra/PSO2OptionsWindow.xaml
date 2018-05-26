@@ -50,9 +50,6 @@
                             <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
-                    <!--<ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_ExclusiveFullscreen}"/>
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_BorderlessFullscreen}"/>
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_Windowed}"/>-->
                 </ComboBox>
             </Grid>
             <Grid Grid.Row="2" x:Name="ShaderQuality">
@@ -61,10 +58,12 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_ShaderQuality}"/>
-                <ComboBox Grid.Column="1" SelectedIndex="0">
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_QualityLow}"/>
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_QualityStandard}"/>
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_QualityHigh}"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding ShaderQualityItems}" SelectedItem="{Binding ShaderQualitySelected}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
             </Grid>
             <Grid Grid.Row="3" x:Name="TextureQuality">
@@ -73,10 +72,12 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_TextureQuality}"/>
-                <ComboBox Grid.Column="1" SelectedIndex="0">
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_QualityLow}"/>
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_QualityStandard}"/>
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_QualityHigh}"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding TextureQualityItems}" SelectedItem="{Binding TextureQualitySelected}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
             </Grid>
             <Grid Grid.Row="4" x:Name="FPSLimit">
@@ -85,11 +86,12 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_FPSLimit}"/>
-                <ComboBox Grid.Column="1" SelectedIndex="0">
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_FPSLimit30}"/>
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_FPSLimit60}"/>
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_FPSLimit120}"/>
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_FPSLimit240}"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding FrameLimitItems}" SelectedItem="{Binding FrameLimitSelected}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
             </Grid>
             <Grid Grid.Row="5" x:Name="UIScale">
@@ -98,10 +100,12 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_UIScale}"/>
-                <ComboBox Grid.Column="1" SelectedIndex="0">
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_UIScale1x}"/>
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_UIScale1Point25x}"/>
-                    <ComboBoxItem Content="{local:LocaleBinding PSO2OptionsWindow_UIScale1Point5x}"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding InterfaceScaleItems}" SelectedItem="{Binding InterfaceScaleSelected}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
                 </ComboBox>
             </Grid>
         </Grid>

@@ -45,12 +45,32 @@ namespace PSRT.Astra
             BorderlessFullscreen
         }
 
+        public enum ShaderQuality
+        {
+            Low = 0,
+            Standard = 1,
+            High = 2
+        }
+
+        public enum TextureQuality
+        {
+            Low = 0,
+            Standard = 1,
+            High = 2
+        }
+
+        public enum InterfaceScale
+        {
+            Scale1x = 0,
+            Scale1_25x = 1,
+            Scale1_5x = 2
+        }
+
         [AddINotifyPropertyChangedInterface]
-        public class TypedItem<T>
-            where T : Enum
+        public class TaggedItem<T>
         {
             public string LocaleKey { get; set; }
-            public T Type { get; set; }
+            public T Tag { get; set; }
         }
 
         public RelayCommand SaveCommand => new RelayCommand(async () => await SaveAndCloseAsync());
@@ -62,13 +82,46 @@ namespace PSRT.Astra
 
         private LuaTable _Table;
 
-        public ObservableCollection<TypedItem<WindowMode>> WindowModeItems { get; set; } = new ObservableCollection<TypedItem<WindowMode>>()
+        public ObservableCollection<TaggedItem<WindowMode>> WindowModeItems { get; set; } = new ObservableCollection<TaggedItem<WindowMode>>()
         {
-            new TypedItem<WindowMode>() { LocaleKey = "PSO2OptionsWindow_Windowed", Type = WindowMode.Windowed },
-            new TypedItem<WindowMode>() { LocaleKey = "PSO2OptionsWindow_ExclusiveFullscreen", Type = WindowMode.ExclusiveFullscreen },
-            new TypedItem<WindowMode>() { LocaleKey = "PSO2OptionsWindow_BorderlessFullscreen", Type = WindowMode.BorderlessFullscreen }
+            new TaggedItem<WindowMode>() { LocaleKey = "PSO2OptionsWindow_Windowed", Tag = WindowMode.Windowed },
+            new TaggedItem<WindowMode>() { LocaleKey = "PSO2OptionsWindow_ExclusiveFullscreen", Tag = WindowMode.ExclusiveFullscreen },
+            new TaggedItem<WindowMode>() { LocaleKey = "PSO2OptionsWindow_BorderlessFullscreen", Tag = WindowMode.BorderlessFullscreen }
         };
-        public TypedItem<WindowMode> WindowModeSelected { get; set; }
+        public TaggedItem<WindowMode> WindowModeSelected { get; set; }
+
+        public ObservableCollection<TaggedItem<ShaderQuality>> ShaderQualityItems { get; set; } = new ObservableCollection<TaggedItem<ShaderQuality>>()
+        {
+            new TaggedItem<ShaderQuality>() { LocaleKey = "PSO2OptionsWindow_QualityLow", Tag = ShaderQuality.Low },
+            new TaggedItem<ShaderQuality>() { LocaleKey = "PSO2OptionsWindow_QualityStandard", Tag = ShaderQuality.Standard },
+            new TaggedItem<ShaderQuality>() { LocaleKey = "PSO2OptionsWindow_QualityHigh", Tag = ShaderQuality.High }
+        };
+        public TaggedItem<ShaderQuality> ShaderQualitySelected { get; set; }
+
+        public ObservableCollection<TaggedItem<TextureQuality>> TextureQualityItems { get; set; } = new ObservableCollection<TaggedItem<TextureQuality>>()
+        {
+            new TaggedItem<TextureQuality>() { LocaleKey = "PSO2OptionsWindow_QualityLow", Tag = TextureQuality.Low },
+            new TaggedItem<TextureQuality>() { LocaleKey = "PSO2OptionsWindow_QualityStandard", Tag = TextureQuality.Standard },
+            new TaggedItem<TextureQuality>() { LocaleKey = "PSO2OptionsWindow_QualityHigh", Tag = TextureQuality.High }
+        };
+        public TaggedItem<TextureQuality> TextureQualitySelected { get; set; }
+
+        public ObservableCollection<TaggedItem<int>> FrameLimitItems { get; set; } = new ObservableCollection<TaggedItem<int>>()
+        {
+            new TaggedItem<int>() { LocaleKey = "PSO2OptionsWindow_FPSLimit30", Tag = 30 },
+            new TaggedItem<int>() { LocaleKey = "PSO2OptionsWindow_FPSLimit60", Tag = 60 },
+            new TaggedItem<int>() { LocaleKey = "PSO2OptionsWindow_FPSLimit120", Tag = 120 },
+            new TaggedItem<int>() { LocaleKey = "PSO2OptionsWindow_FPSLimit240", Tag = 240 }
+        };
+        public TaggedItem<int> FrameLimitSelected { get; set; }
+
+        public ObservableCollection<TaggedItem<InterfaceScale>> InterfaceScaleItems { get; set; } = new ObservableCollection<TaggedItem<InterfaceScale>>()
+        {
+            new TaggedItem<InterfaceScale>() { LocaleKey = "PSO2OptionsWindow_UIScale1x", Tag = InterfaceScale.Scale1x },
+            new TaggedItem<InterfaceScale>() { LocaleKey = "PSO2OptionsWindow_UIScale1Point25x", Tag = InterfaceScale.Scale1_25x },
+            new TaggedItem<InterfaceScale>() { LocaleKey = "PSO2OptionsWindow_UIScale1Point5x", Tag = InterfaceScale.Scale1_5x }
+        };
+        public TaggedItem<InterfaceScale> InterfaceScaleSelected { get; set; }
 
         public async Task InitializeAsync()
         {
@@ -84,7 +137,8 @@ namespace PSRT.Astra
         {
             _ActivityCount += 1;
 
-            switch (WindowModeSelected?.Type)
+            // window mode
+            switch (WindowModeSelected?.Tag)
             {
                 case WindowMode.Windowed:
                     _Table.SetValueEx(new[] { "Windows", "FullScreen" }, false);
@@ -100,6 +154,22 @@ namespace PSRT.Astra
                     break;
             }
 
+            // shader quality
+            if (ShaderQualitySelected != null)
+                _Table.SetValueEx(new[] { "Config", "Draw", "ShaderLevel" }, (int)ShaderQualitySelected.Tag);
+
+            // texture quality
+            if (TextureQualitySelected != null)
+                _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, (int)TextureQualitySelected.Tag);
+
+            // frame limit
+            if (FrameLimitSelected != null)
+                _Table.SetValueEx(new[] { "FrameKeep" }, FrameLimitSelected.Tag);
+
+            // interface scale
+            if (InterfaceScaleSelected != null)
+                _Table.SetValueEx(new[] { "Config", "Screen", "InterfaceSize" }, (int)InterfaceScaleSelected.Tag);
+
             _RefreshFromTable(_Table);
             await _SaveOptionsFileAsync(_Table);
 
@@ -112,11 +182,27 @@ namespace PSRT.Astra
         {
             // window mode
             if (table["Windows", "FullScreen"] as bool? ?? false)
-                WindowModeSelected = WindowModeItems.FirstOrDefault(x => x.Type == WindowMode.ExclusiveFullscreen);
+                WindowModeSelected = WindowModeItems.FirstOrDefault(x => x.Tag == WindowMode.ExclusiveFullscreen);
             else if (table["Windows", "VirtualFullScreen"] as bool? ?? false)
-                WindowModeSelected = WindowModeItems.FirstOrDefault(x => x.Type == WindowMode.BorderlessFullscreen);
+                WindowModeSelected = WindowModeItems.FirstOrDefault(x => x.Tag == WindowMode.BorderlessFullscreen);
             else
-                WindowModeSelected = WindowModeItems.FirstOrDefault(x => x.Type == WindowMode.Windowed);
+                WindowModeSelected = WindowModeItems.FirstOrDefault(x => x.Tag == WindowMode.Windowed);
+
+            // shader quality
+            if (table["Config", "Draw", "ShaderLevel"] is int shaderLevel)
+                ShaderQualitySelected = ShaderQualityItems.FirstOrDefault(x => (int)x.Tag == shaderLevel);
+
+            // texture quality
+            if (table["Config", "Draw", "TextureResolution"] is int textureLevel)
+                TextureQualitySelected = TextureQualityItems.FirstOrDefault(x => (int)x.Tag == textureLevel);
+
+            // frame limit
+            if (table["FrameKeep"] is int frameLimit)
+                FrameLimitSelected = FrameLimitItems.FirstOrDefault(x => x.Tag == frameLimit);
+
+            // interface scale
+            if (table["Config", "Screen", "InterfaceSize"] is int interfaceScale)
+                InterfaceScaleSelected = InterfaceScaleItems.FirstOrDefault(x => (int)x.Tag == interfaceScale);
         }
 
         private async Task<LuaTable> _LoadOptionsFileAsync()
