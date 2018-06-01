@@ -122,7 +122,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <CheckBox IsEnabled="{Binding Ready}" Grid.Column="0" HorizontalAlignment="Left"/>
+                <CheckBox IsEnabled="{Binding Ready}" IsChecked="{Binding DirectX9ExEnabled}" Grid.Column="0" HorizontalAlignment="Left"/>
                 <Label Grid.Column="1" Content="{local:LocaleBinding PSO2OptionsWindow_EnableDirectX9Ex}"/>
             </Grid>
         </Grid>

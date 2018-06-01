@@ -173,6 +173,7 @@ namespace PSRT.Astra
         public Tuple<int, int> ResolutionSelected { get; set; }
 
         public int DrawLevelSelection { get; set; } = 1;
+        public bool DirectX9ExEnabled { get; set; } = false;
 
         public async Task InitializeAsync()
         {
@@ -336,6 +337,9 @@ namespace PSRT.Astra
                     break;
             }
 
+            // directx9ex
+            _Table.SetValueEx(new[] { "Windows", "DisableDirectX9Ex" }, !DirectX9ExEnabled);
+
             _RefreshFromTable(_Table);
             await _SaveOptionsFileAsync(_Table);
 
@@ -380,6 +384,10 @@ namespace PSRT.Astra
             // draw level
             if (table["Config", "Simple", "DrawLevel"] is int drawLevel)
                 DrawLevelSelection = drawLevel;
+
+            // directx9ex
+            if (table["Windows", "DisableDirectX9Ex"] is bool disableDirectX)
+                DirectX9ExEnabled = !disableDirectX;
         }
 
         private async Task<LuaTable> _LoadOptionsFileAsync()
