@@ -61,11 +61,29 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disabled.
+        /// </summary>
+        internal static string Disabled {
+            get {
+                return ResourceManager.GetString("Disabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discard Changes.
         /// </summary>
         internal static string DiscardChanges {
             get {
                 return ResourceManager.GetString("DiscardChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        internal static string Enabled {
+            get {
+                return ResourceManager.GetString("Enabled", resourceCulture);
             }
         }
         
@@ -349,6 +367,26 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable DirectX 9Ex Features.
+        /// </summary>
+        internal static string PSO2OptionsWindow_EnableDirectX9Ex {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_EnableDirectX9Ex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sets whether PSO2 will use newer DirectX features. Disabling this may fix graphics-related crashes on older systems, but will negatively impact performance and memory usage.
+        ///
+        ///If unsure, set this to Enabled..
+        /// </summary>
+        internal static string PSO2OptionsWindow_EnableDirectX9ExHelp {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_EnableDirectX9ExHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exclusive Fullscreen.
         /// </summary>
         internal static string PSO2OptionsWindow_ExclusiveFullscreen {
@@ -372,6 +410,15 @@ namespace PSRT.Astra.Properties {
         internal static string PSO2OptionsWindow_FPSLimit120 {
             get {
                 return ResourceManager.GetString("PSO2OptionsWindow_FPSLimit120", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 144 FPS.
+        /// </summary>
+        internal static string PSO2OptionsWindow_FPSLimit144 {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_FPSLimit144", resourceCulture);
             }
         }
         
@@ -410,6 +457,15 @@ namespace PSRT.Astra.Properties {
         internal static string PSO2OptionsWindow_FPSLimitHelp {
             get {
                 return ResourceManager.GetString("PSO2OptionsWindow_FPSLimitHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlimited.
+        /// </summary>
+        internal static string PSO2OptionsWindow_FPSLimitUnlimited {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_FPSLimitUnlimited", resourceCulture);
             }
         }
         

@@ -155,7 +155,9 @@ namespace PSRT.Astra
             new TaggedItem<int>() { LocaleKey = "PSO2OptionsWindow_FPSLimit30", Tag = 30 },
             new TaggedItem<int>() { LocaleKey = "PSO2OptionsWindow_FPSLimit60", Tag = 60 },
             new TaggedItem<int>() { LocaleKey = "PSO2OptionsWindow_FPSLimit120", Tag = 120 },
-            new TaggedItem<int>() { LocaleKey = "PSO2OptionsWindow_FPSLimit240", Tag = 240 }
+            new TaggedItem<int>() { LocaleKey = "PSO2OptionsWindow_FPSLimit144", Tag = 144 },
+            new TaggedItem<int>() { LocaleKey = "PSO2OptionsWindow_FPSLimit240", Tag = 240 },
+            new TaggedItem<int>() { LocaleKey = "PSO2OptionsWindow_FPSLimitUnlimited", Tag = 0 }
         };
         public TaggedItem<int> FrameLimitSelected { get; set; }
 

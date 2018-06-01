@@ -306,4 +306,24 @@ If unsure, set this to Borderless Fullscreen.</value>
   <data name="PSO2OptionsWindow_DiscardChanges" xml:space="preserve">
     <value>Are you sure you want to discard your changes?</value>
   </data>
+  <data name="PSO2OptionsWindow_FPSLimit144" xml:space="preserve">
+    <value>144 FPS</value>
+  </data>
+  <data name="PSO2OptionsWindow_FPSLimitUnlimited" xml:space="preserve">
+    <value>Unlimited</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="PSO2OptionsWindow_EnableDirectX9Ex" xml:space="preserve">
+    <value>Enable DirectX 9Ex Features</value>
+  </data>
+  <data name="PSO2OptionsWindow_EnableDirectX9ExHelp" xml:space="preserve">
+    <value>Sets whether PSO2 will use newer DirectX features. Disabling this may fix graphics-related crashes on older systems, but will negatively impact performance and memory usage.
+
+If unsure, set this to Enabled.</value>
+  </data>
 </root>
