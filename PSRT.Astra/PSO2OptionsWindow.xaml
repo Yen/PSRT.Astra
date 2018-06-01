@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PSRT.Astra"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:PSO2OptionsWindowViewModel}"
-        MinHeight="300" MinWidth="750" Height="300" Width="750" Loaded="Window_Loaded">
+        MinHeight="320" MinWidth="700" Height="320" Width="700" Loaded="Window_Loaded">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
             <local:LocaleBinding LocaleKey="MainWindow_PSO2Options" />
@@ -31,8 +31,8 @@
             <!--unfortunately there is no mouseover event for named grid rows or cells so everything gets its own container-->
             <Grid Grid.Row="0" x:Name="Resolution">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_Resolution}"/>
                 <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding ResolutionItems}" SelectedItem="{Binding ResolutionSelected}">
@@ -49,8 +49,8 @@
             </Grid>
             <Grid Grid.Row="1" x:Name="WindowMode">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_WindowMode}"/>
                 <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding WindowModeItems}" SelectedItem="{Binding WindowModeSelected}">
@@ -63,8 +63,8 @@
             </Grid>
             <Grid Grid.Row="2" x:Name="ShaderQuality">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_ShaderQuality}"/>
                 <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding ShaderQualityItems}" SelectedItem="{Binding ShaderQualitySelected}">
@@ -77,8 +77,8 @@
             </Grid>
             <Grid Grid.Row="3" x:Name="TextureQuality">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_TextureQuality}"/>
                 <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding TextureQualityItems}" SelectedItem="{Binding TextureQualitySelected}">
@@ -91,8 +91,8 @@
             </Grid>
             <Grid Grid.Row="4" x:Name="FPSLimit">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
                 <Label IsEnabled="{Binding Ready}" Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_FPSLimit}"/>
                 <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding FrameLimitItems}" SelectedItem="{Binding FrameLimitSelected}">
@@ -105,8 +105,8 @@
             </Grid>
             <Grid Grid.Row="5" x:Name="UIScale">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_UIScale}"/>
                 <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding InterfaceScaleItems}" SelectedItem="{Binding InterfaceScaleSelected}">
@@ -119,13 +119,11 @@
             </Grid>
             <Grid Grid.Row="6" x:Name="DirectX9Ex">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_DirectX9Ex}"/>
-                <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1">
-                    <!--i am not qualified to touch the viewmodel-->
-                </ComboBox>
+                <CheckBox IsEnabled="{Binding Ready}" Grid.Column="0" HorizontalAlignment="Left"/>
+                <Label Grid.Column="1" Content="{local:LocaleBinding PSO2OptionsWindow_EnableDirectX9Ex}"/>
             </Grid>
         </Grid>
         <Grid Grid.Column="1">
@@ -171,7 +169,7 @@
                                     <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_GraphicsPresetHelp}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=DirectX9Ex, Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_DirectX9ExHelp}"/>
+                                    <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_EnableDirectX9ExHelp}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

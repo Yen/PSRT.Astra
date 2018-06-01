@@ -358,11 +358,20 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DirectX 9Ex.
+        ///   Looks up a localized string similar to Are you sure you want to discard your changes?.
         /// </summary>
-        internal static string PSO2OptionsWindow_DirectX9Ex {
+        internal static string PSO2OptionsWindow_DiscardChanges {
             get {
-                return ResourceManager.GetString("PSO2OptionsWindow_DirectX9Ex", resourceCulture);
+                return ResourceManager.GetString("PSO2OptionsWindow_DiscardChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable DirectX 9Ex Features.
+        /// </summary>
+        internal static string PSO2OptionsWindow_EnableDirectX9Ex {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_EnableDirectX9Ex", resourceCulture);
             }
         }
         
@@ -371,18 +380,9 @@ namespace PSRT.Astra.Properties {
         ///
         ///If unsure, set this to Enabled..
         /// </summary>
-        internal static string PSO2OptionsWindow_DirectX9ExHelp {
+        internal static string PSO2OptionsWindow_EnableDirectX9ExHelp {
             get {
-                return ResourceManager.GetString("PSO2OptionsWindow_DirectX9ExHelp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to discard your changes?.
-        /// </summary>
-        internal static string PSO2OptionsWindow_DiscardChanges {
-            get {
-                return ResourceManager.GetString("PSO2OptionsWindow_DiscardChanges", resourceCulture);
+                return ResourceManager.GetString("PSO2OptionsWindow_EnableDirectX9ExHelp", resourceCulture);
             }
         }
         
