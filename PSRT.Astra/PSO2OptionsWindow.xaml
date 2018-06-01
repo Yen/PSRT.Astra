@@ -26,15 +26,16 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <!--unfortunately there is no mouseover event for named grid rows or cells so everything gets its own container-->
             <Grid Grid.Row="0" x:Name="Resolution">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_Resolution}"/>
-                <ComboBox  Grid.Column="1" ItemsSource="{Binding ResolutionItems}" SelectedItem="{Binding ResolutionSelected}">
+                <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding ResolutionItems}" SelectedItem="{Binding ResolutionSelected}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>
@@ -48,11 +49,11 @@
             </Grid>
             <Grid Grid.Row="1" x:Name="WindowMode">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_WindowMode}"/>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding WindowModeItems}" SelectedItem="{Binding WindowModeSelected}">
+                <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding WindowModeItems}" SelectedItem="{Binding WindowModeSelected}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
@@ -62,11 +63,11 @@
             </Grid>
             <Grid Grid.Row="2" x:Name="ShaderQuality">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_ShaderQuality}"/>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding ShaderQualityItems}" SelectedItem="{Binding ShaderQualitySelected}">
+                <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding ShaderQualityItems}" SelectedItem="{Binding ShaderQualitySelected}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
@@ -76,11 +77,11 @@
             </Grid>
             <Grid Grid.Row="3" x:Name="TextureQuality">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_TextureQuality}"/>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding TextureQualityItems}" SelectedItem="{Binding TextureQualitySelected}">
+                <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding TextureQualityItems}" SelectedItem="{Binding TextureQualitySelected}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
@@ -90,11 +91,11 @@
             </Grid>
             <Grid Grid.Row="4" x:Name="FPSLimit">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_FPSLimit}"/>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding FrameLimitItems}" SelectedItem="{Binding FrameLimitSelected}">
+                <Label IsEnabled="{Binding Ready}" Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_FPSLimit}"/>
+                <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding FrameLimitItems}" SelectedItem="{Binding FrameLimitSelected}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
@@ -104,16 +105,26 @@
             </Grid>
             <Grid Grid.Row="5" x:Name="UIScale">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_UIScale}"/>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding InterfaceScaleItems}" SelectedItem="{Binding InterfaceScaleSelected}">
+                <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding InterfaceScaleItems}" SelectedItem="{Binding InterfaceScaleSelected}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
+            <Grid Grid.Row="6" x:Name="DirectX9Ex">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_DirectX9Ex}"/>
+                <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1">
+                    <!--i am not qualified to touch the viewmodel-->
                 </ComboBox>
             </Grid>
         </Grid>
@@ -158,6 +169,9 @@
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=GraphicsPreset, Path=IsMouseOver}" Value="True">
                                     <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_GraphicsPresetHelp}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ElementName=DirectX9Ex, Path=IsMouseOver}" Value="True">
+                                    <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_DirectX9ExHelp}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
