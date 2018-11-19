@@ -18,6 +18,6 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Content="{local:LocaleBinding OptionsWindow_TelepipeProxyUrl}"/>
         <TextBox Grid.Row="0" Grid.Column="1" Height="20" Text="{Binding Source={x:Static Properties:Settings.Default}, Path=TelepipeProxyUrl}" ToolTip="{local:LocaleBinding OptionsWindow_TelepipeProxyUrlTooltip}"/>
-        <Button Grid.Row="1" Grid.ColumnSpan="2" Height="40" Content="Save Settings" Name="_SaveSettingsButton" Click="_SaveSettingsButton_Click" FontSize="24"/>
+        <Button Grid.Row="1" Grid.ColumnSpan="2" Height="40" Content="Save Settings" Name="_SaveSettingsButton" Click="_SaveSettingsButton_Click" FontSize="24" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
