@@ -551,8 +551,8 @@ namespace PSRT.Astra
                 {
                     using (var client = new HttpClient())
                     {
-                        bool isCustomProxy = string.IsNullOrWhiteSpace(ProxyUrl);
-                        string url = isCustomProxy ? "http://telepipe.io/config.json" : ProxyUrl;
+                        bool isCustomProxy = !string.IsNullOrWhiteSpace(ProxyUrl);
+                        string url = isCustomProxy ? ProxyUrl : "http://telepipe.io/config.json";
 
                         if (isCustomProxy)
                         {
