@@ -14,7 +14,7 @@
     <Setting Name="PSRTFeaturesEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="ProxyUrl" Type="System.String" Scope="User">
+    <Setting Name="TelepipeProxyUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

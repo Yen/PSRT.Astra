@@ -74,12 +74,12 @@ namespace PSRT.Astra.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ProxyUrl {
+        public string TelepipeProxyUrl {
             get {
-                return ((string)(this["ProxyUrl"]));
+                return ((string)(this["TelepipeProxyUrl"]));
             }
             set {
-                this["ProxyUrl"] = value;
+                this["TelepipeProxyUrl"] = value;
             }
         }
     }
