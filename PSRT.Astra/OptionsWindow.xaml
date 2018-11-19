@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PSRT.Astra.Properties"
+        xmlns:local="clr-namespace:PSRT.Astra"
         xmlns:Properties="clr-namespace:PSRT.Astra.Properties" x:Class="PSRT.Astra.OptionsWindow"
         mc:Ignorable="d"
-        Title="Options - PSRT Astra" Height="150" Width="300" MinHeight="150" MinWidth="300">
+        Title="Options - PSRT Astra" Height="150" Width="500" MinHeight="150" MinWidth="500">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -16,8 +16,8 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Content="Proxy Url"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Height="20" Text="{Binding Source={x:Static local:Settings.Default}, Path=TelepipeProxyUrl}"/>
+        <Label Grid.Row="0" Grid.Column="0" Content="{local:LocaleBinding OptionsWindow_TelepipeProxyUrl}"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Height="20" Text="{Binding Source={x:Static Properties:Settings.Default}, Path=TelepipeProxyUrl}" ToolTip="{local:LocaleBinding OptionsWindow_TelepipeProxyUrlTooltip}"/>
         <Button Grid.Row="1" Grid.ColumnSpan="2" Height="40" Content="Save Settings" Name="_SaveSettingsButton" Click="_SaveSettingsButton_Click" FontSize="24"/>
     </Grid>
 </Window>
