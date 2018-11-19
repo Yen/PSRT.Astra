@@ -1,0 +1,23 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PSRT.Astra.Properties"
+        xmlns:Properties="clr-namespace:PSRT.Astra.Properties" x:Class="PSRT.Astra.AstraOptionsWindow"
+        mc:Ignorable="d"
+        Title="PSRT.Astra Options" Height="150" Width="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Content="Proxy Url"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Height="20" Text="{Binding Source={x:Static local:Settings.Default}, Path=ProxyUrl}"/>
+        <Button Grid.Row="1" Grid.ColumnSpan="2" Height="40" Content="Save Settings" Name="_SaveSettingsButton" Click="_SaveSettingsButton_Click"/>
+    </Grid>
+</Window>

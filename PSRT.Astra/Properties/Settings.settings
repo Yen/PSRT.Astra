@@ -14,5 +14,8 @@
     <Setting Name="PSRTFeaturesEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="ProxyUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">testetsetstsetes</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

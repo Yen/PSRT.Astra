@@ -46,6 +46,7 @@ namespace PSRT.Astra
 
         public bool ArksLayerEnglishPatchEnabled { get; set; } = Properties.Settings.Default.EnglishPatchEnabled;
         public bool ArksLayerTelepipeProxyEnabled { get; set; } = Properties.Settings.Default.TelepipeProxyEnabled;
+        public string ProxyUrl { get; set; } = Properties.Settings.Default.ProxyUrl;
 
         private int _ActivityCount { get; set; } = 0;
         public bool Ready => _ActivityCount == 0 && DownloadConfiguration != null;
@@ -551,7 +552,8 @@ namespace PSRT.Astra
                     using (var client = new HttpClient())
                     {
                         Log("ArksLayer", "Downloading Telepipe proxy information");
-                        var configString = await client.GetStringAsync("http://telepipe.io/config.json");
+                        string url = string.IsNullOrWhiteSpace(ProxyUrl) ? "http://telepipe.io/config.json" : ProxyUrl;
+                        var configString = await client.GetStringAsync(url);
                         var config = JsonConvert.DeserializeObject<ProxyInfo>(configString);
                         var publicKey = await client.GetByteArrayAsync(config.PublicKeyUrl);
 
