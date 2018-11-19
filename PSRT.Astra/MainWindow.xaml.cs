@@ -65,7 +65,7 @@ namespace PSRT.Astra
             if (!await _ViewModel.CanOpenSettingsAsync())
                 return;
 
-            var window = new AstraOptionsWindow();
+            var window = new OptionsWindow();
             window.ShowDialog();
         }
     }

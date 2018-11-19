@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace PSRT.Astra
 {
     /// <summary>
-    /// Interaction logic for AstraOptionsWindow.xaml
+    /// Interaction logic for OptionsWindow.xaml
     /// </summary>
-    public partial class AstraOptionsWindow : Window
+    public partial class OptionsWindow : Window
     {
-        public AstraOptionsWindow()
+        public OptionsWindow()
         {
             InitializeComponent();
         }

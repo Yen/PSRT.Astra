@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PSRT.Astra.Properties"
-        xmlns:Properties="clr-namespace:PSRT.Astra.Properties" x:Class="PSRT.Astra.AstraOptionsWindow"
+        xmlns:Properties="clr-namespace:PSRT.Astra.Properties" x:Class="PSRT.Astra.OptionsWindow"
         mc:Ignorable="d"
-        Title="Options - PSRT Astra" Height="150" Width="300">
+        Title="Options - PSRT Astra" Height="150" Width="300" MinHeight="150" MinWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
