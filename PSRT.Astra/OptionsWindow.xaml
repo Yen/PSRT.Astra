@@ -18,6 +18,6 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Content="Proxy Url"/>
         <TextBox Grid.Row="0" Grid.Column="1" Height="20" Text="{Binding Source={x:Static local:Settings.Default}, Path=ProxyUrl}"/>
-        <Button Grid.Row="1" Grid.ColumnSpan="2" Height="40" Content="Save Settings" Name="_SaveSettingsButton" Click="_SaveSettingsButton_Click"/>
+        <Button Grid.Row="1" Grid.ColumnSpan="2" Height="40" Content="Save Settings" Name="_SaveSettingsButton" Click="_SaveSettingsButton_Click" FontSize="24"/>
     </Grid>
 </Window>
