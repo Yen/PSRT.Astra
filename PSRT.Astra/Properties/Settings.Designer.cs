@@ -73,7 +73,7 @@ namespace PSRT.Astra.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("testetsetstsetes")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ProxyUrl {
             get {
                 return ((string)(this["ProxyUrl"]));
