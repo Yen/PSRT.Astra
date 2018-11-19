@@ -103,8 +103,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AquaHttpClient.cs" />
-    <Compile Include="AstraOptionsWindow.xaml.cs">
-      <DependentUpon>AstraOptionsWindow.xaml</DependentUpon>
+    <Compile Include="OptionsWindow.xaml.cs">
+      <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PSO2OptionsWindow.xaml.cs">
       <DependentUpon>PSO2OptionsWindow.xaml</DependentUpon>
@@ -128,7 +128,7 @@
       <DependentUpon>Localization.resx</DependentUpon>
     </Compile>
     <Compile Include="PSO2OptionsWindowViewModel.cs" />
-    <Page Include="AstraOptionsWindow.xaml">
+    <Page Include="OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
