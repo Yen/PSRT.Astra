@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PSRT.Astra.Properties"
         xmlns:Properties="clr-namespace:PSRT.Astra.Properties" x:Class="PSRT.Astra.AstraOptionsWindow"
         mc:Ignorable="d"
-        Title="PSRT.Astra Options" Height="150" Width="300">
+        Title="Options - PSRT Astra" Height="150" Width="300">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
