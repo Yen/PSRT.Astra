@@ -9,15 +9,18 @@
         Title="Options - PSRT Astra" Height="150" Width="500" MinHeight="150" MinWidth="500">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Grid.Column="0" Content="{local:LocaleBinding OptionsWindow_TelepipeProxyUrl}"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Height="20" Text="{Binding Source={x:Static Properties:Settings.Default}, Path=TelepipeProxyUrl}" ToolTip="{local:LocaleBinding OptionsWindow_TelepipeProxyUrlTooltip}"/>
-        <Button Grid.Row="1" Grid.ColumnSpan="2" Height="40" Content="Save Settings" Name="_SaveSettingsButton" Click="_SaveSettingsButton_Click" FontSize="24" VerticalAlignment="Bottom"/>
+        <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" Content="{local:LocaleBinding OptionsWindow_TelepipeProxyUrl}"/>
+        <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Padding="16,0,16,0" Grid.ColumnSpan="2" Content="{local:LocaleBinding OptionsWindow_TelepipeProxyUrlTooltip}"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Name="TelepipeProxyUrlTextBox"/>
+        <Button Grid.Row="3" Grid.ColumnSpan="2" Content="Save Settings" Name="_SaveSettingsButton" Click="_SaveSettingsButton_Click" FontSize="24" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

@@ -340,7 +340,7 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Custom Telepipe Proxy Url.
+        ///   Looks up a localized string similar to Telepipe Config Url.
         /// </summary>
         internal static string OptionsWindow_TelepipeProxyUrl {
             get {
@@ -349,7 +349,7 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Custom url for Telepipe Proxy.
+        ///   Looks up a localized string similar to Custom url for Telepipe Proxy (leave empty to disable).
         /// </summary>
         internal static string OptionsWindow_TelepipeProxyUrlTooltip {
             get {

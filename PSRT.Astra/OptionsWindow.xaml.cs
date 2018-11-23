@@ -22,6 +22,7 @@ namespace PSRT.Astra
         public OptionsWindow()
         {
             InitializeComponent();
+            TelepipeProxyUrlTextBox.Text = Properties.Settings.Default.TelepipeProxyUrl;
         }
 
         private void _SaveSettingsButton_Click(object sender, RoutedEventArgs e)
