@@ -59,5 +59,14 @@ namespace PSRT.Astra
             var window = new PSO2OptionsWindow();
             window.ShowDialog();
         }
+
+        private async void _AstraSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!await _ViewModel.CanOpenSettingsAsync())
+                return;
+
+            var window = new OptionsWindow();
+            window.ShowDialog();
+        }
     }
 }

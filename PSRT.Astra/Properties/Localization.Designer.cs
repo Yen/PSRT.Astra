@@ -340,6 +340,24 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Telepipe Config Url.
+        /// </summary>
+        internal static string OptionsWindow_TelepipeProxyUrl {
+            get {
+                return ResourceManager.GetString("OptionsWindow_TelepipeProxyUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url override for custom Telepipe proxy json configuration file. Leaving this empty uses the default Telepipe configuration..
+        /// </summary>
+        internal static string OptionsWindow_TelepipeProxyUrlDescription {
+            get {
+                return ResourceManager.GetString("OptionsWindow_TelepipeProxyUrlDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Borderless Fullscreen.
         /// </summary>
         internal static string PSO2OptionsWindow_BorderlessFullscreen {

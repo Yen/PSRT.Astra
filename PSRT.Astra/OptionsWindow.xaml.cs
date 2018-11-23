@@ -1,0 +1,38 @@
+﻿using PropertyChanged;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace PSRT.Astra
+{
+    public partial class OptionsWindow : Window
+    {
+        private OptionsWindowViewModel _ViewModel;
+
+        public OptionsWindow()
+        {
+            InitializeComponent();
+
+            _ViewModel = new OptionsWindowViewModel();
+            DataContext = _ViewModel;
+        }
+
+        private void _SaveSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.TelepipeProxyUrl = _ViewModel.TelepipeProxyUrl;
+            Properties.Settings.Default.Save();
+            Properties.Settings.Default.Reload();
+            Close();
+        }
+    }
+}

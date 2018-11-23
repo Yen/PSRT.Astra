@@ -550,8 +550,19 @@ namespace PSRT.Astra
                 {
                     using (var client = new HttpClient())
                     {
-                        Log("ArksLayer", "Downloading Telepipe proxy information");
-                        var configString = await client.GetStringAsync("http://telepipe.io/config.json");
+                        var proxyUrl = Properties.Settings.Default.TelepipeProxyUrl;
+                        bool isCustomProxy = !string.IsNullOrWhiteSpace(proxyUrl);
+                        string url = isCustomProxy ? proxyUrl : "http://telepipe.io/config.json";
+
+                        if (isCustomProxy)
+                        {
+                            Log("ArksLayer", $"Downloading proxy information from {proxyUrl}");
+                        }
+                        else
+                        {
+                            Log("ArksLayer", "Downloading Telepipe proxy information");
+                        }
+                        var configString = await client.GetStringAsync(url);
                         var config = JsonConvert.DeserializeObject<ProxyInfo>(configString);
                         var publicKey = await client.GetByteArrayAsync(config.PublicKeyUrl);
 
