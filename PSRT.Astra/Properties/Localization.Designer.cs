@@ -349,11 +349,11 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Custom url for Telepipe Proxy (leave empty to disable).
+        ///   Looks up a localized string similar to Url override for custom Telepipe proxy json configuration file. Leaving this empty uses the default Telepipe configuration..
         /// </summary>
-        internal static string OptionsWindow_TelepipeProxyUrlTooltip {
+        internal static string OptionsWindow_TelepipeProxyUrlDescription {
             get {
-                return ResourceManager.GetString("OptionsWindow_TelepipeProxyUrlTooltip", resourceCulture);
+                return ResourceManager.GetString("OptionsWindow_TelepipeProxyUrlDescription", resourceCulture);
             }
         }
         

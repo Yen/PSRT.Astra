@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PropertyChanged;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,20 +15,23 @@ using System.Windows.Shapes;
 
 namespace PSRT.Astra
 {
-    /// <summary>
-    /// Interaction logic for OptionsWindow.xaml
-    /// </summary>
     public partial class OptionsWindow : Window
     {
+        private OptionsWindowViewModel _ViewModel;
+
         public OptionsWindow()
         {
             InitializeComponent();
-            TelepipeProxyUrlTextBox.Text = Properties.Settings.Default.TelepipeProxyUrl;
+
+            _ViewModel = new OptionsWindowViewModel();
+            DataContext = _ViewModel;
         }
 
         private void _SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
+            Properties.Settings.Default.TelepipeProxyUrl = _ViewModel.TelepipeProxyUrl;
             Properties.Settings.Default.Save();
+            Properties.Settings.Default.Reload();
             Close();
         }
     }

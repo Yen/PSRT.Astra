@@ -1,12 +1,18 @@
 ﻿<Window
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PSRT.Astra"
-        xmlns:Properties="clr-namespace:PSRT.Astra.Properties" x:Class="PSRT.Astra.OptionsWindow"
-        mc:Ignorable="d"
-        Title="Options - PSRT Astra" Height="150" Width="500" MinHeight="150" MinWidth="500">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:PSRT.Astra"
+    x:Class="PSRT.Astra.OptionsWindow"
+    d:DataContext="{d:DesignInstance local:OptionsWindowViewModel}"
+    
+    mc:Ignorable="d"
+    Title="Options - PSRT Astra"
+    Height="240"
+    Width="480"
+    MinHeight="240"
+    MinWidth="480">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -18,9 +24,36 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Padding="16,0,16,0"
+            Grid.ColumnSpan="2"
+            Text="{local:LocaleBinding OptionsWindow_TelepipeProxyUrlDescription}"
+            FontStyle="Italic"
+            TextWrapping="Wrap"
+            TextAlignment="Center"/>
+        
         <Label Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" Content="{local:LocaleBinding OptionsWindow_TelepipeProxyUrl}"/>
-        <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Padding="16,0,16,0" Grid.ColumnSpan="2" Content="{local:LocaleBinding OptionsWindow_TelepipeProxyUrlTooltip}"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Name="TelepipeProxyUrlTextBox"/>
-        <Button Grid.Row="3" Grid.ColumnSpan="2" Content="Save Settings" Name="_SaveSettingsButton" Click="_SaveSettingsButton_Click" FontSize="24" VerticalAlignment="Bottom"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding TelepipeProxyUrl, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding TelepipeProxyUrlValid}" Value="False">
+                            <Setter Property="Background" Value="#FFBFBF"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <Button
+            Grid.Row="3"
+            Grid.ColumnSpan="2"
+            Content="Save Settings"
+            Click="_SaveSettingsButton_Click"
+            FontSize="24"
+            VerticalAlignment="Bottom"
+            IsEnabled="{Binding SettingsValid}"/>
     </Grid>
 </Window>

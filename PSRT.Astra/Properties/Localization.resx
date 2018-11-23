@@ -326,8 +326,8 @@ If unsure, set this to Borderless Fullscreen.</value>
 
 If unsure, set this to Enabled.</value>
   </data>
-  <data name="OptionsWindow_TelepipeProxyUrlTooltip" xml:space="preserve">
-    <value>Custom url for Telepipe Proxy (leave empty to disable)</value>
+  <data name="OptionsWindow_TelepipeProxyUrlDescription" xml:space="preserve">
+    <value>Url override for custom Telepipe proxy json configuration file. Leaving this empty uses the default Telepipe configuration.</value>
   </data>
   <data name="OptionsWindow_TelepipeProxyUrl" xml:space="preserve">
     <value>Telepipe Config Url</value>
