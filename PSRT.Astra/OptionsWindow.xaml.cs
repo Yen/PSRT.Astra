@@ -31,7 +31,6 @@ namespace PSRT.Astra
         {
             Properties.Settings.Default.TelepipeProxyUrl = _ViewModel.TelepipeProxyUrl;
             Properties.Settings.Default.Save();
-            Properties.Settings.Default.Reload();
             Close();
         }
     }
