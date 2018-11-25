@@ -76,17 +76,17 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_VerifyFiles}" ToolTip="{local:LocaleBinding MainWindow_VerifyFilesTooltip}" Grid.Row="0" Grid.Column="1" Command="{Binding VerifyGameFilesCommand}"/>
+            <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_VerifyFiles}" ToolTip="{local:LocaleBinding MainWindow_VerifyFilesTooltip}" Grid.Column="1" Command="{Binding VerifyGameFilesCommand}"/>
             <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_ResetGameGuard}" ToolTip="{local:LocaleBinding MainWindow_ResetGameGuardTooltip}" Grid.Row="1" Grid.Column="1" Command="{Binding ResetGameGuardCommand}"/>
             <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_AstraOptions}" ToolTip="{local:LocaleBinding Launcher tweaks for advanced users—tread carefully!}" Grid.Row="2" Grid.Column="1" Click="_AstraSettingsButton_Click"/>
-            <CheckBox ToolTip="{local:LocaleBinding MainWindow_PSRTCheckboxTooltip}" Grid.Row="2" Grid.Column="0">
-                <TextBlock Text="{local:LocaleBinding MainWindow_PSRTCheckbox}" />
-            </CheckBox>
-            <CheckBox ToolTip="{local:LocaleBinding MainWindow_EnglishPatchCheckboxTooltip}" IsChecked="{Binding ArksLayerEnglishPatchEnabled}" Grid.Row="0" Grid.Column="0">
+            <CheckBox ToolTip="{local:LocaleBinding MainWindow_EnglishPatchCheckboxTooltip}" IsChecked="{Binding ArksLayerEnglishPatchEnabled}" Grid.Row="0">
                 <TextBlock Text="{local:LocaleBinding MainWindow_EnglishPatchCheckbox}" />
             </CheckBox>
-            <CheckBox ToolTip="{local:LocaleBinding MainWindow_TelepipeCheckboxTooltip}" IsChecked="{Binding ArksLayerTelepipeProxyEnabled}" Grid.Row="1" Grid.Column="0">
+            <CheckBox ToolTip="{local:LocaleBinding MainWindow_TelepipeCheckboxTooltip}" IsChecked="{Binding ArksLayerTelepipeProxyEnabled}" Grid.Row="1">
                 <TextBlock Text="{local:LocaleBinding MainWindow_TelepipeCheckbox}" />
+            </CheckBox>
+            <CheckBox ToolTip="{local:LocaleBinding MainWindow_PSRTCheckboxTooltip}" Grid.Row="2" IsEnabled="False">
+                <TextBlock Text="{local:LocaleBinding MainWindow_PSRTCheckbox}" />
             </CheckBox>
         </Grid>
     </Grid>
