@@ -178,7 +178,7 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update PSO2.
+        ///   Looks up a localized string similar to Launch Astra.
         /// </summary>
         internal static string InstallSelectorWindow_UpdatePSO2 {
             get {
