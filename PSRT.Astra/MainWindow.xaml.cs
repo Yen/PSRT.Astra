@@ -68,5 +68,10 @@ namespace PSRT.Astra
             var window = new OptionsWindow();
             window.ShowDialog();
         }
+
+        private void _Hyperlink_RequestNavigateBrowser(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(e.Uri.ToString());
+        }
     }
 }

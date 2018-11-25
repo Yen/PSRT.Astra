@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PSRT.Astra.Properties;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,14 @@ namespace PSRT.Astra
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            if (Settings.Default.UpgradeRequired)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeRequired = false;
+                Settings.Default.Save();
+            }
+        }
     }
 }

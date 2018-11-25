@@ -23,7 +23,7 @@ using SharpCompress.Archives.Rar;
 namespace PSRT.Astra
 {
     [AddINotifyPropertyChangedInterface]
-    public class MainWindowViewModel
+    public partial class MainWindowViewModel
     {
         public RelayCommand VerifyGameFilesCommand => new RelayCommand(async () => await VerifyGameFilesAsync());
         public RelayCommand LaunchCommand => new RelayCommand(async () => await LaunchAsync());
@@ -59,6 +59,9 @@ namespace PSRT.Astra
 
         public async Task InitializeAsync()
         {
+            // start update in the background
+            _CheckForUpdate();
+
             _ActivityCount += 1;
 
             await _CreateKeyDirectoriesAsync();
