@@ -334,6 +334,7 @@ If unsure, set this to Enabled.</value>
   </data>
   <data name="MainWindow_UpdateAvailableMessage" xml:space="preserve">
     <value>New PSRT.Astra Version {0} is available.</value>
+    <comment>{0} = Version number</comment>
   </data>
   <data name="MainWindow_UpdateAvailableDownload" xml:space="preserve">
     <value>Click here to download!</value>
