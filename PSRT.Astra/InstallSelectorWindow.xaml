@@ -9,8 +9,8 @@
         Height="240" Width="480" ResizeMode="NoResize">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
-            <local:LocaleBinding LocaleKey="InstallSelectorWindow_Title" />
-            <local:LocaleBinding LocaleKey="PSRTAstra" />
+            <local:LocaleBinding Path="InstallSelectorWindow_Title"/>
+            <local:LocaleBinding Path="PSRTAstra"/>
         </MultiBinding>
     </Window.Title>
     <Grid>
@@ -31,5 +31,5 @@
             <Button Content="{local:LocaleBinding InstallSelectorWindow_Browse}" ToolTip="{local:LocaleBinding InstallSelectorWindow_BrowseTooltip}" Grid.Column="1" Click="_SelectDirectory_Click"/>
         </Grid>
         <Button Grid.Row="3" Content="{local:LocaleDynamicBinding {Binding ConfirmationMessage}}" Grid.Column="1" IsEnabled="{Binding SelectedPathValid}" Click="_AcceptButton_Click" FontSize="36" />
-        </Grid>
+    </Grid>
 </Window>

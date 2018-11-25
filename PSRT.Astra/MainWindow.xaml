@@ -13,7 +13,7 @@
         Loaded="Window_Loaded">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} {1}">
-            <local:LocaleBinding LocaleKey="PSRTAstra"/>
+            <local:LocaleBinding Path="PSRTAstra"/>
             <Binding Path="CurrentVersion" Mode="OneWay"/>
         </MultiBinding>
     </Window.Title>
@@ -46,7 +46,7 @@
             <Run>
                 <Run.Text>
                     <MultiBinding Converter="{x:Static local:StringFormatValueConverter.Instance}">
-                        <local:LocaleBinding LocaleKey="MainWindow_UpdateAvailableMessage"/>
+                        <local:LocaleBinding Path="MainWindow_UpdateAvailableMessage"/>
                         <Binding Path="UpdatedVersionInformation.Version" Mode="OneWay"/>
                     </MultiBinding>
                 </Run.Text>

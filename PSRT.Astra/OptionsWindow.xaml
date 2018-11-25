@@ -14,8 +14,8 @@
     MinWidth="480">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
-            <local:LocaleBinding LocaleKey="OptionsWindow_Title" />
-            <local:LocaleBinding LocaleKey="PSRTAstra" />
+            <local:LocaleBinding Path="OptionsWindow_Title" />
+            <local:LocaleBinding Path="PSRTAstra" />
         </MultiBinding>
     </Window.Title>
     <Grid>

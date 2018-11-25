@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 
 namespace PSRT.Astra
@@ -16,6 +17,9 @@ namespace PSRT.Astra
         {
             if (values.Length == 0)
                 return string.Empty;
+
+            if (values[0] == DependencyProperty.UnsetValue)
+                return null;
 
             var formatString = values[0] as string;
             if (formatString == null)

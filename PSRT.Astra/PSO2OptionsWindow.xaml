@@ -9,8 +9,8 @@
         MinHeight="320" MinWidth="700" Height="320" Width="700" Loaded="Window_Loaded">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
-            <local:LocaleBinding LocaleKey="MainWindow_PSO2Options" />
-            <local:LocaleBinding LocaleKey="PSRTAstra" />
+            <local:LocaleBinding Path="MainWindow_PSO2Options" />
+            <local:LocaleBinding Path="PSRTAstra" />
         </MultiBinding>
     </Window.Title>
     <Grid>

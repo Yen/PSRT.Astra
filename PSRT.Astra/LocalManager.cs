@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -13,18 +12,23 @@ using PropertyChanged;
 
 namespace PSRT.Astra
 {
-    public class LocaleManager : ObservableObject
+    public class LocaleManager : INotifyPropertyChanged
     {
         public static LocaleManager Instance { get; } = new LocaleManager();
 
         private CultureInfo _CurrentCulture = CultureInfo.CurrentCulture;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public CultureInfo CurrentCulture
         {
             get => _CurrentCulture;
             set
             {
                 _CurrentCulture = value;
-                PropertyChangedHandler?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentCulture)));
+                // Fire property changed for all "properties" to update
+                // the bindings set via the indexing operator
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
             }
         }
         public string this[string key] => Properties.Localization.ResourceManager.GetString(key, CurrentCulture) ?? key;
@@ -33,12 +37,12 @@ namespace PSRT.Astra
     [AddINotifyPropertyChangedInterface]
     public class LocaleBindingExtension : Binding
     {
-        public static readonly DependencyProperty LocaleKeyProperty =
-            DependencyProperty.Register(nameof(LocaleKey), typeof(string), typeof(LocaleBindingExtension));
-
-        public string LocaleKey
+        public new string Path
         {
-            set => Path = new PropertyPath($"[{value}]");
+            set
+            {
+                (this as Binding).Path = new PropertyPath($"[{value}]");
+            }
         }
 
         public LocaleBindingExtension()
@@ -62,7 +66,7 @@ namespace PSRT.Astra
             {
                 if (values.Length != 2)
                     throw new Exception();
-                
+
                 var culture = values[0] as CultureInfo;
                 var key = values[1] as string;
 
