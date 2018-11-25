@@ -332,4 +332,13 @@ If unsure, set this to Enabled.</value>
   <data name="OptionsWindow_TelepipeProxyUrl" xml:space="preserve">
     <value>Telepipe Config Url</value>
   </data>
+  <data name="MainWindow_UpdateAvailableMessage" xml:space="preserve">
+    <value>New PSRT.Astra Version {0} is available.</value>
+  </data>
+  <data name="MainWindow_UpdateAvailableDownload" xml:space="preserve">
+    <value>Click here to download!</value>
+  </data>
+  <data name="OptionsWindow_Title" xml:space="preserve">
+    <value>Options</value>
+  </data>
 </root>

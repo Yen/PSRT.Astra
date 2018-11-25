@@ -127,6 +127,7 @@
       <DependentUpon>Localization.resx</DependentUpon>
     </Compile>
     <Compile Include="PSO2OptionsWindowViewModel.cs" />
+    <Compile Include="StringFormatValueConverter.cs" />
     <Page Include="OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

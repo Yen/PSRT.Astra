@@ -43,14 +43,19 @@
                     </Style.Triggers>
                 </Style>
             </TextBlock.Style>
-            <Run>New PSRT.Astra version</Run>
-            <Run FontWeight="SemiBold" Text="{Binding UpdatedVersionInformation.Version, Mode=OneWay}"/>
-            <Run>is available.</Run>
+            <Run>
+                <Run.Text>
+                    <MultiBinding Converter="{x:Static local:StringFormatValueConverter.Instance}">
+                        <local:LocaleBinding LocaleKey="MainWindow_UpdateAvailableMessage"/>
+                        <Binding Path="UpdatedVersionInformation.Version" Mode="OneWay"/>
+                    </MultiBinding>
+                </Run.Text>
+            </Run>
             <Run Text="&#x0a;"/> <!-- New line -->
             <Hyperlink
                 NavigateUri="{Binding UpdatedVersionInformation.GithubUri, Mode=OneWay}"
                 RequestNavigate="_Hyperlink_RequestNavigateBrowser">
-                Click here to download!
+                <Run Text="{local:LocaleBinding MainWindow_UpdateAvailableDownload}"/>
             </Hyperlink>
         </TextBlock>
         <ListView ItemsSource="{Binding LogEntries}" Grid.Row="1" Grid.Column="1" ScrollViewer.ScrollChanged="_Log_ScrollChanged">

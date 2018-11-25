@@ -8,11 +8,16 @@
     d:DataContext="{d:DesignInstance local:OptionsWindowViewModel}"
     
     mc:Ignorable="d"
-    Title="Options - PSRT Astra"
     Height="240"
     Width="480"
     MinHeight="240"
     MinWidth="480">
+    <Window.Title>
+        <MultiBinding StringFormat="{}{0} - {1}">
+            <local:LocaleBinding LocaleKey="OptionsWindow_Title" />
+            <local:LocaleBinding LocaleKey="PSRTAstra" />
+        </MultiBinding>
+    </Window.Title>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>

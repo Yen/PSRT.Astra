@@ -322,6 +322,24 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click here to download!.
+        /// </summary>
+        internal static string MainWindow_UpdateAvailableDownload {
+            get {
+                return ResourceManager.GetString("MainWindow_UpdateAvailableDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New PSRT.Astra Version {0} is available..
+        /// </summary>
+        internal static string MainWindow_UpdateAvailableMessage {
+            get {
+                return ResourceManager.GetString("MainWindow_UpdateAvailableMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verify (File Check).
         /// </summary>
         internal static string MainWindow_VerifyFiles {
@@ -354,6 +372,15 @@ namespace PSRT.Astra.Properties {
         internal static string OptionsWindow_TelepipeProxyUrlDescription {
             get {
                 return ResourceManager.GetString("OptionsWindow_TelepipeProxyUrlDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        internal static string OptionsWindow_Title {
+            get {
+                return ResourceManager.GetString("OptionsWindow_Title", resourceCulture);
             }
         }
         
