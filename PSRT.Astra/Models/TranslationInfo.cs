@@ -41,7 +41,7 @@ namespace PSRT.Astra.Models
         {
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("User-Agent", "ADragonIsFineToo");
+                client.DefaultRequestHeaders.Add("User-Agent", "PSRT.Astra");
                 using (var request = await client.GetAsync(DownloadConfiguration.TranslationsFile, ct))
                 {
                     var downloadText = await request.Content.ReadAsStringAsync();

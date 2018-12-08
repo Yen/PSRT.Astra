@@ -514,7 +514,7 @@ namespace PSRT.Astra
 
                     using (var client = new HttpClient())
                     {
-                        client.DefaultRequestHeaders.Add("User-Agent", "ADragonIsFineToo");
+                        client.DefaultRequestHeaders.Add("User-Agent", "PSRT.Astra");
 
                         async Task VerifyAndDownlodRar(string path, string downloadHash, Uri downloadPath)
                         {
