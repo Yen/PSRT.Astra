@@ -19,6 +19,8 @@ namespace PSRT.Astra.Models
         public string PluginsDirectory { get; }
         public string PluginsDisabledDirectory { get; }
 
+        public string ModsDirectory { get; }
+
         public string PatchesDirectory { get; }
 
         public string DataDirectory { get; }
@@ -83,6 +85,8 @@ namespace PSRT.Astra.Models
 
             PluginsDirectory = Path.Combine(PSO2BinDirectory, "plugins");
             PluginsDisabledDirectory = Path.Combine(PluginsDirectory, "disabled");
+
+            ModsDirectory = Path.Combine(PSO2BinDirectory, "mods");
 
             PatchesDirectory = Path.Combine(PSO2BinDirectory, "patches");
 

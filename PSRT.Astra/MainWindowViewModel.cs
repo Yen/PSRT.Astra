@@ -99,6 +99,8 @@ namespace PSRT.Astra
 
             await VerifyAsync(logSource, patches);
 
+            Log(logSource, "All files verified");
+
             _ActivityCount -= 1;
         }
 
@@ -107,6 +109,27 @@ namespace PSRT.Astra
             _ActivityCount += 1;
 
             await _CreateKeyDirectoriesAsync();
+
+            var modFiles = await Task.Run(() => Directory.GetFiles(InstallConfiguration.ModsDirectory)
+                .Select(p => Path.GetFileName(p))
+                .ToArray());
+
+            if (modFiles.Length > 0)
+            {
+                Log(logSource, $"Creating hard links for {modFiles.Length} mod file{(modFiles.Length == 1 ? string.Empty : "s")}");
+
+                await Task.Run(() =>
+                {
+                    foreach (var file in modFiles)
+                    {
+                        var hardLinkPath = Path.Combine(InstallConfiguration.DataWin32Directory, file);
+                        File.Delete(hardLinkPath);
+
+                        var targetPath = Path.Combine(InstallConfiguration.ModsDirectory, file);
+                        HardLink.CreateHardLink(hardLinkPath, targetPath);
+                    }
+                });
+            }
 
             Log(logSource, "Fetching patch cache data");
 
@@ -120,7 +143,20 @@ namespace PSRT.Astra
             {
                 foreach (var patch in patches)
                 {
-                    var filePath = Path.Combine(InstallConfiguration.PSO2BinDirectory, patch.Key.Substring(0, patch.Key.Length - 4));
+                    var relativeFilePath = patch.Key
+                        .Substring(0, patch.Key.Length - 4)
+                        .Replace('/', Path.DirectorySeparatorChar)
+                        .ToLower();
+                    var filePath = Path.Combine(InstallConfiguration.PSO2BinDirectory, relativeFilePath);
+
+                    // skip file if a file with the same name exists in the mods folder
+                    if (Path.GetDirectoryName(filePath).ToLower() == InstallConfiguration.DataWin32Directory.ToLower())
+                    {
+                        var modFilePath = Path.Combine(InstallConfiguration.ModsDirectory, Path.GetFileName(relativeFilePath));
+                        if (File.Exists(modFilePath))
+                            continue;
+                    }
+
                     if (!File.Exists(filePath))
                     {
                         toUpdate.Add((patch.Key, patch.Value));
@@ -154,8 +190,6 @@ namespace PSRT.Astra
             if (toUpdate.Count == 0)
             {
                 _DeleteCensorFile();
-
-                Log(logSource, "All files verified");
 
                 _ActivityCount -= 1;
                 return;
@@ -284,9 +318,8 @@ namespace PSRT.Astra
             await cacheInsertLoopTask;
 
             // Rerun
+            Log(logSource, "Rerunning verify task to check for intermediate changes");
             await VerifyAsync(logSource, patches);
-
-            Log(logSource, "All files verified");
 
             _ActivityCount -= 1;
         }
@@ -316,6 +349,7 @@ namespace PSRT.Astra
                 Directory.CreateDirectory(InstallConfiguration.PluginsDirectory);
                 Directory.CreateDirectory(InstallConfiguration.PluginsDisabledDirectory);
                 Directory.CreateDirectory(InstallConfiguration.PatchesDirectory);
+                Directory.CreateDirectory(InstallConfiguration.ModsDirectory);
                 Directory.CreateDirectory(InstallConfiguration.DataDirectory);
                 Directory.CreateDirectory(InstallConfiguration.DataLicenseDirectory);
                 Directory.CreateDirectory(InstallConfiguration.DataWin32Directory);
