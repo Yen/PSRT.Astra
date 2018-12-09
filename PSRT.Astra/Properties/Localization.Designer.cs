@@ -268,6 +268,15 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Waiting for PSO2 to exit.
+        /// </summary>
+        internal static string MainWindow_PSO2Running {
+            get {
+                return ResourceManager.GetString("MainWindow_PSO2Running", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PSRT Extended Features.
         /// </summary>
         internal static string MainWindow_PSRTCheckbox {

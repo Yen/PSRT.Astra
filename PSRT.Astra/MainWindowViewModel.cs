@@ -47,8 +47,10 @@ namespace PSRT.Astra
         public bool ArksLayerEnglishPatchEnabled { get; set; } = Properties.Settings.Default.EnglishPatchEnabled;
         public bool ArksLayerTelepipeProxyEnabled { get; set; } = Properties.Settings.Default.TelepipeProxyEnabled;
 
+        public string LaunchPSO2ButtonLocaleKey => IsPSO2Running ? "MainWindow_PSO2Running" : "MainWindow_LaunchPSO2";
+
         private int _ActivityCount { get; set; } = 0;
-        public bool Ready => _ActivityCount == 0 && DownloadConfiguration != null;
+        public bool Ready => _ActivityCount == 0 && DownloadConfiguration != null && !IsPSO2Running;
 
         //
 
@@ -59,10 +61,12 @@ namespace PSRT.Astra
 
         public async Task InitializeAsync()
         {
+            _ActivityCount += 1;
+
             // start update in the background
             _CheckForUpdate();
 
-            _ActivityCount += 1;
+            _InitializeGameWatcher();
 
             await _CreateKeyDirectoriesAsync();
 
@@ -73,6 +77,13 @@ namespace PSRT.Astra
             PatchCache = await PatchCache.CreateAsync(InstallConfiguration);
 
             _ActivityCount -= 1;
+        }
+
+        public Task DestroyAsync()
+        {
+            _DestroyGameWatcher();
+
+            return Task.CompletedTask;
         }
 
         public async Task<bool> CanOpenSettingsAsync()

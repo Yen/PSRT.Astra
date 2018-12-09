@@ -10,7 +10,8 @@
         MinWidth="800"
         Height="480"
         Width="800"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        Closed="Window_Closed">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} {1}">
             <local:LocaleBinding Path="PSRTAstra"/>
@@ -69,7 +70,18 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_LaunchPSO2}" ToolTip="{local:LocaleBinding MainWindow_LaunchPSO2Tooltip}" Grid.Row="1" Command="{Binding LaunchCommand}" FontSize="48" FontWeight="Bold"/>
+        <Button
+            IsEnabled="{Binding Ready}"   
+            ToolTip="{local:LocaleBinding MainWindow_LaunchPSO2Tooltip}"
+            Grid.Row="1"
+            Command="{Binding LaunchCommand}">
+            <TextBlock
+                Text="{local:LocaleDynamicBinding {Binding LaunchPSO2ButtonLocaleKey, Mode=OneWay}}"
+                FontSize="48"
+                FontWeight="Bold"
+                TextWrapping="Wrap"
+                TextAlignment="Center"/>
+        </Button>
         <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_PSO2Options}" ToolTip="{local:LocaleBinding MainWindow_PSO2OptionsTooltip}" Grid.Row="2" FontSize="20" Click="_SettingsButton_Click"/>
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>

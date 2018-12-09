@@ -42,6 +42,11 @@ namespace PSRT.Astra
             await _ViewModel.VerifyGameFilesAsync();
         }
 
+        private async void Window_Closed(object sender, EventArgs e)
+        {
+            await _ViewModel.DestroyAsync();
+        }
+
         private void _Log_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (sender is ListView list)
