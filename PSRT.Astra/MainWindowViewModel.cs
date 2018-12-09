@@ -203,16 +203,17 @@ namespace PSRT.Astra
 
             //
 
-            var processTasks = Enumerable.Range(0, atomicProcessCount).Select(i => Task.Run(async () =>
+            var processTasks = Enumerable.Range(0, atomicProcessCount).Select(i => Task.Factory.StartNew(async () =>
             {
                 using (var md5 = MD5.Create())
                 using (var client = new AquaHttpClient())
                 {
+                    const int streamingFileSize = 10 * 1024 * 1024; // 10MB
+                    byte[] bufferBytes = new byte[streamingFileSize];
+
                     var entries = new List<PatchCacheEntry>();
                     while (true)
                     {
-                        await Task.Yield();
-
                         var index = Interlocked.Increment(ref atomicIndex) - 1;
                         if (index >= toUpdate.Count)
                         {
@@ -231,12 +232,24 @@ namespace PSRT.Astra
 
                         if (File.Exists(path))
                         {
-                            using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None, 4096, true))
+                            using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
                             {
-                                var bytes = new byte[fs.Length];
-                                await fs.ReadAsync(bytes, 0, bytes.Length);
-
-                                var hashBytes = md5.ComputeHash(bytes);
+                                // streaming the file into the hash is considerably slower than 
+                                // reading into a byte array first. It does however avoid possible
+                                // out of memory errors with giant files.
+                                // As such we only stream the file if its bigger than the 
+                                // specified file size
+                                byte[] hashBytes;
+                                if (fs.Length > streamingFileSize)
+                                {
+                                    hashBytes = md5.ComputeHash(fs);
+                                }
+                                else
+                                {
+                                    fs.Read(bufferBytes, 0, (int)fs.Length);
+                                    hashBytes = md5.ComputeHash(bufferBytes, 0, (int)fs.Length);
+                                }
+                                
                                 var hashString = string.Concat(hashBytes.Select(b => b.ToString("X2")));
 
                                 if (hashString == info.Hash)
@@ -260,7 +273,7 @@ namespace PSRT.Astra
                         }
                         catch (Exception ex)
                         {
-                            await Application.Current.Dispatcher.InvokeAsync(() => Log(logSource, $"Error: {ex.Message}"));
+                            Application.Current.Dispatcher.Invoke(() => Log(logSource, $"Error: {ex.Message}"));
                             continue;
                         }
 
@@ -274,7 +287,7 @@ namespace PSRT.Astra
                 }
 
                 Interlocked.Decrement(ref atomicProcessCount);
-            }));
+            }, TaskCreationOptions.LongRunning));
 
             //
 
