@@ -39,4 +39,4 @@ A user should not have to deal with anything else. If they have gotten to the po
 
 # Arks Layer
 
-The Arks Layer team has very kindly allowed us to utilise their tools as Astra does not attempt to replicate the functionality of any of these, just the Tweaker itself. As such, Astra ships with support the the English patch and the Telepipe Proxy. It should be noted that Arks Layer does not allow the use of their tools without request! If you are considering using the code here to replicate functionality be warned that you **must** request access from them first. The user agent used by Astra was provided _for_ the use by Astra only.
+The Arks Layer team has very kindly allowed us to utilise their tools as Astra does not attempt to replicate the functionality of any of these, just the Tweaker itself. As such, Astra ships with support for the English patch and the Telepipe Proxy. It should be noted that Arks Layer does not allow the use of their tools without request! If you are considering using the code here to replicate functionality be warned that you **must** request access from them first. The user agent used by Astra was provided _for_ the use by Astra only.
