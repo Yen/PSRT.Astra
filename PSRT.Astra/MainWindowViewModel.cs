@@ -249,7 +249,7 @@ namespace PSRT.Astra
                                     fs.Read(bufferBytes, 0, (int)fs.Length);
                                     hashBytes = md5.ComputeHash(bufferBytes, 0, (int)fs.Length);
                                 }
-                                
+
                                 var hashString = string.Concat(hashBytes.Select(b => b.ToString("X2")));
 
                                 if (hashString == info.Hash)
@@ -315,10 +315,42 @@ namespace PSRT.Astra
 
             async Task LogLoopAsync()
             {
+                var perSecondQueue = new Queue<double>();
+
+                var lastRemainingUpdates = toUpdate.Count;
+                var lastTime = DateTime.UtcNow;
+                
+                var updateSpeed = 1.0;
+
                 while (atomicProcessCount > 0)
                 {
-                    logEntry.Message = $"{Math.Max(0, toUpdate.Count - atomicIndex)} queued for update";
                     await Task.Delay(100);
+
+                    var remainingUpdates = toUpdate.Count - atomicIndex;
+
+                    if (DateTime.UtcNow - TimeSpan.FromSeconds(5) > lastTime)
+                    {
+                        var updateCount = lastRemainingUpdates - remainingUpdates;
+
+                        if (updateCount > 0)
+                            perSecondQueue.Enqueue(updateCount / (DateTime.UtcNow - lastTime).TotalSeconds);
+                        lastRemainingUpdates = remainingUpdates;
+                        lastTime = DateTime.UtcNow;
+
+                        while (perSecondQueue.Count > 20)
+                            perSecondQueue.Dequeue();
+
+                        updateSpeed = perSecondQueue.Sum() / perSecondQueue.Count;
+                    }
+
+                    var estimatedSeconds = remainingUpdates / updateSpeed;
+                    var estimatedMinutes = (int)Math.Round(TimeSpan.FromSeconds(estimatedSeconds).TotalMinutes);
+
+                    var message = $"{Math.Max(0, remainingUpdates)} queued for update";
+                    if (estimatedMinutes > 1)
+                        message += $": ~{estimatedMinutes} minutes";
+
+                    logEntry.Message = message;
                 }
             }
 
