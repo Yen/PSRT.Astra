@@ -1,6 +1,6 @@
-﻿using PropertyChanged;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +32,15 @@ namespace PSRT.Astra
             Properties.Settings.Default.TelepipeProxyUrl = _ViewModel.TelepipeProxyUrl;
             Properties.Settings.Default.Save();
             Close();
+        }
+
+        private void _ChangePSO2DirectoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.LastSelectedInstallLocation = null;
+            Properties.Settings.Default.Save();
+
+            Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
         }
     }
 }

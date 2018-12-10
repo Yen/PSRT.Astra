@@ -63,6 +63,8 @@ namespace PSRT.Astra
         {
             _ActivityCount += 1;
 
+            Log("Astra", $"Game directory set to {Properties.Settings.Default.LastSelectedInstallLocation}");
+
             // start update in the background
             _CheckForUpdate();
 

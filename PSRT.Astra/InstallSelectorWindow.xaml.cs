@@ -31,6 +31,9 @@ namespace PSRT.Astra
             DataContext = _ViewModel;
 
             _ViewModel.SelectedPath = Properties.Settings.Default.LastSelectedInstallLocation;
+
+            if (_ViewModel.SelectedPathContainsPSO2Bin)
+                _OpenMainWindow();
         }
 
         private void _SelectDirectory_Click(object sender, RoutedEventArgs e)
@@ -48,6 +51,11 @@ namespace PSRT.Astra
         }
 
         private void _AcceptButton_Click(object sender, RoutedEventArgs e)
+        {
+            _OpenMainWindow();
+        }
+
+        private void _OpenMainWindow()
         {
             Properties.Settings.Default.LastSelectedInstallLocation = _ViewModel.SelectedPath;
             Properties.Settings.Default.Save();

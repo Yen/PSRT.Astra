@@ -345,4 +345,7 @@ If unsure, set this to Enabled.</value>
   <data name="MainWindow_PSO2Running" xml:space="preserve">
     <value>Waiting for PSO2 to exit</value>
   </data>
+  <data name="OptionsWindow_ChangePSO2Directory" xml:space="preserve">
+    <value>Change PSO2 directory</value>
+  </data>
 </root>
