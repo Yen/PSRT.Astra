@@ -202,9 +202,6 @@
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\pso2h.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\PSO2BlockRename.dll" />
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +218,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\pso2h.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
