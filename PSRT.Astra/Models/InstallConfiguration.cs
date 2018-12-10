@@ -61,6 +61,8 @@ namespace PSRT.Astra.Models
         public string TelepipeProxyConfig { get; }
         public string TelepipeProxyPublicKey { get; }
 
+        public string LargeAddressAwareConfig { get; }
+
         static InstallConfiguration()
         {
             var gameGuardDir = Environment.GetFolderPath(
@@ -125,6 +127,8 @@ namespace PSRT.Astra.Models
 
             TelepipeProxyConfig = Path.Combine(PSO2BinDirectory, "proxy.txt");
             TelepipeProxyPublicKey = Path.Combine(PSO2BinDirectory, "publickey.blob");
+
+            LargeAddressAwareConfig = Path.Combine(PSO2BinDirectory, "largeAddressAware.json");
         }
     }
 }

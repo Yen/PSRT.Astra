@@ -348,4 +348,7 @@ If unsure, set this to Enabled.</value>
   <data name="OptionsWindow_ChangePSO2Directory" xml:space="preserve">
     <value>Change PSO2 directory</value>
   </data>
+  <data name="OptionsWindow_LargeAddressAware" xml:space="preserve">
+    <value>Large Address Aware Patch</value>
+  </data>
 </root>

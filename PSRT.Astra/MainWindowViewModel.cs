@@ -176,6 +176,15 @@ namespace PSRT.Astra
                         continue;
                     }
 
+                    // skip pso2.exe if the file is large address aware patched
+                    if (Path.GetFileName(relativeFilePath) == Path.GetFileName(InstallConfiguration.PSO2Executable)
+                        && Properties.Settings.Default.LargeAddressAwareEnabled
+                        && LargeAddressAware.IsLargeAddressAwarePactchApplied(InstallConfiguration, patch.Value.Hash))
+                    {
+                        continue;
+                    }
+
+
                     if (!cacheData.ContainsKey(patch.Key))
                     {
                         toUpdate.Add((patch.Key, patch.Value));
@@ -332,7 +341,7 @@ namespace PSRT.Astra
 
                 var lastRemainingUpdates = toUpdate.Count;
                 var lastTime = DateTime.UtcNow;
-                
+
                 var updateSpeed = 1.0;
 
                 while (atomicProcessCount > 0)
@@ -448,6 +457,12 @@ namespace PSRT.Astra
                 Log("Launch", "Launch canceled due to error");
                 _ActivityCount -= 1;
                 return;
+            }
+
+            if (Properties.Settings.Default.LargeAddressAwareEnabled)
+            {
+                Log("Launch", "Applying large address aware patch");
+                await Task.Run(() => LargeAddressAware.ApplyLargeAddressAwarePatch(InstallConfiguration));
             }
 
             Log("Launch", "Starting PSO2");

@@ -73,6 +73,36 @@ namespace PSRT.Astra.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] LargeAddressAware_EDITBIN {
+            get {
+                object obj = ResourceManager.GetObject("LargeAddressAware_EDITBIN", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] LargeAddressAware_LINK {
+            get {
+                object obj = ResourceManager.GetObject("LargeAddressAware_LINK", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] LargeAddressAware_MSPDB60 {
+            get {
+                object obj = ResourceManager.GetObject("LargeAddressAware_MSPDB60", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] PSO2BlockRenameDll {
             get {
                 object obj = ResourceManager.GetObject("PSO2BlockRenameDll", resourceCulture);

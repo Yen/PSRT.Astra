@@ -367,6 +367,24 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change PSO2 directory.
+        /// </summary>
+        internal static string OptionsWindow_ChangePSO2Directory {
+            get {
+                return ResourceManager.GetString("OptionsWindow_ChangePSO2Directory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Large Address Aware Patch.
+        /// </summary>
+        internal static string OptionsWindow_LargeAddressAware {
+            get {
+                return ResourceManager.GetString("OptionsWindow_LargeAddressAware", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Telepipe Config Url.
         /// </summary>
         internal static string OptionsWindow_TelepipeProxyUrl {

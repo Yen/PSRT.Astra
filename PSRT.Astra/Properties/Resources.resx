@@ -139,4 +139,13 @@
   <data name="TelepipeProxyDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TelepipeProxy.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="LargeAddressAware_EDITBIN" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LargeAddressAware\EDITBIN.EXE;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="LargeAddressAware_LINK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LargeAddressAware\LINK.EXE;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="LargeAddressAware_MSPDB60" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LargeAddressAware\MSPDB60.DLL;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

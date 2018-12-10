@@ -30,7 +30,9 @@ namespace PSRT.Astra
         private void _SaveSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.TelepipeProxyUrl = _ViewModel.TelepipeProxyUrl;
+            Properties.Settings.Default.LargeAddressAwareEnabled = _ViewModel.LargeAddressAwareEnabled;
             Properties.Settings.Default.Save();
+            DialogResult = true;
             Close();
         }
 

@@ -16,6 +16,8 @@ namespace PSRT.Astra
             => string.IsNullOrWhiteSpace(TelepipeProxyUrl)
             || (Uri.TryCreate(TelepipeProxyUrl, UriKind.Absolute, out var uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps));
 
+        public bool LargeAddressAwareEnabled { get; set; } = Properties.Settings.Default.LargeAddressAwareEnabled;
+
         public bool SettingsValid => TelepipeProxyUrlValid;
     }
 }

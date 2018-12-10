@@ -94,5 +94,17 @@ namespace PSRT.Astra.Properties {
                 this["UpgradeRequired"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LargeAddressAwareEnabled {
+            get {
+                return ((bool)(this["LargeAddressAwareEnabled"]));
+            }
+            set {
+                this["LargeAddressAwareEnabled"] = value;
+            }
+        }
     }
 }

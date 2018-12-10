@@ -104,6 +104,7 @@
     <Compile Include="AquaHttpClient.cs" />
     <Compile Include="MainWindowViewModel.GameWatcher.cs" />
     <Compile Include="MainWindowViewModel.UpdateChecker.cs" />
+    <Compile Include="Models\LargeAddressAware.cs" />
     <Compile Include="OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
@@ -220,6 +221,9 @@
     <Resource Include="Resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\LargeAddressAware\EDITBIN.EXE" />
+    <Content Include="Resources\LargeAddressAware\LINK.EXE" />
+    <Content Include="Resources\LargeAddressAware\MSPDB60.DLL" />
     <Content Include="Resources\pso2h.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

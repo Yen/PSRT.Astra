@@ -71,7 +71,8 @@ namespace PSRT.Astra
                 return;
 
             var window = new OptionsWindow();
-            window.ShowDialog();
+            if (window.ShowDialog() ?? false)
+                await _ViewModel.VerifyGameFilesAsync();
         }
 
         private void _Hyperlink_RequestNavigateBrowser(object sender, RequestNavigateEventArgs e)
