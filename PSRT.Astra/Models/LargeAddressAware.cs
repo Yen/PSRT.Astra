@@ -103,7 +103,7 @@ namespace PSRT.Astra.Models
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = editbinExecutablePath,
-                    Arguments = $"/NOLOGO /LARGEADDRESSAWARE {normalizedName}"
+                    Arguments = $"/NOLOGO /LARGEADDRESSAWARE \"{normalizedName}\""
                 }
             };
 
