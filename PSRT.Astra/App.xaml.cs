@@ -23,6 +23,12 @@ namespace PSRT.Astra
     {
         public App()
         {
+            // older version of .net (or perhaps just windows) use a different
+            // security protocol by default which does not work with specific
+            // web server settings used by some of the servers astra needs
+            // to contact
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             if (Settings.Default.UpgradeRequired)
             {
                 Settings.Default.Upgrade();
