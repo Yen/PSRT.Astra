@@ -23,3 +23,18 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)/PSRT.Astra/bin/Release'
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+    cleanTargetFolder: true
+    
+- task: DeleteFiles@1
+  inputs:
+    sourceFolder: '$(Build.ArtifactStagingDirectory)'
+    contents: '*.+(pdb|xml)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    artifactName: 'PSRT.Astra'
