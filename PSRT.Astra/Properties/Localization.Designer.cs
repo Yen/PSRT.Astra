@@ -381,7 +381,7 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change PSO2 directory.
+        ///   Looks up a localized string similar to Change PSO2 installation directory.
         /// </summary>
         internal static string OptionsWindow_ChangePSO2Directory {
             get {

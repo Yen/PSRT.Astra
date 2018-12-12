@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,7 +46,12 @@ namespace PSRT.Astra
 
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
-                    _ViewModel.SelectedPath = dialog.SelectedPath;
+                    var selectedPath = dialog.SelectedPath;
+                    // if the user selects the pso2_bin directory rather than their actual
+                    // installation directory with the folder browser, move their selection
+                    // back down to the base installation directory
+                    selectedPath = Regex.Replace(selectedPath, @"\\pso2_bin\\?$", string.Empty);
+                    _ViewModel.SelectedPath = selectedPath;
                 }
             }
         }

@@ -346,7 +346,7 @@ If unsure, set this to Enabled.</value>
     <value>Waiting for PSO2 to exit</value>
   </data>
   <data name="OptionsWindow_ChangePSO2Directory" xml:space="preserve">
-    <value>Change PSO2 directory</value>
+    <value>Change PSO2 installation directory</value>
   </data>
   <data name="OptionsWindow_LargeAddressAware" xml:space="preserve">
     <value>Large Address Aware Patch</value>
