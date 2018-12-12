@@ -115,6 +115,20 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are running Astra on an existing installation of PSO2.
+        ///
+        ///The application will report it is updating all of your game files but do not worry, Astra is only scanning the files to learn about your PSO2 installation.
+        ///Only downloads of corrupt/missing/outdated files occur.
+        ///
+        ///This operation will only happen to completion one time, after this the operation is near instant and ensures your PSO2 installation is always kept in a working state..
+        /// </summary>
+        internal static string InstallSelectorWindow_ExistingInstallationSelectMessage {
+            get {
+                return ResourceManager.GetString("InstallSelectorWindow_ExistingInstallationSelectMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Found a PSO2 installation! Astra will update and launch the game from here..
         /// </summary>
         internal static string InstallSelectorWindow_InstallFoundHint {

@@ -42,7 +42,7 @@ namespace PSRT.Astra
             {
                 dialog.Description = LocaleManager.Instance["InstallSelectorWindow"];
                 var result = dialog.ShowDialog();
-                
+
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
                     _ViewModel.SelectedPath = dialog.SelectedPath;
@@ -52,6 +52,11 @@ namespace PSRT.Astra
 
         private void _AcceptButton_Click(object sender, RoutedEventArgs e)
         {
+            if (_ViewModel.SelectedPathContainsPSO2Bin)
+            {
+                var message = LocaleManager.Instance["InstallSelectorWindow_ExistingInstallationSelectMessage"];
+                System.Windows.MessageBox.Show(message, "PSRT.Astra", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
             _OpenMainWindow();
         }
 
