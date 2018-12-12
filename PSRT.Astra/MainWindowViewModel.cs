@@ -134,7 +134,11 @@ namespace PSRT.Astra
                 await Task.Run(() =>
                 {
                     foreach (var file in modFiles)
-                        File.Copy(Path.Combine(InstallConfiguration.ModsDirectory, file), Path.Combine(InstallConfiguration.DataWin32Directory, file), true);
+                    {
+                        var dataPath = Path.Combine(InstallConfiguration.DataWin32Directory, file);
+                        File.Delete(dataPath);
+                        File.Copy(Path.Combine(InstallConfiguration.ModsDirectory, file), dataPath, true);
+                    }
                 });
             }
 
