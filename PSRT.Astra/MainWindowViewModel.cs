@@ -129,18 +129,12 @@ namespace PSRT.Astra
 
             if (modFiles.Length > 0)
             {
-                Log(logSource, $"Creating hard links for {modFiles.Length} mod file{(modFiles.Length == 1 ? string.Empty : "s")}");
+                Log(logSource, $"Copying {modFiles.Length} mod file{(modFiles.Length == 1 ? string.Empty : "s")}");
 
                 await Task.Run(() =>
                 {
                     foreach (var file in modFiles)
-                    {
-                        var hardLinkPath = Path.Combine(InstallConfiguration.DataWin32Directory, file);
-                        File.Delete(hardLinkPath);
-
-                        var targetPath = Path.Combine(InstallConfiguration.ModsDirectory, file);
-                        HardLink.CreateHardLink(hardLinkPath, targetPath);
-                    }
+                        File.Copy(Path.Combine(InstallConfiguration.ModsDirectory, file), Path.Combine(InstallConfiguration.DataWin32Directory, file), true);
                 });
             }
 

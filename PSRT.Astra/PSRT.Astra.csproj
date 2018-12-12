@@ -132,7 +132,6 @@
     </Compile>
     <Compile Include="PSO2OptionsWindowViewModel.cs" />
     <Compile Include="StringFormatValueConverter.cs" />
-    <Compile Include="HardLink.cs" />
     <Page Include="OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
