@@ -24,6 +24,9 @@ namespace PSRT.Astra.Models
         public string PatchesDirectory { get; }
 
         public string DataDirectory { get; }
+        // TODO: might be able to remove these definitions as pso2 now uses
+        // more directory names without notice and astra generates the folders
+        // that are required
         public string DataLicenseDirectory { get; }
         public string DataWin32Directory { get; }
         public string DataWin32ScriptDirectory { get; }

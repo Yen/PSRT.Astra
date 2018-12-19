@@ -287,6 +287,7 @@ namespace PSRT.Astra
 
                         try
                         {
+                            Directory.CreateDirectory(Path.GetDirectoryName(path));
                             using (var responseStream = await client.GetStreamAsync(info.DownloadPath))
                             using (var fs = new FileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.None, 4096, true))
                                 await responseStream.CopyToAsync(fs);
