@@ -116,7 +116,7 @@
       <DependentUpon>InstallSelectorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="InstallSelectorWindowViewModel.cs" />
-    <Compile Include="LocalManager.cs" />
+    <Compile Include="LocaleManager.cs" />
     <Compile Include="Models\DownloadConfiguration.cs" />
     <Compile Include="Models\InstallConfiguration.cs" />
     <Compile Include="MainWindowViewModel.cs" />

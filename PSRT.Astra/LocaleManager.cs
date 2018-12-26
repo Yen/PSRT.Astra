@@ -67,6 +67,9 @@ namespace PSRT.Astra
                 if (values.Length != 2)
                     throw new Exception();
 
+                if (values[1] == DependencyProperty.UnsetValue)
+                    return null;
+
                 var culture = values[0] as CultureInfo;
                 var key = values[1] as string;
 
