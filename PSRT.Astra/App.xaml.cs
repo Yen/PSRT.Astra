@@ -21,6 +21,10 @@ namespace PSRT.Astra
     /// </summary>
     public partial class App : Application
     {
+        public static new App Current => Application.Current as App;
+
+        public Logger Logger = new Logger();
+
         public App()
         {
             // older version of .net (or perhaps just windows) use a different
@@ -29,8 +33,12 @@ namespace PSRT.Astra
             // to contact
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
+            Logger.Info($"PSRT.Astra {Assembly.GetExecutingAssembly().GetName().Version}");
+
             if (Settings.Default.UpgradeRequired)
             {
+                Logger.Info("Upgrading settings file");
+
                 Settings.Default.Upgrade();
                 Settings.Default.UpgradeRequired = false;
                 Settings.Default.Save();
@@ -41,11 +49,15 @@ namespace PSRT.Astra
 
         private void _UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
+            Logger.Warning("Entered dispatcher unhandled exception handler", e.Exception);
+
             const string messageBoxTitle = "PSRT Astra fatal exception";
             const string messageBoxContent = "PSRT Astra has encountered an unrecoverable error.\n\nIf this is a repeating issue, please click below to upload the error information and share it with a developer.\n\nWould you like to upload the error information?";
             var messageBoxResult = MessageBox.Show(messageBoxContent, messageBoxTitle, MessageBoxButton.YesNo, MessageBoxImage.Error);
             if (messageBoxResult == MessageBoxResult.No)
                 return;
+
+            Logger.Info("Uploading error information");
 
             var uploadResult = Task.Run(async () =>
             {
@@ -54,11 +66,20 @@ namespace PSRT.Astra
                     client.DefaultRequestHeaders.Add("X-Auth-Token", "ahDhbbK8esumH1uZgcvIwFjk2yMC4DhKZykRHoYDW");
                     var json = JsonConvert.SerializeObject(new
                     {
+                        description = $"PSRT.Astra {Assembly.GetExecutingAssembly().GetName().Version} | {DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")}",
+                        expiration = "never",
                         sections = new[]
                         {
                             new
                             {
-                                name = $"PSRT.Astra {Assembly.GetExecutingAssembly().GetName().Version} | Fatal Exception | {DateTime.UtcNow}",
+                                name = "Log",
+                                syntax = "text",
+                                contents = Logger.Content
+                            },
+                            new
+                            {
+                                name = "Exception",
+                                syntax = "text",
                                 contents = e.Exception.ToString()
                             }
                         }
