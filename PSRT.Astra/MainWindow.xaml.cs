@@ -39,7 +39,6 @@ namespace PSRT.Astra
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             await _ViewModel.InitializeAsync();
-            await _ViewModel.VerifyGameFilesAsync();
         }
 
         private async void Window_Closed(object sender, EventArgs e)
@@ -71,8 +70,9 @@ namespace PSRT.Astra
                 return;
 
             var window = new OptionsWindow();
-            if (window.ShowDialog() ?? false)
-                await _ViewModel.VerifyGameFilesAsync();
+            window.ShowDialog();
+            //if (window.ShowDialog() ?? false)
+            //    await _ViewModel.VerifyGameFilesAsync();
         }
 
         private void _Hyperlink_RequestNavigateBrowser(object sender, RequestNavigateEventArgs e)

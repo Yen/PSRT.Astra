@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PSRT.Astra.Models.Phases
@@ -16,7 +17,7 @@ namespace PSRT.Astra.Models.Phases
             _InstallConfiguration = installConfiguration;
         }
 
-        public async Task RunAsync()
+        public async Task RunAsync(CancellationToken ct = default)
         {
             await Task.Run(() => File.Delete(_InstallConfiguration.CensorFile));
         }

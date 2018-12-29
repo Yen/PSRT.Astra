@@ -29,7 +29,6 @@ namespace PSRT.Astra
     [AddINotifyPropertyChangedInterface]
     public partial class MainWindowViewModel
     {
-        public RelayCommand VerifyGameFilesCommand => new RelayCommand(async () => await VerifyGameFilesAsync());
         public RelayCommand LaunchCommand => new RelayCommand(async () => await LaunchAsync());
         public RelayCommand ResetGameGuardCommand => new RelayCommand(async () => await ResetGameGuardAsync());
 
@@ -57,6 +56,8 @@ namespace PSRT.Astra
         public bool Ready => _ActivityCount == 0 && DownloadConfiguration != null && !IsPSO2Running;
 
         // phases
+
+        private CancellationTokenSource _LaunchCancellationTokenSource;
 
         private PSO2DirectoriesPhase _PSO2DirectoriesPhase;
         private ModFilesPhase _ModFilesPhase;
@@ -116,72 +117,6 @@ namespace PSRT.Astra
             return userFileExists;
         }
 
-        public async Task VerifyGameFilesAsync()
-        {
-            _ActivityCount += 1;
-
-            var logSource = "Verify PSO2";
-
-            while (true)
-            {
-                try
-                {
-                    await VerifyAsync(logSource);
-                }
-                catch (Exception ex)
-                {
-                    App.Current.Logger.Error(nameof(MainWindowViewModel), "Exception while verifying", ex);
-                    Log(logSource, "Error verifying, retrying");
-                    await Task.Delay(5000);
-                    continue;
-                }
-                break;
-            }
-
-            Log(logSource, "All files verified");
-
-            _ActivityCount -= 1;
-        }
-
-        public async Task VerifyAsync(string logSource)
-        {
-            _ActivityCount += 1;
-
-            try
-            {
-                App.Current.Logger.Info("Verify", $"Running {nameof(PSO2DirectoriesPhase)}");
-                Log(logSource, $"Running {nameof(PSO2DirectoriesPhase)}");
-                await _PSO2DirectoriesPhase.RunAsync();
-
-                App.Current.Logger.Info("Verify", $"Running {nameof(ModFilesPhase)}");
-                Log(logSource, $"Running {nameof(ModFilesPhase)}");
-                await _ModFilesPhase.RunAsync();
-
-                App.Current.Logger.Info("Verify", $"Running {nameof(DeleteCensorFilePhase)}");
-                Log(logSource, $"Running {nameof(DeleteCensorFilePhase)}");
-                await _DeleteCensorFilePhase.RunAsync();
-
-                App.Current.Logger.Info("Verify", $"Running {nameof(ComparePhase)}");
-                Log(logSource, $"Running {nameof(ComparePhase)}");
-                var toUpdate = await _ComparePhase.RunAsync();
-                if (toUpdate.Count == 0)
-                    return;
-
-                App.Current.Logger.Info("Verify", $"Running {nameof(VerifyFilesPhase)}");
-                Log(logSource, $"Running {nameof(VerifyFilesPhase)}");
-                await _VerifyFilesPhase.RunAsync(toUpdate);
-
-                // Rerun
-                App.Current.Logger.Info("Verify", "Rerunning verify task to check for intermediate changes");
-                Log(logSource, "Rerunning verify task to check for intermediate changes");
-                await VerifyAsync(logSource);
-            }
-            finally
-            {
-                _ActivityCount -= 1;
-            }
-        }
-
         public void Log(string source, string message)
         {
             Log(new LogEntry()
@@ -200,89 +135,124 @@ namespace PSRT.Astra
         {
             _ActivityCount += 1;
 
-            Log("Launch", "Saving client settings");
-            await Task.Run(() =>
-            {
-                Properties.Settings.Default.EnglishPatchEnabled = ArksLayerEnglishPatchEnabled;
-                Properties.Settings.Default.TelepipeProxyEnabled = ArksLayerTelepipeProxyEnabled;
-                Properties.Settings.Default.Save();
-            });
-
-            if (await _PerformArksLayerPatches() == false)
-            {
-                Log("Launch", "Launch canceled due to error");
-                _ActivityCount -= 1;
-                return;
-            }
-
-            if (Properties.Settings.Default.LargeAddressAwareEnabled)
-            {
-                Log("Launch", "Applying large address aware patch");
-                await Task.Run(() => LargeAddressAware.ApplyLargeAddressAwarePatch(InstallConfiguration));
-            }
-
-            Log("Launch", "Starting PSO2");
-
-            var startInfo = new ProcessStartInfo()
-            {
-                FileName = InstallConfiguration.PSO2Executable,
-                Arguments = "+0x33aca2b9",
-                UseShellExecute = false
-            };
-            startInfo.EnvironmentVariables["-pso2"] = "+0x01e3f1e9";
-
-            await Task.Run(() =>
-            {
-                var process = new Process()
-                {
-                    StartInfo = startInfo
-                };
-                process.Start();
-
-                process.WaitForExit();
-            });
-
-            Log("Launch", "PSO2 launch process ended");
-
-            _ActivityCount -= 1;
-        }
-
-        private async Task<bool> _PerformArksLayerPatches()
-        {
-            _ActivityCount += 1;
-
             try
             {
-                Log("ArksLayer", "Downloading plugin info");
+                _LaunchCancellationTokenSource = new CancellationTokenSource();
 
-                var pluginInfo = await PluginInfo.FetchAsync();
+                Log("Launch", "Saving client settings");
+                await Task.Run(() =>
+                {
+                    Properties.Settings.Default.EnglishPatchEnabled = ArksLayerEnglishPatchEnabled;
+                    Properties.Settings.Default.TelepipeProxyEnabled = ArksLayerTelepipeProxyEnabled;
+                    Properties.Settings.Default.Save();
+                });
 
-                var pso2hPhase = new PSO2hPhase(InstallConfiguration, pluginInfo, ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled);
-                await pso2hPhase.RunAsync();
+                while (true)
+                {
+                    try
+                    {
+                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                var telepipeProxyPhase = new TelepipeProxyPhase(InstallConfiguration, pluginInfo, ArksLayerTelepipeProxyEnabled);
-                await telepipeProxyPhase.RunAsync();
+                        App.Current.Logger.Info("Launch", $"Running {nameof(PSO2DirectoriesPhase)}");
+                        Log("Launch", $"Running {nameof(PSO2DirectoriesPhase)}");
+                        await _PSO2DirectoriesPhase.RunAsync(_LaunchCancellationTokenSource.Token);
 
-                var englishPatchPhase = new EnglishPatchPhase(InstallConfiguration, PatchCache, pluginInfo, ArksLayerEnglishPatchEnabled);
-                await englishPatchPhase.RunAsync();
-            }
-            catch (Exception ex)
-            {
-                App.Current.Logger.Error(nameof(MainWindowViewModel), "Error applying patches", ex);
+                        App.Current.Logger.Info("Launch", $"Running {nameof(ModFilesPhase)}");
+                        Log("Launch", $"Running {nameof(ModFilesPhase)}");
+                        await _ModFilesPhase.RunAsync(_LaunchCancellationTokenSource.Token);
 
-                Log("ArksLayer", "Error applying Arks-Layer patches");
-                Log("ArksLayer", ex.Message);
+                        App.Current.Logger.Info("Launch", $"Running {nameof(DeleteCensorFilePhase)}");
+                        Log("Launch", $"Running {nameof(DeleteCensorFilePhase)}");
+                        await _DeleteCensorFilePhase.RunAsync(_LaunchCancellationTokenSource.Token);
 
-                return false;
+                        // loop this block so files that were updated while a possibly long
+                        // verify phase took place are not missed
+                        while (true)
+                        {
+                            App.Current.Logger.Info("Launch", $"Running {nameof(ComparePhase)}");
+                            Log("Launch", $"Running {nameof(ComparePhase)}");
+                            var toUpdate = await _ComparePhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                            if (toUpdate.Count == 0)
+                                break;
+
+                            App.Current.Logger.Info("Launch", $"Running {nameof(VerifyFilesPhase)}");
+                            Log("Launch", $"Running {nameof(VerifyFilesPhase)}");
+                            await _VerifyFilesPhase.RunAsync(toUpdate, _LaunchCancellationTokenSource.Token);
+                        }
+
+                        App.Current.Logger.Info("Launch", "Fetching plugin info");
+                        Log("Launch", "Fetching plugin info");
+                        var pluginInfo = await PluginInfo.FetchAsync(_LaunchCancellationTokenSource.Token);
+
+                        App.Current.Logger.Info("Launch", $"Running {nameof(PSO2hPhase)}");
+                        Log("Launch", $"Running {nameof(PSO2hPhase)}");
+                        var pso2hPhase = new PSO2hPhase(InstallConfiguration, pluginInfo, ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled);
+                        await pso2hPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+
+                        App.Current.Logger.Info("Launch", $"Running {nameof(TelepipeProxyPhase)}");
+                        Log("Launch", $"Running {nameof(TelepipeProxyPhase)}");
+                        var telepipeProxyPhase = new TelepipeProxyPhase(InstallConfiguration, pluginInfo, ArksLayerTelepipeProxyEnabled);
+                        await telepipeProxyPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+
+                        App.Current.Logger.Info("Launch", $"Running {nameof(EnglishPatchPhase)}");
+                        Log("Launch", $"Running {nameof(EnglishPatchPhase)}");
+                        var englishPatchPhase = new EnglishPatchPhase(InstallConfiguration, PatchCache, pluginInfo, ArksLayerEnglishPatchEnabled);
+                        await englishPatchPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        App.Current.Logger.Info("Launch", "Launch cancelled");
+                        Log("Launch", "Launch cancelled");
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Current.Logger.Info("Launch", "Error during launch phases", ex);
+                        Log("Launch", "Error during launch phases, retrying");
+                        await Task.Delay(5000);
+                        continue;
+                    }
+
+                    break;
+                }
+
+                if (Properties.Settings.Default.LargeAddressAwareEnabled)
+                {
+                    Log("Launch", "Applying large address aware patch");
+                    await Task.Run(() => LargeAddressAware.ApplyLargeAddressAwarePatch(InstallConfiguration));
+                }
+
+                Log("Launch", "Starting PSO2");
+
+                var startInfo = new ProcessStartInfo()
+                {
+                    FileName = InstallConfiguration.PSO2Executable,
+                    Arguments = "+0x33aca2b9",
+                    UseShellExecute = false
+                };
+                startInfo.EnvironmentVariables["-pso2"] = "+0x01e3f1e9";
+
+                await Task.Run(() =>
+                {
+                    var process = new Process()
+                    {
+                        StartInfo = startInfo
+                    };
+                    process.Start();
+
+                    process.WaitForExit();
+                });
+
+                Log("Launch", "PSO2 launch process ended");
+
             }
             finally
             {
                 _ActivityCount -= 1;
+                _LaunchCancellationTokenSource = null;
             }
-
-            return true;
         }
-
+        
         public async Task ResetGameGuardAsync()
         {
             _ActivityCount += 1;
@@ -323,8 +293,7 @@ namespace PSRT.Astra
             {
                 Log("GameGuard", "Error. Unable to delete GameGuard registry files");
             }
-
-            await VerifyGameFilesAsync();
+            
             _ActivityCount -= 1;
         }
     }

@@ -28,8 +28,11 @@ namespace PSRT.Astra.Models.Phases
             _PatchCache = patchCache;
         }
 
-        public async Task RunAsync(List<(string Name, (string Hash, Uri DownloadPath))> toUpdate)
+        public async Task RunAsync(List<(string Name, (string Hash, Uri DownloadPath))> toUpdate, CancellationToken ct = default)
         {
+            if (toUpdate.Count == 0)
+                return;
+
             var state = new ProcessState
             {
                 AtomicIndex = 0,
@@ -39,6 +42,7 @@ namespace PSRT.Astra.Models.Phases
 
             var exceptions = new ConcurrentBag<Exception>();
             var errorCancellationTokenSource = new CancellationTokenSource();
+            var processCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(errorCancellationTokenSource.Token, ct);
 
             App.Current.Logger.Info(nameof(VerifyFilesPhase), "Starting processing threads");
 
@@ -52,7 +56,7 @@ namespace PSRT.Astra.Models.Phases
                     {
                         App.Current.Logger.Info(nameof(VerifyFilesPhase), $"Processing thread {i} started");
 
-                        _Process(state, toUpdate, errorCancellationTokenSource.Token).GetAwaiter().GetResult();
+                        _Process(state, toUpdate, processCancellationTokenSource.Token).GetAwaiter().GetResult();
                     }
                     catch (OperationCanceledException ex)
                     {
