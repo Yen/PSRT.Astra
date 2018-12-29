@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -494,59 +495,95 @@ namespace PSRT.Astra
         {
             _ActivityCount += 1;
 
-            Log("ArksLayer", "Deleting existing files");
-
             try
             {
-                await Task.Run(() =>
+                Log("ArksLayer", "Downloading plugin info");
+
+                var pluginInfo = await PluginInfo.FetchAsync();
+
+                async Task ValidateFileAsync(string filePath, PluginInfo.PluginEntry entry)
                 {
-                    if (File.Exists(InstallConfiguration.TweakerBin))
-                        File.Delete(InstallConfiguration.TweakerBin);
+                    if (File.Exists(filePath))
+                    {
+                        using (var md5 = MD5.Create())
+                        {
+                            var hashBytes = md5.ComputeHash(File.OpenRead(filePath));
+                            var hash = string.Concat(hashBytes.Select(b => b.ToString("X2", CultureInfo.InvariantCulture)));
+                            if (hash == entry.Hash)
+                                return;
+                        }
+                    }
 
-                    if (File.Exists(InstallConfiguration.DDrawDll))
-                        File.Delete(InstallConfiguration.DDrawDll);
-                    if (File.Exists(InstallConfiguration.PSO2hDll))
-                        File.Delete(InstallConfiguration.PSO2hDll);
+                    File.Delete(filePath);
+                    using (var client = new AstraHttpClient())
+                    using (var ns = await client.GetStreamAsync(new Uri(DownloadConfiguration.PluginsRoot, entry.FileName)))
+                    using (var fs = File.Create(filePath, 4096, FileOptions.Asynchronous))
+                    {
+                        await ns.CopyToAsync(fs);
+                    }
+                }
 
-                    if (File.Exists(InstallConfiguration.PluginPSO2BlockRenameDll))
-                        File.Delete(InstallConfiguration.PluginPSO2BlockRenameDll);
-                    if (File.Exists(InstallConfiguration.PluginPSO2ItemTranslatorDll))
-                        File.Delete(InstallConfiguration.PluginPSO2ItemTranslatorDll);
-                    if (File.Exists(InstallConfiguration.PluginPSO2TitleTranslatorDll))
-                        File.Delete(InstallConfiguration.PluginPSO2TitleTranslatorDll);
-                    if (File.Exists(InstallConfiguration.PluginPSO2RAISERSystemDll))
-                        File.Delete(InstallConfiguration.PluginPSO2RAISERSystemDll);
-                    if (File.Exists(InstallConfiguration.PluginTelepipeProxyDll))
-                        File.Delete(InstallConfiguration.PluginTelepipeProxyDll);
+                if (ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled)
+                {
+                    Log("ArksLayer", "Validating core Arks-Layer components");
+                    App.Current.Logger.Info("Validating core Arks-Layer components");
 
-                    if (File.Exists(InstallConfiguration.TelepipeProxyConfig))
-                        File.Delete(InstallConfiguration.TelepipeProxyConfig);
-                    if (File.Exists(InstallConfiguration.TelepipeProxyPublicKey))
-                        File.Delete(InstallConfiguration.TelepipeProxyPublicKey);
-                });
-            }
-            catch
-            {
-                Log("ArksLayer", "Error deleting files");
-                _ActivityCount -= 1;
-                return false;
-            }
+                    await ValidateFileAsync(InstallConfiguration.DDrawDll, pluginInfo.DDrawDll);
+                    await ValidateFileAsync(InstallConfiguration.PSO2hDll, pluginInfo.PSO2hDll);
 
-            if (ArksLayerEnglishPatchEnabled == false && ArksLayerTelepipeProxyEnabled == false)
-            {
-                _ActivityCount -= 1;
-                return true;
-            }
+                    Log("ArksLayer", "Writing tweaker.bin file");
 
-            Log("ArksLayer", "Copying key files");
-            await Task.Run(() =>
-            {
-                File.WriteAllBytes(InstallConfiguration.DDrawDll, Properties.Resources.DDrawDll);
-                File.WriteAllBytes(InstallConfiguration.PSO2hDll, Properties.Resources.PSO2hDll);
-            });
+                    using (var fs = new FileStream(InstallConfiguration.TweakerBin, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                    using (var writer = new StreamWriter(fs))
+                    {
+                        var magic = _GenerateTweakerBin();
+                        await writer.WriteLineAsync(magic);
+                    }
+                }
+                else
+                {
+                    App.Current.Logger.Info("Deleting core Arks-Layer components");
 
-            try
-            {
+                    File.Delete(InstallConfiguration.TweakerBin);
+                    File.Delete(InstallConfiguration.DDrawDll);
+                    File.Delete(InstallConfiguration.PSO2hDll);
+                }
+
+                if (ArksLayerTelepipeProxyEnabled)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        var proxyUrl = Properties.Settings.Default.TelepipeProxyUrl;
+                        bool isCustomProxy = !string.IsNullOrWhiteSpace(proxyUrl);
+                        string url = isCustomProxy ? proxyUrl : "http://telepipe.io/config.json";
+
+                        if (isCustomProxy)
+                        {
+                            Log("ArksLayer", $"Downloading proxy information from {proxyUrl}");
+                        }
+                        else
+                        {
+                            Log("ArksLayer", "Downloading Telepipe proxy information");
+                        }
+                        var configString = await client.GetStringAsync(url);
+                        var config = JsonConvert.DeserializeObject<ProxyInfo>(configString);
+                        var publicKey = await client.GetByteArrayAsync(config.PublicKeyUrl);
+
+                        Log("ArksLayer", "Writing Telepipe proxy config files");
+                        await Task.Run(() =>
+                        {
+                            File.WriteAllText(InstallConfiguration.TelepipeProxyConfig, config.Host);
+                            File.WriteAllBytes(InstallConfiguration.TelepipeProxyPublicKey, publicKey);
+                        });
+                    }
+
+                    await ValidateFileAsync(InstallConfiguration.PluginTelepipeProxyDll, pluginInfo.TelepipeProxyDll);
+                }
+                else
+                {
+                    File.Delete(InstallConfiguration.PluginTelepipeProxyDll);
+                }
+
                 if (ArksLayerEnglishPatchEnabled)
                 {
                     Log("ArksLayer", "Downloading english translation information");
@@ -584,10 +621,8 @@ namespace PSRT.Astra
                         return true;
                     }
 
-                    using (var client = new HttpClient())
+                    using (var client = new AstraHttpClient())
                     {
-                        client.DefaultRequestHeaders.Add("User-Agent", "PSRT.Astra");
-
                         async Task VerifyAndDownlodRar(string path, string downloadHash, Uri downloadPath)
                         {
                             if (Verify(path, downloadHash) == false)
@@ -636,74 +671,36 @@ namespace PSRT.Astra
                         }
                     }
 
-                    Log("ArksLayer", "Copying english patch plugins");
-                    await Task.Run(() =>
-                    {
-                        File.WriteAllBytes(InstallConfiguration.PluginPSO2BlockRenameDll, Properties.Resources.PSO2BlockRenameDll);
-                        File.WriteAllBytes(InstallConfiguration.PluginPSO2ItemTranslatorDll, Properties.Resources.PSO2ItemTranslatorDll);
-                        File.WriteAllBytes(InstallConfiguration.PluginPSO2TitleTranslatorDll, Properties.Resources.PSO2TitleTranslatorDll);
-                        File.WriteAllBytes(InstallConfiguration.PluginPSO2RAISERSystemDll, Properties.Resources.PSO2RAISERSystemDll);
-                    });
+                    Log("ArksLayer", "Verifying english patch plugins");
+
+                    await ValidateFileAsync(InstallConfiguration.PluginPSO2BlockRenameDll, pluginInfo.PSO2BlockRenameDll);
+                    await ValidateFileAsync(InstallConfiguration.PluginPSO2ItemTranslatorDll, pluginInfo.PSO2ItemTranslatorDll);
+                    await ValidateFileAsync(InstallConfiguration.PluginPSO2TitleTranslatorDll, pluginInfo.PSO2TitleTranslatorDll);
+                    await ValidateFileAsync(InstallConfiguration.PluginPSO2RAISERSystemDll, pluginInfo.PSO2RAISERSystemDll);
                 }
+                else
+                {
+                    File.Delete(InstallConfiguration.PluginPSO2BlockRenameDll);
+                    File.Delete(InstallConfiguration.PluginPSO2ItemTranslatorDll);
+                    File.Delete(InstallConfiguration.PluginPSO2TitleTranslatorDll);
+                    File.Delete(InstallConfiguration.PluginPSO2RAISERSystemDll);
+                }
+
             }
-            catch
+            catch (Exception ex)
             {
-                Log("ArksLayer", "Error installing english patch");
-                _ActivityCount -= 1;
+                App.Current.Logger.Error("Error applying Arks-layer patches", ex);
+
+                Log("ArksLayer", "Error applying Arks-Layer patches");
+                Log("ArksLayer", ex.Message);
+
                 return false;
             }
-
-            if (ArksLayerTelepipeProxyEnabled)
+            finally
             {
-                try
-                {
-                    using (var client = new HttpClient())
-                    {
-                        var proxyUrl = Properties.Settings.Default.TelepipeProxyUrl;
-                        bool isCustomProxy = !string.IsNullOrWhiteSpace(proxyUrl);
-                        string url = isCustomProxy ? proxyUrl : "http://telepipe.io/config.json";
-
-                        if (isCustomProxy)
-                        {
-                            Log("ArksLayer", $"Downloading proxy information from {proxyUrl}");
-                        }
-                        else
-                        {
-                            Log("ArksLayer", "Downloading Telepipe proxy information");
-                        }
-                        var configString = await client.GetStringAsync(url);
-                        var config = JsonConvert.DeserializeObject<ProxyInfo>(configString);
-                        var publicKey = await client.GetByteArrayAsync(config.PublicKeyUrl);
-
-                        Log("ArksLayer", "Writing Telepipe proxy config files");
-                        await Task.Run(() =>
-                        {
-                            File.WriteAllText(InstallConfiguration.TelepipeProxyConfig, config.Host);
-                            File.WriteAllBytes(InstallConfiguration.TelepipeProxyPublicKey, publicKey);
-                        });
-                    }
-
-                    Log("ArksLayer", "Copying Telepipe proxy plugin");
-                    await Task.Run(() => File.WriteAllBytes(InstallConfiguration.PluginTelepipeProxyDll, Properties.Resources.TelepipeProxyDll));
-                }
-                catch
-                {
-                    Log("ArksLayer", "Error installing Telepipe proxy");
-                    _ActivityCount -= 1;
-                    return false;
-                }
+                _ActivityCount -= 1;
             }
 
-            Log("ArksLayer", "Writing tweaker.bin file");
-
-            using (var fs = new FileStream(InstallConfiguration.TweakerBin, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-            using (var writer = new StreamWriter(fs))
-            {
-                var magic = _GenerateTweakerBin();
-                await writer.WriteLineAsync(magic);
-            }
-
-            _ActivityCount -= 1;
             return true;
         }
 

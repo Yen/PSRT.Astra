@@ -118,27 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="DDrawDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ddraw.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="PSO2BlockRenameDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PSO2BlockRename.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="PSO2hDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pso2h.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="PSO2ItemTranslatorDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PSO2ItemTranslator.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="PSO2RAISERSystemDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PSO2RAISERSystem.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="PSO2TitleTranslatorDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PSO2TitleTranslator.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="TelepipeProxyDll" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\TelepipeProxy.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="LargeAddressAware_EDITBIN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\LargeAddressAware\EDITBIN.EXE;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

@@ -19,7 +19,7 @@ namespace PSRT.Astra.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -63,16 +63,6 @@ namespace PSRT.Astra.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] DDrawDll {
-            get {
-                object obj = ResourceManager.GetObject("DDrawDll", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] LargeAddressAware_EDITBIN {
             get {
                 object obj = ResourceManager.GetObject("LargeAddressAware_EDITBIN", resourceCulture);
@@ -96,66 +86,6 @@ namespace PSRT.Astra.Properties {
         internal static byte[] LargeAddressAware_MSPDB60 {
             get {
                 object obj = ResourceManager.GetObject("LargeAddressAware_MSPDB60", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] PSO2BlockRenameDll {
-            get {
-                object obj = ResourceManager.GetObject("PSO2BlockRenameDll", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] PSO2hDll {
-            get {
-                object obj = ResourceManager.GetObject("PSO2hDll", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] PSO2ItemTranslatorDll {
-            get {
-                object obj = ResourceManager.GetObject("PSO2ItemTranslatorDll", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] PSO2RAISERSystemDll {
-            get {
-                object obj = ResourceManager.GetObject("PSO2RAISERSystemDll", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] PSO2TitleTranslatorDll {
-            get {
-                object obj = ResourceManager.GetObject("PSO2TitleTranslatorDll", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] TelepipeProxyDll {
-            get {
-                object obj = ResourceManager.GetObject("TelepipeProxyDll", resourceCulture);
                 return ((byte[])(obj));
             }
         }

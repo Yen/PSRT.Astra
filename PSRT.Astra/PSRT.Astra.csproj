@@ -102,10 +102,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AquaHttpClient.cs" />
+    <Compile Include="AstraHttpClient.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MainWindowViewModel.GameWatcher.cs" />
     <Compile Include="MainWindowViewModel.UpdateChecker.cs" />
     <Compile Include="Models\LargeAddressAware.cs" />
+    <Compile Include="Models\PluginInfo.cs" />
     <Compile Include="OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
@@ -177,6 +179,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Localization.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -197,25 +200,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ddraw.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PSO2BlockRename.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PSO2ItemTranslator.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PSO2RAISERSystem.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PSO2TitleTranslator.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\TelepipeProxy.dll" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icon.ico" />
@@ -224,7 +209,6 @@
     <Content Include="Resources\LargeAddressAware\EDITBIN.EXE" />
     <Content Include="Resources\LargeAddressAware\LINK.EXE" />
     <Content Include="Resources\LargeAddressAware\MSPDB60.DLL" />
-    <Content Include="Resources\pso2h.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -39,9 +39,8 @@ namespace PSRT.Astra.Models
 
         public static async Task<TranslationInfo> FetchAsync(CancellationToken ct = default)
         {
-            using (var client = new HttpClient())
+            using (var client = new AstraHttpClient())
             {
-                client.DefaultRequestHeaders.Add("User-Agent", "PSRT.Astra");
                 using (var request = await client.GetAsync(DownloadConfiguration.TranslationsFile, ct))
                 {
                     var downloadText = await request.Content.ReadAsStringAsync();
