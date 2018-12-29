@@ -506,8 +506,9 @@ namespace PSRT.Astra
                     if (File.Exists(filePath))
                     {
                         using (var md5 = MD5.Create())
+                        using (var fs = File.OpenRead(filePath))
                         {
-                            var hashBytes = md5.ComputeHash(File.OpenRead(filePath));
+                            var hashBytes = md5.ComputeHash(fs);
                             var hash = string.Concat(hashBytes.Select(b => b.ToString("X2", CultureInfo.InvariantCulture)));
                             if (hash == entry.Hash)
                                 return;
