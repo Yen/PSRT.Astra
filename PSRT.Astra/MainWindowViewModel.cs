@@ -528,7 +528,7 @@ namespace PSRT.Astra
                 if (ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled)
                 {
                     Log("ArksLayer", "Validating core Arks-Layer components");
-                    App.Current.Logger.Info("Validating core Arks-Layer components");
+                    App.Current.Logger.Info(Logger.Domain.ArksLayer, "Validating core components");
 
                     await ValidateFileAsync(InstallConfiguration.ArksLayer.DDrawDll, pluginInfo.DDrawDll);
                     await ValidateFileAsync(InstallConfiguration.ArksLayer.PSO2hDll, pluginInfo.PSO2hDll);
@@ -544,7 +544,7 @@ namespace PSRT.Astra
                 }
                 else
                 {
-                    App.Current.Logger.Info("Deleting core Arks-Layer components");
+                    App.Current.Logger.Info(Logger.Domain.ArksLayer, "Deleting core Arks-Layer components");
 
                     File.Delete(InstallConfiguration.ArksLayer.TweakerBin);
                     File.Delete(InstallConfiguration.ArksLayer.DDrawDll);
@@ -691,7 +691,7 @@ namespace PSRT.Astra
             }
             catch (Exception ex)
             {
-                App.Current.Logger.Error("Error applying Arks-layer patches", ex);
+                App.Current.Logger.Error(Logger.Domain.ArksLayer, "Error applying patches", ex);
 
                 Log("ArksLayer", "Error applying Arks-Layer patches");
                 Log("ArksLayer", ex.Message);
