@@ -33,11 +33,11 @@ namespace PSRT.Astra
             // to contact
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            Logger.Info($"PSRT.Astra {Assembly.GetExecutingAssembly().GetName().Version}");
+            Logger.Info(nameof(Astra), $"Version {Assembly.GetExecutingAssembly().GetName().Version}");
 
             if (Settings.Default.UpgradeRequired)
             {
-                Logger.Info("Upgrading settings file");
+                Logger.Info(nameof(Astra), "Upgrading settings file");
 
                 Settings.Default.Upgrade();
                 Settings.Default.UpgradeRequired = false;
@@ -49,7 +49,7 @@ namespace PSRT.Astra
 
         private void _UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            Logger.Warning("Entered dispatcher unhandled exception handler", e.Exception);
+            Logger.Warning(nameof(Astra), "Entered dispatcher unhandled exception handler", e.Exception);
 
             const string messageBoxTitle = "PSRT Astra fatal exception";
             const string messageBoxContent = "PSRT Astra has encountered an unrecoverable error.\n\nIf this is a repeating issue, please click below to upload the error information and share it with a developer.\n\nWould you like to upload the error information?";
@@ -57,7 +57,7 @@ namespace PSRT.Astra
             if (messageBoxResult == MessageBoxResult.No)
                 return;
 
-            Logger.Info("Uploading error information");
+            Logger.Info(nameof(Astra), "Uploading error information");
 
             var uploadResult = Task.Run(async () =>
             {

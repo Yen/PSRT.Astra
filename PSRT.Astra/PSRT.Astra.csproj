@@ -111,6 +111,11 @@
     <Compile Include="Models\ArksLayer\TweakerBin.cs" />
     <Compile Include="Models\LargeAddressAware.cs" />
     <Compile Include="Models\ArksLayer\PluginInfo.cs" />
+    <Compile Include="Models\Phases\ComparePhase.cs" />
+    <Compile Include="Models\Phases\DeleteCensorFilePhase.cs" />
+    <Compile Include="Models\Phases\ModFilesPhase.cs" />
+    <Compile Include="Models\Phases\PSO2DirectoriesPhase.cs" />
+    <Compile Include="Models\Phases\VerifyFilesPhase.cs" />
     <Compile Include="OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>

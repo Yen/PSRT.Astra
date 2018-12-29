@@ -14,12 +14,6 @@ namespace PSRT.Astra
             Error
         }
 
-        public enum Domain
-        {
-            Astra,
-            ArksLayer
-        }
-
         private object _Lock = new object();
         private StringBuilder _Builder = new StringBuilder();
 
@@ -32,11 +26,11 @@ namespace PSRT.Astra
             }
         }
         
-        public void Info(Domain domain, string message) => Write(Level.Info, domain, message);
-        public void Warning(Domain domain, string message) => Write(Level.Warning, domain, message);
-        public void Error(Domain domain, string message) => Write(Level.Error, domain, message);
+        public void Info(string domain, string message) => Write(Level.Info, domain, message);
+        public void Warning(string domain, string message) => Write(Level.Warning, domain, message);
+        public void Error(string domain, string message) => Write(Level.Error, domain, message);
 
-        public void Write(Level level, Domain domain, string message)
+        public void Write(Level level, string domain, string message)
         {
             var line = $"{_GetPrefix(level, domain)} {message}";
 
@@ -44,11 +38,11 @@ namespace PSRT.Astra
                 _Builder.AppendLine(line);
         }
 
-        public void Info(Domain domain, string message, Exception exception) => Write(Level.Info, domain, message, exception);
-        public void Warning(Domain domain, string message, Exception exception) => Write(Level.Warning, domain, message, exception);
-        public void Error(Domain domain, string message, Exception exception) => Write(Level.Error, domain, message, exception);
+        public void Info(string domain, string message, Exception exception) => Write(Level.Info, domain, message, exception);
+        public void Warning(string domain, string message, Exception exception) => Write(Level.Warning, domain, message, exception);
+        public void Error(string domain, string message, Exception exception) => Write(Level.Error, domain, message, exception);
 
-        public void Write(Level level, Domain domain, string message, Exception exception)
+        public void Write(Level level, string domain, string message, Exception exception)
         {
             var line = $"{_GetPrefix(level, domain)} {message}";
             var exceptionString = exception.ToString();
@@ -60,7 +54,7 @@ namespace PSRT.Astra
             }
         }
 
-        private string _GetPrefix(Level level, Domain domain)
+        private string _GetPrefix(Level level, string domain)
         {
             var levelString = _GetLevelString(level);
             return $"[{levelString} {DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")}]({domain})";

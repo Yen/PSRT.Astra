@@ -35,7 +35,7 @@ namespace PSRT.Astra.Models.ArksLayer
 
         public static async Task<PluginInfo> FetchAsync(CancellationToken ct = default)
         {
-            App.Current.Logger.Info("Downloading plugin info");
+            App.Current.Logger.Info(nameof(PluginInfo), "Downloading plugin info");
 
             using (var client = new ArksLayerHttpClient())
             {

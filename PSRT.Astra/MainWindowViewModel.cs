@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using PropertyChanged;
 using PSRT.Astra.Models;
 using PSRT.Astra.Models.ArksLayer;
+using PSRT.Astra.Models.Phases;
 using SharpCompress.Archives.Rar;
 
 namespace PSRT.Astra
@@ -54,6 +55,14 @@ namespace PSRT.Astra
         private int _ActivityCount { get; set; } = 0;
         public bool Ready => _ActivityCount == 0 && DownloadConfiguration != null && !IsPSO2Running;
 
+        // phases
+
+        private PSO2DirectoriesPhase _PSO2DirectoriesPhase;
+        private ModFilesPhase _ModFilesPhase;
+        private ComparePhase _ComparePhase;
+        private DeleteCensorFilePhase _DeleteCensorFilePhase;
+        private VerifyFilesPhase _VerifyFilesPhase;
+
         //
 
         public MainWindowViewModel(string pso2BinDirectory)
@@ -72,13 +81,19 @@ namespace PSRT.Astra
 
             _InitializeGameWatcher();
 
-            await _CreateKeyDirectoriesAsync();
-
             Log("Init", "Fetching download configuration");
             DownloadConfiguration = await DownloadConfiguration.CreateDefaultAsync();
 
             Log("Init", "Connecting to patch cache database");
             PatchCache = await PatchCache.CreateAsync(InstallConfiguration);
+
+            _PSO2DirectoriesPhase = new PSO2DirectoriesPhase(InstallConfiguration);
+            _ModFilesPhase = new ModFilesPhase(InstallConfiguration);
+            _ComparePhase = new ComparePhase(InstallConfiguration, DownloadConfiguration, PatchCache);
+            _DeleteCensorFilePhase = new DeleteCensorFilePhase(InstallConfiguration);
+            _VerifyFilesPhase = new VerifyFilesPhase(InstallConfiguration, PatchCache);
+
+            await VerifyGameFilesAsync();
 
             _ActivityCount -= 1;
         }
@@ -108,323 +123,50 @@ namespace PSRT.Astra
 
             var logSource = "Verify PSO2";
 
-            Log(logSource, "Downloading patch list");
-
-            var patches = await PatchInfo.FetchPatchInfosAsync(InstallConfiguration, DownloadConfiguration);
-
-            await VerifyAsync(logSource, patches);
+            await VerifyAsync(logSource);
 
             Log(logSource, "All files verified");
 
             _ActivityCount -= 1;
         }
 
-        public async Task VerifyAsync(string logSource, Dictionary<string, (string Hash, Uri DownloadPath)> patches)
+        public async Task VerifyAsync(string logSource)
         {
             _ActivityCount += 1;
 
-            await _CreateKeyDirectoriesAsync();
-
-            var modFiles = await Task.Run(() => Directory.GetFiles(InstallConfiguration.ModsDirectory)
-                .Select(p => Path.GetFileName(p))
-                .ToArray());
-
-            if (modFiles.Length > 0)
+            try
             {
-                Log(logSource, $"Copying {modFiles.Length} mod file{(modFiles.Length == 1 ? string.Empty : "s")}");
+                App.Current.Logger.Info("Verify", $"Running {nameof(PSO2DirectoriesPhase)}");
+                Log(logSource, $"Running {nameof(PSO2DirectoriesPhase)}");
+                await _PSO2DirectoriesPhase.RunAsync();
 
-                await Task.Run(() =>
-                {
-                    foreach (var file in modFiles)
-                    {
-                        var dataPath = Path.Combine(InstallConfiguration.DataWin32Directory, file);
-                        File.Delete(dataPath);
-                        File.Copy(Path.Combine(InstallConfiguration.ModsDirectory, file), dataPath, true);
-                    }
-                });
+                App.Current.Logger.Info("Verify", $"Running {nameof(ModFilesPhase)}");
+                Log(logSource, $"Running {nameof(ModFilesPhase)}");
+                await _ModFilesPhase.RunAsync();
+
+                App.Current.Logger.Info("Verify", $"Running {nameof(DeleteCensorFilePhase)}");
+                Log(logSource, $"Running {nameof(DeleteCensorFilePhase)}");
+                await _DeleteCensorFilePhase.RunAsync();
+
+                App.Current.Logger.Info("Verify", $"Running {nameof(ComparePhase)}");
+                Log(logSource, $"Running {nameof(ComparePhase)}");
+                var toUpdate = await _ComparePhase.RunAsync();
+                if (toUpdate.Count == 0)
+                    return;
+
+                App.Current.Logger.Info("Verify", $"Running {nameof(VerifyFilesPhase)}");
+                Log(logSource, $"Running {nameof(VerifyFilesPhase)}");
+                await _VerifyFilesPhase.RunAsync(toUpdate);
+
+                // Rerun
+                App.Current.Logger.Info("Verify", "Rerunning verify task to check for intermediate changes");
+                Log(logSource, "Rerunning verify task to check for intermediate changes");
+                await VerifyAsync(logSource);
             }
-
-            Log(logSource, "Fetching patch cache data");
-
-            var cacheData = await PatchCache.SelectAllAsync();
-
-            Log(logSource, "Comparing files");
-
-            var toUpdate = new List<(string Name, (string Hash, Uri DownloadPath))>();
-
-            await Task.Run(() =>
+            finally
             {
-                foreach (var patch in patches)
-                {
-                    var relativeFilePath = patch.Key
-                        .Substring(0, patch.Key.Length - 4)
-                        .Replace('/', Path.DirectorySeparatorChar)
-                        .ToLower();
-                    var filePath = Path.Combine(InstallConfiguration.PSO2BinDirectory, relativeFilePath);
-
-                    // skip file if a file with the same name exists in the mods folder
-                    if (Path.GetDirectoryName(filePath).ToLower() == InstallConfiguration.DataWin32Directory.ToLower())
-                    {
-                        var modFilePath = Path.Combine(InstallConfiguration.ModsDirectory, Path.GetFileName(relativeFilePath));
-                        if (File.Exists(modFilePath))
-                            continue;
-                    }
-
-                    if (!File.Exists(filePath))
-                    {
-                        toUpdate.Add((patch.Key, patch.Value));
-                        continue;
-                    }
-
-                    // skip pso2.exe if the file is large address aware patched
-                    if (Path.GetFileName(relativeFilePath) == Path.GetFileName(InstallConfiguration.PSO2Executable)
-                        && Properties.Settings.Default.LargeAddressAwareEnabled
-                        && LargeAddressAware.IsLargeAddressAwarePactchApplied(InstallConfiguration, patch.Value.Hash))
-                    {
-                        continue;
-                    }
-
-
-                    if (!cacheData.ContainsKey(patch.Key))
-                    {
-                        toUpdate.Add((patch.Key, patch.Value));
-                        continue;
-                    }
-
-                    var cacheEntry = cacheData[patch.Key];
-
-                    if (patch.Value.Hash != cacheEntry.Hash)
-                    {
-                        toUpdate.Add((patch.Key, patch.Value));
-                        continue;
-                    }
-
-                    var info = new FileInfo(filePath);
-                    if (info.LastWriteTimeUtc.ToFileTimeUtc() != cacheEntry.LastWriteTime)
-                    {
-                        toUpdate.Add((patch.Key, patch.Value));
-                        continue;
-                    }
-                }
-            });
-
-            Log(logSource, $"{toUpdate.Count} files to update");
-            if (toUpdate.Count == 0)
-            {
-                _DeleteCensorFile();
-
                 _ActivityCount -= 1;
-                return;
             }
-
-            //
-
-            var atomicIndex = 0;
-            var atomicProcessCount = Environment.ProcessorCount;
-            var updateBucket = new ConcurrentQueue<List<PatchCacheEntry>>();
-
-            //
-
-            var processTasks = Enumerable.Range(0, atomicProcessCount).Select(i => Task.Factory.StartNew(async () =>
-            {
-                using (var md5 = MD5.Create())
-                using (var client = new AquaHttpClient())
-                {
-                    const int streamingFileSize = 10 * 1024 * 1024; // 10MB
-                    byte[] bufferBytes = new byte[streamingFileSize];
-
-                    var entries = new List<PatchCacheEntry>();
-                    while (true)
-                    {
-                        var index = Interlocked.Increment(ref atomicIndex) - 1;
-                        if (index >= toUpdate.Count)
-                        {
-                            updateBucket.Enqueue(entries);
-                            break;
-                        }
-
-                        if (entries.Count > 50)
-                        {
-                            updateBucket.Enqueue(entries);
-                            entries = new List<PatchCacheEntry>();
-                        }
-
-                        var (name, info) = toUpdate[index];
-                        var path = Path.Combine(InstallConfiguration.PSO2BinDirectory, name.Substring(0, name.Length - 4));
-
-                        if (File.Exists(path))
-                        {
-                            using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
-                            {
-                                // streaming the file into the hash is considerably slower than 
-                                // reading into a byte array first. It does however avoid possible
-                                // out of memory errors with giant files.
-                                // As such we only stream the file if its bigger than the 
-                                // specified file size
-                                byte[] hashBytes;
-                                if (fs.Length > streamingFileSize)
-                                {
-                                    hashBytes = md5.ComputeHash(fs);
-                                }
-                                else
-                                {
-                                    fs.Read(bufferBytes, 0, (int)fs.Length);
-                                    hashBytes = md5.ComputeHash(bufferBytes, 0, (int)fs.Length);
-                                }
-
-                                var hashString = string.Concat(hashBytes.Select(b => b.ToString("X2")));
-
-                                if (hashString == info.Hash)
-                                {
-                                    entries.Add(new PatchCacheEntry()
-                                    {
-                                        Name = name,
-                                        Hash = info.Hash,
-                                        LastWriteTime = new FileInfo(path).LastWriteTimeUtc.ToFileTimeUtc()
-                                    });
-                                    continue;
-                                }
-                            }
-                        }
-
-                        try
-                        {
-                            Directory.CreateDirectory(Path.GetDirectoryName(path));
-                            using (var responseStream = await client.GetStreamAsync(info.DownloadPath))
-                            using (var fs = new FileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.None, 4096, true))
-                                await responseStream.CopyToAsync(fs);
-                        }
-                        catch (Exception ex)
-                        {
-                            Application.Current.Dispatcher.Invoke(() => Log(logSource, $"Error: {ex.Message}"));
-                            continue;
-                        }
-
-                        entries.Add(new PatchCacheEntry()
-                        {
-                            Name = name,
-                            Hash = info.Hash,
-                            LastWriteTime = new FileInfo(path).LastWriteTimeUtc.ToFileTimeUtc()
-                        });
-                    }
-                }
-
-                Interlocked.Decrement(ref atomicProcessCount);
-            }, TaskCreationOptions.LongRunning));
-
-            //
-
-            async Task CacheInsertLoopAsync()
-            {
-                while (atomicProcessCount > 0 || updateBucket.Count != 0)
-                {
-                    await Task.Delay(100);
-
-                    if (updateBucket.Count == 0)
-                        continue;
-
-                    while (updateBucket.TryDequeue(out var list))
-                    {
-                        if (list.Count > 0)
-                            await PatchCache.InsertUnderTransactionAsync(list);
-                    }
-                }
-            }
-
-            var logEntry = new LogEntry()
-            {
-                Source = logSource
-            };
-
-            async Task LogLoopAsync()
-            {
-                var perSecondQueue = new Queue<double>();
-
-                var lastRemainingUpdates = toUpdate.Count;
-                var lastTime = DateTime.UtcNow;
-
-                var updateSpeed = 1.0;
-
-                while (atomicProcessCount > 0)
-                {
-                    await Task.Delay(100);
-
-                    var remainingUpdates = toUpdate.Count - atomicIndex;
-
-                    if (DateTime.UtcNow - TimeSpan.FromSeconds(5) > lastTime)
-                    {
-                        var updateCount = lastRemainingUpdates - remainingUpdates;
-
-                        if (updateCount > 0)
-                            perSecondQueue.Enqueue(updateCount / (DateTime.UtcNow - lastTime).TotalSeconds);
-                        lastRemainingUpdates = remainingUpdates;
-                        lastTime = DateTime.UtcNow;
-
-                        while (perSecondQueue.Count > 20)
-                            perSecondQueue.Dequeue();
-
-                        updateSpeed = perSecondQueue.Sum() / perSecondQueue.Count;
-                    }
-
-                    var estimatedSeconds = remainingUpdates / updateSpeed;
-                    var estimatedMinutes = (int)Math.Round(TimeSpan.FromSeconds(estimatedSeconds).TotalMinutes);
-
-                    var message = $"{Math.Max(0, remainingUpdates)} queued for update";
-                    if (estimatedMinutes > 1)
-                        message += $": ~{estimatedMinutes} minutes";
-
-                    logEntry.Message = message;
-                }
-            }
-
-            Log(logEntry);
-            var logLoopTask = LogLoopAsync();
-            var cacheInsertLoopTask = CacheInsertLoopAsync();
-
-            await Task.WhenAll(processTasks);
-            await logLoopTask;
-            await cacheInsertLoopTask;
-
-            // Rerun
-            Log(logSource, "Rerunning verify task to check for intermediate changes");
-            await VerifyAsync(logSource, patches);
-
-            _ActivityCount -= 1;
-        }
-
-        private void _DeleteCensorFile()
-        {
-            _ActivityCount += 1;
-
-            if (File.Exists(InstallConfiguration.CensorFile))
-            {
-                Log("Verify", "Removing censor file");
-                File.Delete(InstallConfiguration.CensorFile);
-            }
-
-            _ActivityCount -= 1;
-        }
-
-        private async Task _CreateKeyDirectoriesAsync()
-        {
-            _ActivityCount += 1;
-
-            Log("Info", "Creating key directories");
-
-            await Task.Run(() =>
-            {
-                Directory.CreateDirectory(InstallConfiguration.PSO2BinDirectory);
-                Directory.CreateDirectory(InstallConfiguration.ArksLayer.PluginsDirectory);
-                Directory.CreateDirectory(InstallConfiguration.ArksLayer.PluginsDisabledDirectory);
-                Directory.CreateDirectory(InstallConfiguration.ArksLayer.PatchesDirectory);
-                Directory.CreateDirectory(InstallConfiguration.ModsDirectory);
-                Directory.CreateDirectory(InstallConfiguration.DataDirectory);
-                Directory.CreateDirectory(InstallConfiguration.DataLicenseDirectory);
-                Directory.CreateDirectory(InstallConfiguration.DataWin32Directory);
-                Directory.CreateDirectory(InstallConfiguration.DataWin32ScriptDirectory);
-            });
-
-            _ActivityCount -= 1;
         }
 
         public void Log(string source, string message)
@@ -528,7 +270,7 @@ namespace PSRT.Astra
                 if (ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled)
                 {
                     Log("ArksLayer", "Validating core Arks-Layer components");
-                    App.Current.Logger.Info(Logger.Domain.ArksLayer, "Validating core components");
+                    App.Current.Logger.Info(nameof(MainWindowViewModel), "Validating core components");
 
                     await ValidateFileAsync(InstallConfiguration.ArksLayer.DDrawDll, pluginInfo.DDrawDll);
                     await ValidateFileAsync(InstallConfiguration.ArksLayer.PSO2hDll, pluginInfo.PSO2hDll);
@@ -544,7 +286,7 @@ namespace PSRT.Astra
                 }
                 else
                 {
-                    App.Current.Logger.Info(Logger.Domain.ArksLayer, "Deleting core Arks-Layer components");
+                    App.Current.Logger.Info(nameof(MainWindowViewModel), "Deleting core Arks-Layer components");
 
                     File.Delete(InstallConfiguration.ArksLayer.TweakerBin);
                     File.Delete(InstallConfiguration.ArksLayer.DDrawDll);
@@ -691,7 +433,7 @@ namespace PSRT.Astra
             }
             catch (Exception ex)
             {
-                App.Current.Logger.Error(Logger.Domain.ArksLayer, "Error applying patches", ex);
+                App.Current.Logger.Error(nameof(MainWindowViewModel), "Error applying patches", ex);
 
                 Log("ArksLayer", "Error applying Arks-Layer patches");
                 Log("ArksLayer", ex.Message);

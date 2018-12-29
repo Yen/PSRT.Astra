@@ -64,7 +64,7 @@ namespace PSRT.Astra.Models
 
         public InstallConfiguration(string pso2BinDirectory)
         {
-            App.Current.Logger.Info("Creating Install configuration");
+            App.Current.Logger.Info(nameof(InstallConfiguration), "Creating Install configuration");
 
             PSO2BinDirectory = pso2BinDirectory;
 
