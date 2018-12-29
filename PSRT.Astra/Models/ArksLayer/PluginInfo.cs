@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PSRT.Astra.Models.ArksLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PSRT.Astra.Models
+namespace PSRT.Astra.Models.ArksLayer
 {
     public class PluginInfo
     {
@@ -36,7 +37,7 @@ namespace PSRT.Astra.Models
         {
             App.Current.Logger.Info("Downloading plugin info");
 
-            using (var client = new AstraHttpClient())
+            using (var client = new ArksLayerHttpClient())
             {
                 using (var request = await client.GetAsync(DownloadConfiguration.PluginsFile, ct))
                 {

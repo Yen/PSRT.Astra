@@ -102,12 +102,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AquaHttpClient.cs" />
-    <Compile Include="AstraHttpClient.cs" />
+    <Compile Include="Models\ArksLayer\ArksLayerDownloadConfiguration.cs" />
+    <Compile Include="Models\ArksLayer\ArksLayerHttpClient.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MainWindowViewModel.GameWatcher.cs" />
     <Compile Include="MainWindowViewModel.UpdateChecker.cs" />
+    <Compile Include="Models\ArksLayer\ArksLayerInstallConfiguration.cs" />
+    <Compile Include="Models\ArksLayer\TweakerBin.cs" />
     <Compile Include="Models\LargeAddressAware.cs" />
-    <Compile Include="Models\PluginInfo.cs" />
+    <Compile Include="Models\ArksLayer\PluginInfo.cs" />
     <Compile Include="OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
@@ -126,8 +129,8 @@
     <Compile Include="Models\PatchCache.cs" />
     <Compile Include="Models\PatchCacheEntry.cs" />
     <Compile Include="Models\PatchInfo.cs" />
-    <Compile Include="Models\ProxyInfo.cs" />
-    <Compile Include="Models\TranslationInfo.cs" />
+    <Compile Include="Models\ArksLayer\ProxyInfo.cs" />
+    <Compile Include="Models\ArksLayer\TranslationInfo.cs" />
     <Compile Include="Properties\Localization.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

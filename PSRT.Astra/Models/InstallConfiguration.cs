@@ -1,4 +1,4 @@
-﻿using PropertyChanged;
+﻿using PSRT.Astra.Models.ArksLayer;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace PSRT.Astra.Models
 {
-    [AddINotifyPropertyChangedInterface]
     public class InstallConfiguration
     {
         public static string PSO2DocumentsDirectory { get; }
@@ -16,12 +15,7 @@ namespace PSRT.Astra.Models
 
         public string PSO2BinDirectory { get; }
 
-        public string PluginsDirectory { get; }
-        public string PluginsDisabledDirectory { get; }
-
         public string ModsDirectory { get; }
-
-        public string PatchesDirectory { get; }
 
         public string DataDirectory { get; }
         // TODO: might be able to remove these definitions as pso2 now uses
@@ -37,7 +31,6 @@ namespace PSRT.Astra.Models
         public string PSO2PreDownloadExecutable { get; }
         public string PSO2DownloadExecutable { get; }
 
-        public string TweakerBin { get; }
         public string PatchCacheDatabase { get; }
         public string CensorFile { get; }
 
@@ -46,25 +39,10 @@ namespace PSRT.Astra.Models
 
         public static string[] GameGuardSystemFiles { get; }
 
-        public string DDrawDll { get; }
-        public string PSO2hDll { get; }
-
-        public string PluginPSO2BlockRenameDll { get; }
-        public string PluginPSO2ItemTranslatorDll { get; }
-        public string PluginPSO2TitleTranslatorDll { get; }
-        public string PluginPSO2RAISERSystemDll { get; }
-        public string PluginTelepipeProxyDll { get; }
-
-        public string EnglishBlockPatch { get; }
-        public string EnglishItemPatch { get; }
-        public string EnglishRaiserPatch { get; }
-        public string EnglishTextPatch { get; }
-        public string EnglishTitlePatch { get; }
-
-        public string TelepipeProxyConfig { get; }
-        public string TelepipeProxyPublicKey { get; }
-
         public string LargeAddressAwareConfig { get; }
+        public object PluginsDirectory { get; internal set; }
+
+        public ArksLayerInstallConfiguration ArksLayer { get; }
 
         static InstallConfiguration()
         {
@@ -86,52 +64,32 @@ namespace PSRT.Astra.Models
 
         public InstallConfiguration(string pso2BinDirectory)
         {
+            App.Current.Logger.Info("Creating Install configuration");
+
             PSO2BinDirectory = pso2BinDirectory;
 
-            PluginsDirectory = Path.Combine(PSO2BinDirectory, "plugins");
-            PluginsDisabledDirectory = Path.Combine(PluginsDirectory, "disabled");
+            ModsDirectory = Path.Combine(PSO2BinDirectory, "mods/");
 
-            ModsDirectory = Path.Combine(PSO2BinDirectory, "mods");
-
-            PatchesDirectory = Path.Combine(PSO2BinDirectory, "patches");
-
-            DataDirectory = Path.Combine(PSO2BinDirectory, "data");
-            DataLicenseDirectory = Path.Combine(DataDirectory, "license");
-            DataWin32Directory = Path.Combine(DataDirectory, "win32");
-            DataWin32ScriptDirectory = Path.Combine(DataWin32Directory, "script");
+            DataDirectory = Path.Combine(PSO2BinDirectory, "data/");
+            DataLicenseDirectory = Path.Combine(DataDirectory, "license/");
+            DataWin32Directory = Path.Combine(DataDirectory, "win32/");
+            DataWin32ScriptDirectory = Path.Combine(DataWin32Directory, "script/");
 
             PSO2Executable = Path.Combine(PSO2BinDirectory, "pso2.exe");
             PSO2LauncherExecutable = Path.Combine(PSO2BinDirectory, "pso2launcher.exe");
             PSO2UpdaterExecutable = Path.Combine(PSO2BinDirectory, "pso2updater.exe");
             PSO2PreDownloadExecutable = Path.Combine(PSO2BinDirectory, "pso2predownload.exe");
             PSO2DownloadExecutable = Path.Combine(PSO2BinDirectory, "pso2download.exe");
-
-            TweakerBin = Path.Combine(PSO2BinDirectory, "tweaker.bin");
+            
             PatchCacheDatabase = Path.Combine(PSO2BinDirectory, "patchcache.db");
             CensorFile = Path.Combine(DataWin32Directory, "ffbff2ac5b7a7948961212cefd4d402c");
 
-            GameGuardDirectory = Path.Combine(PSO2BinDirectory, "GameGuard");
+            GameGuardDirectory = Path.Combine(PSO2BinDirectory, "GameGuard/");
             GameGuardFile = Path.Combine(PSO2BinDirectory, "GameGuard.des");
 
-            DDrawDll = Path.Combine(PSO2BinDirectory, "ddraw.dll");
-            PSO2hDll = Path.Combine(PSO2BinDirectory, "pso2h.dll");
-
-            PluginPSO2BlockRenameDll = Path.Combine(PluginsDirectory, "PSO2BlockRename.dll");
-            PluginPSO2ItemTranslatorDll = Path.Combine(PluginsDirectory, "PSO2ItemTranslator.dll");
-            PluginPSO2TitleTranslatorDll = Path.Combine(PluginsDirectory, "PSO2TitleTranslator.dll");
-            PluginPSO2RAISERSystemDll = Path.Combine(PluginsDirectory, "PSO2RAISERSystem.dll");
-            PluginTelepipeProxyDll = Path.Combine(PluginsDirectory, "TelepipeProxy.dll");
-
-            EnglishBlockPatch = Path.Combine(PatchesDirectory, "translation_blocks.bin");
-            EnglishItemPatch = Path.Combine(PatchesDirectory, "translation_items.bin");
-            EnglishRaiserPatch = Path.Combine(PatchesDirectory, "translation_raiser.bin");
-            EnglishTextPatch = Path.Combine(PatchesDirectory, "patch.tar");
-            EnglishTitlePatch = Path.Combine(PatchesDirectory, "translation_titles.bin");
-
-            TelepipeProxyConfig = Path.Combine(PSO2BinDirectory, "proxy.txt");
-            TelepipeProxyPublicKey = Path.Combine(PSO2BinDirectory, "publickey.blob");
-
             LargeAddressAwareConfig = Path.Combine(PSO2BinDirectory, "largeAddressAware.json");
+
+            ArksLayer = new ArksLayerInstallConfiguration(this);
         }
     }
 }

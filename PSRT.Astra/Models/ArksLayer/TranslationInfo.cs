@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PSRT.Astra.Models.ArksLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PSRT.Astra.Models
+namespace PSRT.Astra.Models.ArksLayer
 {
     public class TranslationInfo
     {
@@ -17,7 +18,7 @@ namespace PSRT.Astra.Models
         [JsonRequired]
         public string BlockPatch;
         [JsonRequired]
-        public long BranchID;
+        public string BranchID;
         [JsonRequired]
         public bool Enabled;
         [JsonRequired]
@@ -37,17 +38,24 @@ namespace PSRT.Astra.Models
         [JsonRequired]
         public string TitlePatch;
 
-        public static async Task<TranslationInfo> FetchAsync(CancellationToken ct = default)
+        public static async Task<Dictionary<string, TranslationInfo>> FetchAllAsync(CancellationToken ct = default)
         {
-            using (var client = new AstraHttpClient())
+            App.Current.Logger.Info("Downloading ArksLayer translation info");
+
+            using (var client = new ArksLayerHttpClient())
             {
                 using (var request = await client.GetAsync(DownloadConfiguration.TranslationsFile, ct))
                 {
                     var downloadText = await request.Content.ReadAsStringAsync();
-                    var downloadJson = JObject.Parse(downloadText);
-                    return downloadJson["EN"].ToObject<TranslationInfo>();
+                    return JsonConvert.DeserializeObject<Dictionary<string, TranslationInfo>>(downloadText);
                 }
             }
+        }
+
+        public static async Task<TranslationInfo> FetchEnglishAsync(CancellationToken ct = default)
+        {
+            var all = await FetchAllAsync(ct);
+            return all["EN"];
         }
     }
 }

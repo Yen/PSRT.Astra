@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PSRT.Astra.Models
+namespace PSRT.Astra.Models.ArksLayer
 {
     public class ProxyInfo
     {
