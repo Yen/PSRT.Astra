@@ -108,9 +108,12 @@
     <Compile Include="MainWindowViewModel.GameWatcher.cs" />
     <Compile Include="MainWindowViewModel.UpdateChecker.cs" />
     <Compile Include="Models\ArksLayer\ArksLayerInstallConfiguration.cs" />
+    <Compile Include="Models\ArksLayer\Phases\EnglishPatchPhase.cs" />
     <Compile Include="Models\ArksLayer\TweakerBin.cs" />
     <Compile Include="Models\LargeAddressAware.cs" />
     <Compile Include="Models\ArksLayer\PluginInfo.cs" />
+    <Compile Include="Models\ArksLayer\Phases\PSO2hPhase.cs" />
+    <Compile Include="Models\ArksLayer\Phases\TelepipeProxyPhase.cs" />
     <Compile Include="Models\Phases\ComparePhase.cs" />
     <Compile Include="Models\Phases\DeleteCensorFilePhase.cs" />
     <Compile Include="Models\Phases\ModFilesPhase.cs" />

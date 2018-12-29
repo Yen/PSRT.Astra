@@ -33,12 +33,50 @@ namespace PSRT.Astra.Models.Phases
             var state = new ProcessState
             {
                 AtomicIndex = 0,
-                AtomicProcessCount = Environment.ProcessorCount,
+                AtomicProcessCount = 0,
                 UpdateBuckets = new ConcurrentQueue<List<PatchCacheEntry>>()
             };
 
-            var processTasks = Enumerable.Range(0, state.AtomicProcessCount)
-                .Select(i => Task.Factory.StartNew(() => _Process(state, toUpdate), TaskCreationOptions.LongRunning));
+            var exceptions = new ConcurrentBag<Exception>();
+            var errorCancellationTokenSource = new CancellationTokenSource();
+
+            App.Current.Logger.Info(nameof(VerifyFilesPhase), "Starting processing threads");
+
+            // TODO: processor affinity?
+            var threads = Enumerable.Range(0, Environment.ProcessorCount).Select(i =>
+            {
+                var thread = new Thread(() =>
+                {
+                    Interlocked.Increment(ref state.AtomicProcessCount);
+                    try
+                    {
+                        App.Current.Logger.Info(nameof(VerifyFilesPhase), $"Processing thread {i} started");
+
+                        _Process(state, toUpdate, errorCancellationTokenSource.Token).GetAwaiter().GetResult();
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        App.Current.Logger.Error(nameof(VerifyFilesPhase), $"Processing thread {i} canceled", ex);
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Current.Logger.Error(nameof(VerifyFilesPhase), $"Exception in processing thread {i}", ex);
+                        exceptions.Add(ex);
+
+                        errorCancellationTokenSource.Cancel();
+                    }
+                    finally
+                    {
+                        Interlocked.Decrement(ref state.AtomicProcessCount);
+
+                        App.Current.Logger.Info(nameof(VerifyFilesPhase), $"Processing thread {i} ended");
+                    }
+                });
+                thread.Name = $"{nameof(VerifyFilesPhase)}({i})";
+                thread.Start();
+
+                return thread;
+            }).ToArray();
 
             while (state.AtomicProcessCount > 0 || state.UpdateBuckets.Count != 0)
             {
@@ -54,10 +92,20 @@ namespace PSRT.Astra.Models.Phases
                 }
             }
 
-            await Task.WhenAll(processTasks);
+            App.Current.Logger.Info(nameof(VerifyFilesPhase), "Joining processing threads");
+
+            foreach (var t in threads)
+                await Task.Factory.StartNew(() => t.Join(), TaskCreationOptions.LongRunning);
+
+            if (exceptions.Count > 0)
+            {
+                var aggregate = new AggregateException("Error verifying files", exceptions);
+                App.Current.Logger.Error(nameof(VerifyFilesPhase), "Error verifying files", aggregate);
+                throw aggregate;
+            }
         }
 
-        private async Task _Process(ProcessState state, List<(string Name, (string Hash, Uri DownloadPath))> toUpdate)
+        private async Task _Process(ProcessState state, List<(string Name, (string Hash, Uri DownloadPath))> toUpdate, CancellationToken ct = default)
         {
             using (var md5 = MD5.Create())
             using (var client = new AquaHttpClient())
@@ -68,6 +116,8 @@ namespace PSRT.Astra.Models.Phases
                 var entries = new List<PatchCacheEntry>();
                 while (true)
                 {
+                    ct.ThrowIfCancellationRequested();
+
                     var index = Interlocked.Increment(ref state.AtomicIndex) - 1;
                     if (index >= toUpdate.Count)
                     {
@@ -86,7 +136,7 @@ namespace PSRT.Astra.Models.Phases
 
                     if (File.Exists(path))
                     {
-                        using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
+                        using (var fs = File.OpenRead(path))
                         {
                             // streaming the file into the hash is considerably slower than 
                             // reading into a byte array first. It does however avoid possible
@@ -123,8 +173,8 @@ namespace PSRT.Astra.Models.Phases
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(path));
                         using (var responseStream = await client.GetStreamAsync(info.DownloadPath))
-                        using (var fs = new FileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.None, 4096, true))
-                            await responseStream.CopyToAsync(fs);
+                        using (var fs = File.Create(path, 4096, FileOptions.Asynchronous))
+                            await responseStream.CopyToAsync(fs, 4096, ct);
                     }
                     catch (Exception ex)
                     {
@@ -140,8 +190,6 @@ namespace PSRT.Astra.Models.Phases
                     });
                 }
             }
-
-            Interlocked.Decrement(ref state.AtomicProcessCount);
         }
     }
 }

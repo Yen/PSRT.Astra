@@ -29,6 +29,12 @@ namespace PSRT.Astra.Models.Phases
                 Directory.CreateDirectory(_InstallConfiguration.DataLicenseDirectory);
                 Directory.CreateDirectory(_InstallConfiguration.DataWin32Directory);
                 Directory.CreateDirectory(_InstallConfiguration.DataWin32ScriptDirectory);
+
+                // not part of stock PSO2, but always create the ArksLayer directories anyway
+
+                Directory.CreateDirectory(_InstallConfiguration.ArksLayer.PluginsDirectory);
+                Directory.CreateDirectory(_InstallConfiguration.ArksLayer.PluginsDisabledDirectory);
+                Directory.CreateDirectory(_InstallConfiguration.ArksLayer.PatchesDirectory);
             });
         }
     }

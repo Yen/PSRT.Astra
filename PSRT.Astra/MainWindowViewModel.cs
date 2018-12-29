@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using PropertyChanged;
 using PSRT.Astra.Models;
 using PSRT.Astra.Models.ArksLayer;
+using PSRT.Astra.Models.ArksLayer.Phases;
 using PSRT.Astra.Models.Phases;
 using SharpCompress.Archives.Rar;
 
@@ -93,8 +94,6 @@ namespace PSRT.Astra
             _DeleteCensorFilePhase = new DeleteCensorFilePhase(InstallConfiguration);
             _VerifyFilesPhase = new VerifyFilesPhase(InstallConfiguration, PatchCache);
 
-            await VerifyGameFilesAsync();
-
             _ActivityCount -= 1;
         }
 
@@ -123,7 +122,21 @@ namespace PSRT.Astra
 
             var logSource = "Verify PSO2";
 
-            await VerifyAsync(logSource);
+            while (true)
+            {
+                try
+                {
+                    await VerifyAsync(logSource);
+                }
+                catch (Exception ex)
+                {
+                    App.Current.Logger.Error(nameof(MainWindowViewModel), "Exception while verifying", ex);
+                    Log(logSource, "Error verifying, retrying");
+                    await Task.Delay(5000);
+                    continue;
+                }
+                break;
+            }
 
             Log(logSource, "All files verified");
 
@@ -244,192 +257,14 @@ namespace PSRT.Astra
 
                 var pluginInfo = await PluginInfo.FetchAsync();
 
-                async Task ValidateFileAsync(string filePath, PluginInfo.PluginEntry entry)
-                {
-                    if (File.Exists(filePath))
-                    {
-                        using (var md5 = MD5.Create())
-                        using (var fs = File.OpenRead(filePath))
-                        {
-                            var hashBytes = md5.ComputeHash(fs);
-                            var hash = string.Concat(hashBytes.Select(b => b.ToString("X2", CultureInfo.InvariantCulture)));
-                            if (hash == entry.Hash)
-                                return;
-                        }
-                    }
+                var pso2hPhase = new PSO2hPhase(InstallConfiguration, pluginInfo, ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled);
+                await pso2hPhase.RunAsync();
 
-                    File.Delete(filePath);
-                    using (var client = new ArksLayerHttpClient())
-                    using (var ns = await client.GetStreamAsync(new Uri(DownloadConfiguration.PluginsRoot, entry.FileName)))
-                    using (var fs = File.Create(filePath, 4096, FileOptions.Asynchronous))
-                    {
-                        await ns.CopyToAsync(fs);
-                    }
-                }
+                var telepipeProxyPhase = new TelepipeProxyPhase(InstallConfiguration, pluginInfo, ArksLayerTelepipeProxyEnabled);
+                await telepipeProxyPhase.RunAsync();
 
-                if (ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled)
-                {
-                    Log("ArksLayer", "Validating core Arks-Layer components");
-                    App.Current.Logger.Info(nameof(MainWindowViewModel), "Validating core components");
-
-                    await ValidateFileAsync(InstallConfiguration.ArksLayer.DDrawDll, pluginInfo.DDrawDll);
-                    await ValidateFileAsync(InstallConfiguration.ArksLayer.PSO2hDll, pluginInfo.PSO2hDll);
-
-                    Log("ArksLayer", "Writing tweaker.bin file");
-
-                    using (var fs = new FileStream(InstallConfiguration.ArksLayer.TweakerBin, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                    using (var writer = new StreamWriter(fs))
-                    {
-                        var magic = TweakerBin.GenerateFileContents(InstallConfiguration.PSO2BinDirectory);
-                        await writer.WriteLineAsync(magic);
-                    }
-                }
-                else
-                {
-                    App.Current.Logger.Info(nameof(MainWindowViewModel), "Deleting core Arks-Layer components");
-
-                    File.Delete(InstallConfiguration.ArksLayer.TweakerBin);
-                    File.Delete(InstallConfiguration.ArksLayer.DDrawDll);
-                    File.Delete(InstallConfiguration.ArksLayer.PSO2hDll);
-                }
-
-                if (ArksLayerTelepipeProxyEnabled)
-                {
-                    using (var client = new HttpClient())
-                    {
-                        var proxyUrl = Properties.Settings.Default.TelepipeProxyUrl;
-                        bool isCustomProxy = !string.IsNullOrWhiteSpace(proxyUrl);
-                        string url = isCustomProxy ? proxyUrl : "http://telepipe.io/config.json";
-
-                        if (isCustomProxy)
-                        {
-                            Log("ArksLayer", $"Downloading proxy information from {proxyUrl}");
-                        }
-                        else
-                        {
-                            Log("ArksLayer", "Downloading Telepipe proxy information");
-                        }
-                        var configString = await client.GetStringAsync(url);
-                        var config = JsonConvert.DeserializeObject<ProxyInfo>(configString);
-                        var publicKey = await client.GetByteArrayAsync(config.PublicKeyUrl);
-
-                        Log("ArksLayer", "Writing Telepipe proxy config files");
-                        await Task.Run(() =>
-                        {
-                            File.WriteAllText(InstallConfiguration.ArksLayer.TelepipeProxyConfig, config.Host);
-                            File.WriteAllBytes(InstallConfiguration.ArksLayer.TelepipeProxyPublicKey, publicKey);
-                        });
-                    }
-
-                    await ValidateFileAsync(InstallConfiguration.ArksLayer.PluginTelepipeProxyDll, pluginInfo.TelepipeProxyDll);
-                }
-                else
-                {
-                    File.Delete(InstallConfiguration.ArksLayer.PluginTelepipeProxyDll);
-                }
-
-                if (ArksLayerEnglishPatchEnabled)
-                {
-                    Log("ArksLayer", "Downloading english translation information");
-                    var translation = await TranslationInfo.FetchEnglishAsync();
-
-                    Log("ArksLayer", "Verifying english patch files");
-                    var cacheData = await PatchCache.SelectAllAsync();
-
-                    string CreateRelativePath(string path)
-                    {
-                        var root = new Uri(InstallConfiguration.PSO2BinDirectory);
-                        var relative = root.MakeRelativeUri(new Uri(path));
-                        return relative.OriginalString;
-                    }
-
-                    bool Verify(string path, string hash)
-                    {
-                        var relative = CreateRelativePath(path);
-
-                        var info = new FileInfo(path);
-                        if (info.Exists == false)
-                            return false;
-
-                        if (cacheData.ContainsKey(relative) == false)
-                            return false;
-
-                        var data = cacheData[relative];
-
-                        if (data.Hash != hash)
-                            return false;
-
-                        if (data.LastWriteTime != info.LastWriteTimeUtc.ToFileTimeUtc())
-                            return false;
-
-                        return true;
-                    }
-
-                    using (var client = new ArksLayerHttpClient())
-                    {
-                        async Task VerifyAndDownlodRar(string path, string downloadHash, Uri downloadPath)
-                        {
-                            if (Verify(path, downloadHash) == false)
-                            {
-                                Log("ArksLayer", $"Downloading \"{Path.GetFileName(downloadPath.LocalPath)}\"");
-                                using (var response = await client.GetAsync(downloadPath))
-                                using (var stream = await response.Content.ReadAsStreamAsync())
-                                using (var archive = RarArchive.Open(stream))
-                                {
-                                    if (archive.Entries.Count > 0)
-                                    {
-                                        using (var fs = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
-                                        {
-                                            await archive.Entries.First().OpenEntryStream().CopyToAsync(fs);
-                                        }
-                                        await PatchCache.InsertUnderTransactionAsync(new[] { new PatchCacheEntry()
-                                        {
-                                            Name = CreateRelativePath(path),
-                                            Hash = downloadHash,
-                                            LastWriteTime = new FileInfo(path).LastWriteTimeUtc.ToFileTimeUtc()
-                                        }});
-                                    }
-                                }
-                            }
-                        }
-
-                        await VerifyAndDownlodRar(InstallConfiguration.ArksLayer.EnglishBlockPatch, translation.BlockMD5, new Uri(translation.BlockPatch));
-                        await VerifyAndDownlodRar(InstallConfiguration.ArksLayer.EnglishItemPatch, translation.ItemMD5, new Uri(translation.ItemPatch));
-                        await VerifyAndDownlodRar(InstallConfiguration.ArksLayer.EnglishTextPatch, translation.TextMD5, new Uri(translation.TextPatch));
-                        await VerifyAndDownlodRar(InstallConfiguration.ArksLayer.EnglishTitlePatch, translation.TitleMD5, new Uri(translation.TitlePatch));
-
-                        if (Verify(InstallConfiguration.ArksLayer.EnglishRaiserPatch, translation.RaiserMD5) == false)
-                        {
-                            Log("ArksLayer", $"Downloading \"{Path.GetFileName(new Uri(translation.RaiserPatch).LocalPath)}\"");
-                            using (var stream = await client.GetStreamAsync(translation.RaiserPatch))
-                            using (var fs = new FileStream(InstallConfiguration.ArksLayer.EnglishRaiserPatch, FileMode.Create, FileAccess.Write, FileShare.None))
-                            {
-                                await stream.CopyToAsync(fs);
-                            }
-                            await PatchCache.InsertUnderTransactionAsync(new[] { new PatchCacheEntry()
-                            {
-                                Name = CreateRelativePath(InstallConfiguration.ArksLayer.EnglishRaiserPatch),
-                                Hash = translation.RaiserMD5,
-                                LastWriteTime = new FileInfo(InstallConfiguration.ArksLayer.EnglishRaiserPatch).LastWriteTimeUtc.ToFileTimeUtc()
-                            }});
-                        }
-                    }
-
-                    Log("ArksLayer", "Verifying english patch plugins");
-
-                    await ValidateFileAsync(InstallConfiguration.ArksLayer.PluginPSO2BlockRenameDll, pluginInfo.PSO2BlockRenameDll);
-                    await ValidateFileAsync(InstallConfiguration.ArksLayer.PluginPSO2ItemTranslatorDll, pluginInfo.PSO2ItemTranslatorDll);
-                    await ValidateFileAsync(InstallConfiguration.ArksLayer.PluginPSO2TitleTranslatorDll, pluginInfo.PSO2TitleTranslatorDll);
-                    await ValidateFileAsync(InstallConfiguration.ArksLayer.PluginPSO2RAISERSystemDll, pluginInfo.PSO2RAISERSystemDll);
-                }
-                else
-                {
-                    File.Delete(InstallConfiguration.ArksLayer.PluginPSO2BlockRenameDll);
-                    File.Delete(InstallConfiguration.ArksLayer.PluginPSO2ItemTranslatorDll);
-                    File.Delete(InstallConfiguration.ArksLayer.PluginPSO2TitleTranslatorDll);
-                    File.Delete(InstallConfiguration.ArksLayer.PluginPSO2RAISERSystemDll);
-                }
-
+                var englishPatchPhase = new EnglishPatchPhase(InstallConfiguration, PatchCache, pluginInfo, ArksLayerEnglishPatchEnabled);
+                await englishPatchPhase.RunAsync();
             }
             catch (Exception ex)
             {
