@@ -54,17 +54,9 @@ namespace PSRT.Astra
 
         private int _ActivityCount { get; set; } = 0;
         public bool Ready => _ActivityCount == 0 && DownloadConfiguration != null && !IsPSO2Running;
-
-        // phases
-
+        
         private CancellationTokenSource _LaunchCancellationTokenSource;
-
-        private PSO2DirectoriesPhase _PSO2DirectoriesPhase;
-        private ModFilesPhase _ModFilesPhase;
-        private ComparePhase _ComparePhase;
-        private DeleteCensorFilePhase _DeleteCensorFilePhase;
-        private VerifyFilesPhase _VerifyFilesPhase;
-
+        
         //
 
         public MainWindowViewModel(string pso2BinDirectory)
@@ -88,12 +80,6 @@ namespace PSRT.Astra
 
             Log("Init", "Connecting to patch cache database");
             PatchCache = await PatchCache.CreateAsync(InstallConfiguration);
-
-            _PSO2DirectoriesPhase = new PSO2DirectoriesPhase(InstallConfiguration);
-            _ModFilesPhase = new ModFilesPhase(InstallConfiguration);
-            _ComparePhase = new ComparePhase(InstallConfiguration, DownloadConfiguration, PatchCache);
-            _DeleteCensorFilePhase = new DeleteCensorFilePhase(InstallConfiguration);
-            _VerifyFilesPhase = new VerifyFilesPhase(InstallConfiguration, PatchCache);
 
             _ActivityCount -= 1;
         }
@@ -153,17 +139,21 @@ namespace PSRT.Astra
                     {
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
+
                         App.Current.Logger.Info("Launch", $"Running {nameof(PSO2DirectoriesPhase)}");
                         Log("Launch", $"Running {nameof(PSO2DirectoriesPhase)}");
-                        await _PSO2DirectoriesPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                        var pso2DirectoriesPhase = new PSO2DirectoriesPhase(InstallConfiguration);
+                        await pso2DirectoriesPhase.RunAsync(_LaunchCancellationTokenSource.Token);
 
                         App.Current.Logger.Info("Launch", $"Running {nameof(ModFilesPhase)}");
                         Log("Launch", $"Running {nameof(ModFilesPhase)}");
-                        await _ModFilesPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                        var modFilesPhase = new ModFilesPhase(InstallConfiguration);
+                        await modFilesPhase.RunAsync(_LaunchCancellationTokenSource.Token);
 
                         App.Current.Logger.Info("Launch", $"Running {nameof(DeleteCensorFilePhase)}");
                         Log("Launch", $"Running {nameof(DeleteCensorFilePhase)}");
-                        await _DeleteCensorFilePhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                        var deleteCensorFilePhase = new DeleteCensorFilePhase(InstallConfiguration);
+                        await deleteCensorFilePhase.RunAsync(_LaunchCancellationTokenSource.Token);
 
                         // loop this block so files that were updated while a possibly long
                         // verify phase took place are not missed
@@ -171,13 +161,15 @@ namespace PSRT.Astra
                         {
                             App.Current.Logger.Info("Launch", $"Running {nameof(ComparePhase)}");
                             Log("Launch", $"Running {nameof(ComparePhase)}");
-                            var toUpdate = await _ComparePhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                            var comparePhase = new ComparePhase(InstallConfiguration, DownloadConfiguration, PatchCache);
+                            var toUpdate = await comparePhase.RunAsync(_LaunchCancellationTokenSource.Token);
                             if (toUpdate.Count == 0)
                                 break;
 
                             App.Current.Logger.Info("Launch", $"Running {nameof(VerifyFilesPhase)}");
                             Log("Launch", $"Running {nameof(VerifyFilesPhase)}");
-                            await _VerifyFilesPhase.RunAsync(toUpdate, _LaunchCancellationTokenSource.Token);
+                            var verifyFilesPhase = new VerifyFilesPhase(InstallConfiguration, PatchCache);
+                            await verifyFilesPhase.RunAsync(toUpdate, _LaunchCancellationTokenSource.Token);
                         }
 
                         App.Current.Logger.Info("Launch", "Fetching plugin info");
@@ -252,7 +244,7 @@ namespace PSRT.Astra
                 _LaunchCancellationTokenSource = null;
             }
         }
-        
+
         public async Task ResetGameGuardAsync()
         {
             _ActivityCount += 1;
@@ -293,7 +285,7 @@ namespace PSRT.Astra
             {
                 Log("GameGuard", "Error. Unable to delete GameGuard registry files");
             }
-            
+
             _ActivityCount -= 1;
         }
     }
