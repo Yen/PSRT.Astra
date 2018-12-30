@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
         Width="350" SizeToContent="Height">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
