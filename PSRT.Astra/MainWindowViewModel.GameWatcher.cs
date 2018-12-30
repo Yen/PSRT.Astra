@@ -23,11 +23,16 @@ namespace PSRT.Astra
         {
             while (!_GameWatcherToken.IsCancellationRequested)
             {
-                var processes = Process.GetProcessesByName("pso2");
-                IsPSO2Running = processes.Length != 0;
+                _CheckGameWatcher();
 
                 await Task.Delay(1000);
             }
+        }
+
+        private void _CheckGameWatcher()
+        {
+            var processes = Process.GetProcessesByName("pso2");
+            IsPSO2Running = processes.Length != 0;
         }
 
         private void _DestroyGameWatcher()

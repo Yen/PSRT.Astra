@@ -50,8 +50,6 @@ namespace PSRT.Astra
         }
 
         public InstallConfiguration InstallConfiguration { get; set; }
-        public DownloadConfiguration DownloadConfiguration { get; set; }
-        public PatchCache PatchCache { get; set; }
 
         public ObservableCollection<LogEntry> LogEntries { get; } = new ObservableCollection<LogEntry>();
 
@@ -87,7 +85,7 @@ namespace PSRT.Astra
 
         public bool ConfigButtonsEnabled
             => _ApplicationState == ApplicationState.Idle;
-        
+
         public string LaunchPSO2ButtonLocaleKey
         {
             get
@@ -119,20 +117,23 @@ namespace PSRT.Astra
         {
             _ActivityCount += 1;
 
-            Log("Astra", $"Game directory set to {Properties.Settings.Default.LastSelectedInstallLocation}");
+            try
+            {
+                Log("Astra", $"Game directory set to {Properties.Settings.Default.LastSelectedInstallLocation}");
 
-            // start update in the background
-            _CheckForUpdate();
+                // start update in the background
+                _CheckForUpdate();
 
-            _InitializeGameWatcher();
-
-            Log("Init", "Fetching download configuration");
-            DownloadConfiguration = await DownloadConfiguration.CreateDefaultAsync();
-
-            Log("Init", "Connecting to patch cache database");
-            PatchCache = await PatchCache.CreateAsync(InstallConfiguration);
-
-            _ActivityCount -= 1;
+                // manually check once in case the game was running
+                // before the launcher was started and initialisation 
+                // finishes before the async task detects it
+                await Task.Run(() => _CheckGameWatcher());
+                _InitializeGameWatcher();
+            }
+            finally
+            {
+                _ActivityCount -= 1;
+            }
         }
 
         public Task DestroyAsync()
@@ -217,6 +218,18 @@ namespace PSRT.Astra
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
+                        App.Current.Logger.Info("Launch", "Fetching download configuration");
+                        Log("Launch", "Fetching download configuration");
+                        var downloadConfiguration = await DownloadConfiguration.CreateDefaultAsync(_LaunchCancellationTokenSource.Token);
+
+                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                        App.Current.Logger.Info("Launch", "Connecting to patch cache database");
+                        Log("Launch", "Connecting to patch cache database");
+                        var patchCache = await PatchCache.CreateAsync(InstallConfiguration);
+
+                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
                         // loop this block so files that were updated while a possibly long
                         // verify phase took place are not missed
                         while (true)
@@ -225,7 +238,7 @@ namespace PSRT.Astra
 
                             App.Current.Logger.Info("Launch", $"Running {nameof(ComparePhase)}");
                             Log("Launch", $"Running {nameof(ComparePhase)}");
-                            var comparePhase = new ComparePhase(InstallConfiguration, DownloadConfiguration, PatchCache);
+                            var comparePhase = new ComparePhase(InstallConfiguration, downloadConfiguration, patchCache);
                             var toUpdate = await comparePhase.RunAsync(_LaunchCancellationTokenSource.Token);
                             if (toUpdate.Count == 0)
                                 break;
@@ -234,7 +247,7 @@ namespace PSRT.Astra
 
                             App.Current.Logger.Info("Launch", $"Running {nameof(VerifyFilesPhase)}");
                             Log("Launch", $"Running {nameof(VerifyFilesPhase)}");
-                            var verifyFilesPhase = new VerifyFilesPhase(InstallConfiguration, PatchCache);
+                            var verifyFilesPhase = new VerifyFilesPhase(InstallConfiguration, patchCache);
                             await verifyFilesPhase.RunAsync(toUpdate, _LaunchCancellationTokenSource.Token);
                         }
 
@@ -262,8 +275,18 @@ namespace PSRT.Astra
 
                         App.Current.Logger.Info("Launch", $"Running {nameof(EnglishPatchPhase)}");
                         Log("Launch", $"Running {nameof(EnglishPatchPhase)}");
-                        var englishPatchPhase = new EnglishPatchPhase(InstallConfiguration, PatchCache, pluginInfo, ArksLayerEnglishPatchEnabled);
+                        var englishPatchPhase = new EnglishPatchPhase(InstallConfiguration, patchCache, pluginInfo, ArksLayerEnglishPatchEnabled);
                         await englishPatchPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+
+                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                        if (Properties.Settings.Default.LargeAddressAwareEnabled)
+                        {
+                            App.Current.Logger.Info("Launch", $"Running {nameof(LargeAddressAwarePhase)}");
+                            Log("Launch", $"Running {nameof(LargeAddressAwarePhase)}");
+                            var largeAddressAwarePhase = new LargeAddressAwarePhase(InstallConfiguration);
+                            await largeAddressAwarePhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                        }
                     }
                     catch (OperationCanceledException)
                     {
@@ -282,16 +305,11 @@ namespace PSRT.Astra
                     break;
                 }
 
-                if (Properties.Settings.Default.LargeAddressAwareEnabled)
-                {
-                    Log("Launch", "Applying large address aware patch");
-                    await Task.Run(() => LargeAddressAware.ApplyLargeAddressAwarePatch(InstallConfiguration));
-                }
-
                 _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
-                
+
                 // cancellation no longer works after this point
 
+                App.Current.Logger.Info("Launch", "Starting PSO2");
                 Log("Launch", "Starting PSO2");
 
                 var startInfo = new ProcessStartInfo()
@@ -313,6 +331,7 @@ namespace PSRT.Astra
                     process.WaitForExit();
                 });
 
+                App.Current.Logger.Info("Launch", "PSO2 launch process ended");
                 Log("Launch", "PSO2 launch process ended");
 
             }
@@ -327,44 +346,55 @@ namespace PSRT.Astra
         {
             _ActivityCount += 1;
 
-            Log("GameGuard", "Removing GameGuard files and directories");
-
             try
             {
-                if (Directory.Exists(InstallConfiguration.GameGuardDirectory))
-                    Directory.Delete(InstallConfiguration.GameGuardDirectory, true);
 
-                await Task.Yield();
+                App.Current.Logger.Error("GameGuard", "Removing GameGuard files and directories");
+                Log("GameGuard", "Removing GameGuard files and directories");
 
-                if (File.Exists(InstallConfiguration.GameGuardFile))
-                    File.Delete(InstallConfiguration.GameGuardFile);
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        if (Directory.Exists(InstallConfiguration.GameGuardDirectory))
+                            Directory.Delete(InstallConfiguration.GameGuardDirectory, true);
 
-                await Task.Yield();
+                        if (File.Exists(InstallConfiguration.GameGuardFile))
+                            File.Delete(InstallConfiguration.GameGuardFile);
 
-                foreach (var file in InstallConfiguration.GameGuardSystemFiles)
-                    if (File.Exists(file))
-                        File.Delete(file);
+                        foreach (var file in InstallConfiguration.GameGuardSystemFiles)
+                            if (File.Exists(file))
+                                File.Delete(file);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    App.Current.Logger.Error("GameGuard", "Error deleting game guard files", ex);
+                    Log("GameGuard", "Error. Could not delete all GameGuard files as GameGuard is still running, ensure PSO2 is closed and restart your PC");
+                }
+
+                App.Current.Logger.Error("GameGuard", "Removing GameGuard registries");
+                Log("GameGuard", "Removing GameGuard registries");
+
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        if (Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\npggsvc", true) != null)
+                            Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services", true).DeleteSubKeyTree("npggsvc");
+                    });
+                }
+                catch (Exception ex)
+                {
+                    App.Current.Logger.Error("GameGuard", "Unable to delete GameGuard registry files", ex);
+                    Log("GameGuard", "Error. Unable to delete GameGuard registry files");
+                }
+
             }
-            catch
+            finally
             {
-                Log("GameGuard", "Error. Could not delete all GameGuard files as GameGuard is still running, ensure PSO2 is closed and restart your PC");
+                _ActivityCount -= 1;
             }
-
-            await Task.Yield();
-
-            Log("GameGuard", "Removing GameGuard registries");
-
-            try
-            {
-                if (Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\npggsvc", true) != null)
-                    Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services", true).DeleteSubKeyTree("npggsvc");
-            }
-            catch
-            {
-                Log("GameGuard", "Error. Unable to delete GameGuard registry files");
-            }
-
-            _ActivityCount -= 1;
         }
     }
 }

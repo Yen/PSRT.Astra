@@ -119,6 +119,7 @@
     <Compile Include="Models\ArksLayer\Phases\TelepipeProxyPhase.cs" />
     <Compile Include="Models\Phases\ComparePhase.cs" />
     <Compile Include="Models\Phases\DeleteCensorFilePhase.cs" />
+    <Compile Include="Models\Phases\LargeAddressAwarePhase.cs" />
     <Compile Include="Models\Phases\ModFilesPhase.cs" />
     <Compile Include="Models\Phases\PSO2DirectoriesPhase.cs" />
     <Compile Include="Models\Phases\VerifyFilesPhase.cs" />
