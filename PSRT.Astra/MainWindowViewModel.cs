@@ -29,6 +29,14 @@ namespace PSRT.Astra
     [AddINotifyPropertyChangedInterface]
     public partial class MainWindowViewModel
     {
+        public enum ApplicationState
+        {
+            Idle,
+            Loading,
+            Patching,
+            GameRunning
+        };
+
         public RelayCommand LaunchCommand => new RelayCommand(async () => await LaunchAsync());
         public RelayCommand ResetGameGuardCommand => new RelayCommand(async () => await ResetGameGuardAsync());
 
@@ -50,13 +58,56 @@ namespace PSRT.Astra
         public bool ArksLayerEnglishPatchEnabled { get; set; } = Properties.Settings.Default.EnglishPatchEnabled;
         public bool ArksLayerTelepipeProxyEnabled { get; set; } = Properties.Settings.Default.TelepipeProxyEnabled;
 
-        public string LaunchPSO2ButtonLocaleKey => IsPSO2Running ? "MainWindow_PSO2Running" : "MainWindow_LaunchPSO2";
+        private CancellationTokenSource _LaunchCancellationTokenSource { get; set; }
+
+        //
 
         private int _ActivityCount { get; set; } = 0;
-        public bool Ready => _ActivityCount == 0 && DownloadConfiguration != null && !IsPSO2Running;
+
+        private ApplicationState _ApplicationState
+        {
+            get
+            {
+                if (IsPSO2Running)
+                    return ApplicationState.GameRunning;
+
+                if (_LaunchCancellationTokenSource != null)
+                    return ApplicationState.Patching;
+
+                if (_ActivityCount > 0)
+                    return ApplicationState.Loading;
+
+                return ApplicationState.Idle;
+            }
+        }
+
+        public bool LaunchPSO2ButtonEnabled
+            => _ApplicationState == ApplicationState.Idle
+            || _ApplicationState == ApplicationState.Patching;
+
+        public bool ConfigButtonsEnabled
+            => _ApplicationState == ApplicationState.Idle;
         
-        private CancellationTokenSource _LaunchCancellationTokenSource;
-        
+        public string LaunchPSO2ButtonLocaleKey
+        {
+            get
+            {
+                switch (_ApplicationState)
+                {
+                    case ApplicationState.Idle:
+                        return "MainWindow_LaunchPSO2";
+                    case ApplicationState.Loading:
+                        return "MainWindow_Loading";
+                    case ApplicationState.Patching:
+                        return "MainWindow_Cancel";
+                    case ApplicationState.GameRunning:
+                        return "MainWindow_PSO2Running";
+                }
+
+                return null;
+            }
+        }
+
         //
 
         public MainWindowViewModel(string pso2BinDirectory)
@@ -119,6 +170,12 @@ namespace PSRT.Astra
 
         public async Task LaunchAsync()
         {
+            if (_ApplicationState == ApplicationState.Patching)
+            {
+                _LaunchCancellationTokenSource?.Cancel();
+                return;
+            }
+
             _ActivityCount += 1;
 
             try
@@ -139,26 +196,33 @@ namespace PSRT.Astra
                     {
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-
                         App.Current.Logger.Info("Launch", $"Running {nameof(PSO2DirectoriesPhase)}");
                         Log("Launch", $"Running {nameof(PSO2DirectoriesPhase)}");
                         var pso2DirectoriesPhase = new PSO2DirectoriesPhase(InstallConfiguration);
                         await pso2DirectoriesPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+
+                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                         App.Current.Logger.Info("Launch", $"Running {nameof(ModFilesPhase)}");
                         Log("Launch", $"Running {nameof(ModFilesPhase)}");
                         var modFilesPhase = new ModFilesPhase(InstallConfiguration);
                         await modFilesPhase.RunAsync(_LaunchCancellationTokenSource.Token);
 
+                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
                         App.Current.Logger.Info("Launch", $"Running {nameof(DeleteCensorFilePhase)}");
                         Log("Launch", $"Running {nameof(DeleteCensorFilePhase)}");
                         var deleteCensorFilePhase = new DeleteCensorFilePhase(InstallConfiguration);
                         await deleteCensorFilePhase.RunAsync(_LaunchCancellationTokenSource.Token);
 
+                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
                         // loop this block so files that were updated while a possibly long
                         // verify phase took place are not missed
                         while (true)
                         {
+                            _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
                             App.Current.Logger.Info("Launch", $"Running {nameof(ComparePhase)}");
                             Log("Launch", $"Running {nameof(ComparePhase)}");
                             var comparePhase = new ComparePhase(InstallConfiguration, DownloadConfiguration, PatchCache);
@@ -166,25 +230,35 @@ namespace PSRT.Astra
                             if (toUpdate.Count == 0)
                                 break;
 
+                            _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
                             App.Current.Logger.Info("Launch", $"Running {nameof(VerifyFilesPhase)}");
                             Log("Launch", $"Running {nameof(VerifyFilesPhase)}");
                             var verifyFilesPhase = new VerifyFilesPhase(InstallConfiguration, PatchCache);
                             await verifyFilesPhase.RunAsync(toUpdate, _LaunchCancellationTokenSource.Token);
                         }
 
+                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
                         App.Current.Logger.Info("Launch", "Fetching plugin info");
                         Log("Launch", "Fetching plugin info");
                         var pluginInfo = await PluginInfo.FetchAsync(_LaunchCancellationTokenSource.Token);
+
+                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                         App.Current.Logger.Info("Launch", $"Running {nameof(PSO2hPhase)}");
                         Log("Launch", $"Running {nameof(PSO2hPhase)}");
                         var pso2hPhase = new PSO2hPhase(InstallConfiguration, pluginInfo, ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled);
                         await pso2hPhase.RunAsync(_LaunchCancellationTokenSource.Token);
 
+                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
                         App.Current.Logger.Info("Launch", $"Running {nameof(TelepipeProxyPhase)}");
                         Log("Launch", $"Running {nameof(TelepipeProxyPhase)}");
                         var telepipeProxyPhase = new TelepipeProxyPhase(InstallConfiguration, pluginInfo, ArksLayerTelepipeProxyEnabled);
                         await telepipeProxyPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+
+                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                         App.Current.Logger.Info("Launch", $"Running {nameof(EnglishPatchPhase)}");
                         Log("Launch", $"Running {nameof(EnglishPatchPhase)}");
@@ -213,6 +287,10 @@ namespace PSRT.Astra
                     Log("Launch", "Applying large address aware patch");
                     await Task.Run(() => LargeAddressAware.ApplyLargeAddressAwarePatch(InstallConfiguration));
                 }
+
+                _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+                
+                // cancellation no longer works after this point
 
                 Log("Launch", "Starting PSO2");
 

@@ -71,7 +71,7 @@
             </ListView.ItemTemplate>
         </ListView>
         <Button
-            IsEnabled="{Binding Ready}"   
+            IsEnabled="{Binding LaunchPSO2ButtonEnabled}"   
             ToolTip="{local:LocaleBinding MainWindow_LaunchPSO2Tooltip}"
             Grid.Row="1"
             Command="{Binding LaunchCommand}">
@@ -82,7 +82,7 @@
                 TextWrapping="Wrap"
                 TextAlignment="Center"/>
         </Button>
-        <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_PSO2Options}" ToolTip="{local:LocaleBinding MainWindow_PSO2OptionsTooltip}" Grid.Row="2" FontSize="20" Click="_SettingsButton_Click"/>
+        <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{local:LocaleBinding MainWindow_PSO2Options}" ToolTip="{local:LocaleBinding MainWindow_PSO2OptionsTooltip}" Grid.Row="2" FontSize="20" Click="_SettingsButton_Click"/>
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -93,16 +93,16 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_ResetGameGuard}" ToolTip="{local:LocaleBinding MainWindow_ResetGameGuardTooltip}" Grid.Row="0" Grid.Column="1" Command="{Binding ResetGameGuardCommand}"/>
-            <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_AstraOptions}" ToolTip="{local:LocaleBinding MainWindow_AstraOptionsTooltip}" Grid.Row="1" Grid.Column="1" Click="_AstraSettingsButton_Click"/>
+            <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{local:LocaleBinding MainWindow_ResetGameGuard}" ToolTip="{local:LocaleBinding MainWindow_ResetGameGuardTooltip}" Grid.Row="0" Grid.Column="1" Command="{Binding ResetGameGuardCommand}"/>
+            <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{local:LocaleBinding MainWindow_AstraOptions}" ToolTip="{local:LocaleBinding MainWindow_AstraOptionsTooltip}" Grid.Row="1" Grid.Column="1" Click="_AstraSettingsButton_Click"/>
             <Button Content="{local:LocaleBinding AboutAstra}" ToolTip="{local:LocaleBinding MainWindow_AboutAstraTooltip}" Grid.Row="2" Grid.Column="1" Click="_AboutButton_Click"/>
-            <CheckBox ToolTip="{local:LocaleBinding MainWindow_EnglishPatchCheckboxTooltip}" IsChecked="{Binding ArksLayerEnglishPatchEnabled}" Grid.Row="0">
+            <CheckBox IsEnabled="{Binding ConfigButtonsEnabled}" ToolTip="{local:LocaleBinding MainWindow_EnglishPatchCheckboxTooltip}" IsChecked="{Binding ArksLayerEnglishPatchEnabled}" Grid.Row="0">
                 <TextBlock Text="{local:LocaleBinding MainWindow_EnglishPatchCheckbox}" />
             </CheckBox>
-            <CheckBox ToolTip="{local:LocaleBinding MainWindow_TelepipeCheckboxTooltip}" IsChecked="{Binding ArksLayerTelepipeProxyEnabled}" Grid.Row="1">
+            <CheckBox IsEnabled="{Binding ConfigButtonsEnabled}" ToolTip="{local:LocaleBinding MainWindow_TelepipeCheckboxTooltip}" IsChecked="{Binding ArksLayerTelepipeProxyEnabled}" Grid.Row="1">
                 <TextBlock Text="{local:LocaleBinding MainWindow_TelepipeCheckbox}" />
             </CheckBox>
-            <CheckBox ToolTip="{local:LocaleBinding MainWindow_PSRTCheckboxTooltip}" Grid.Row="2" IsEnabled="False">
+            <CheckBox IsEnabled="False" ToolTip="{local:LocaleBinding MainWindow_PSRTCheckboxTooltip}" Grid.Row="2">
                 <TextBlock Text="{local:LocaleBinding MainWindow_PSRTCheckbox}" />
             </CheckBox>
         </Grid>
