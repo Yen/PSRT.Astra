@@ -78,6 +78,7 @@ namespace PSRT.Astra
         private void _AboutButton_Click(object sender, RoutedEventArgs e)
         {
             var window = new AboutWindow();
+            window.Owner = this;
             window.ShowDialog();
         }
 
