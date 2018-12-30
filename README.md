@@ -1,4 +1,5 @@
 ## [**Download Latest Release**](https://github.com/Yen/PSRT.Astra/releases/latest)
+## [**最新バージョンのダウンロード**](https://github.com/Yen/PSRT.Astra/releases/latest)
 
 # PSRT.Astra
 
