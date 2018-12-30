@@ -61,6 +61,96 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About Astra.
+        /// </summary>
+        internal static string AboutAstra {
+            get {
+                return ResourceManager.GetString("AboutAstra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Arks Layer.
+        /// </summary>
+        internal static string AboutWindow_ArksLayer {
+            get {
+                return ResourceManager.GetString("AboutWindow_ArksLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugin framework and game translations (used with permission).
+        /// </summary>
+        internal static string AboutWindow_ArksLayerCredit {
+            get {
+                return ResourceManager.GetString("AboutWindow_ArksLayerCredit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ⓒ 2018 George &quot;Yen&quot; Bott, in cooperation with all GitHub contributors. Distributed under the MIT license..
+        /// </summary>
+        internal static string AboutWindow_CopyrightInformation {
+            get {
+                return ResourceManager.GetString("AboutWindow_CopyrightInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discord.
+        /// </summary>
+        internal static string AboutWindow_Discord {
+            get {
+                return ResourceManager.GetString("AboutWindow_Discord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The PSRT community hub: chat with developers and get help with using Astra in real-time.
+        /// </summary>
+        internal static string AboutWindow_DiscordDescription {
+            get {
+                return ResourceManager.GetString("AboutWindow_DiscordDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GitHub.
+        /// </summary>
+        internal static string AboutWindow_GitHub {
+            get {
+                return ResourceManager.GetString("AboutWindow_GitHub", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Follow Astra&apos;s development: read code and changelogs, request features, and report bugs.
+        /// </summary>
+        internal static string AboutWindow_GitHubDescription {
+            get {
+                return ResourceManager.GetString("AboutWindow_GitHubDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PSO-World.
+        /// </summary>
+        internal static string AboutWindow_PSOW {
+            get {
+                return ResourceManager.GetString("AboutWindow_PSOW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request features and report bugs (responses may be slower).
+        /// </summary>
+        internal static string AboutWindow_PSOWDescription {
+            get {
+                return ResourceManager.GetString("AboutWindow_PSOWDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disabled.
         /// </summary>
         internal static string Disabled {
@@ -206,6 +296,15 @@ namespace PSRT.Astra.Properties {
         internal static string Log_ArksLayer {
             get {
                 return ResourceManager.GetString("Log_ArksLayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credits and contact information. .
+        /// </summary>
+        internal static string MainWindow_AboutAstraTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_AboutAstraTooltip", resourceCulture);
             }
         }
         
@@ -399,6 +498,15 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allows PSO2 to assign itself more than 2GB RAM. Some users report this resolves crashes or texture corruption in certain situations..
+        /// </summary>
+        internal static string OptionsWindow_LargeAddressAwareTooltip {
+            get {
+                return ResourceManager.GetString("OptionsWindow_LargeAddressAwareTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Telepipe Config Url.
         /// </summary>
         internal static string OptionsWindow_TelepipeProxyUrl {
@@ -408,11 +516,11 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Url override for custom Telepipe proxy json configuration file. Leaving this empty uses the default Telepipe configuration..
+        ///   Looks up a localized string similar to Override the proxy URL. Leave this blank to use Telepipe&apos;s default..
         /// </summary>
-        internal static string OptionsWindow_TelepipeProxyUrlDescription {
+        internal static string OptionsWindow_TelepipeProxyUrlTooltip {
             get {
-                return ResourceManager.GetString("OptionsWindow_TelepipeProxyUrlDescription", resourceCulture);
+                return ResourceManager.GetString("OptionsWindow_TelepipeProxyUrlTooltip", resourceCulture);
             }
         }
         

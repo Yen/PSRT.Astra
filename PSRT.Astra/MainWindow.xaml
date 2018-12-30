@@ -93,8 +93,9 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_ResetGameGuard}" ToolTip="{local:LocaleBinding MainWindow_ResetGameGuardTooltip}" Grid.Row="1" Grid.Column="1" Command="{Binding ResetGameGuardCommand}"/>
-            <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_AstraOptions}" ToolTip="{local:LocaleBinding Launcher tweaks for advanced users—tread carefully!}" Grid.Row="2" Grid.Column="1" Click="_AstraSettingsButton_Click"/>
+            <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_ResetGameGuard}" ToolTip="{local:LocaleBinding MainWindow_ResetGameGuardTooltip}" Grid.Row="0" Grid.Column="1" Command="{Binding ResetGameGuardCommand}"/>
+            <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding MainWindow_AstraOptions}" ToolTip="{local:LocaleBinding MainWindow_AstraOptionsTooltip!}" Grid.Row="1" Grid.Column="1" Click="_AstraSettingsButton_Click"/>
+            <Button IsEnabled="{Binding Ready}" Content="{local:LocaleBinding AboutAstra}" ToolTip="{local:LocaleBinding MainWindow_AboutAstraTooltip}" Grid.Row="2" Grid.Column="1" Click="_AboutButton_Click"/>
             <CheckBox ToolTip="{local:LocaleBinding MainWindow_EnglishPatchCheckboxTooltip}" IsChecked="{Binding ArksLayerEnglishPatchEnabled}" Grid.Row="0">
                 <TextBlock Text="{local:LocaleBinding MainWindow_EnglishPatchCheckbox}" />
             </CheckBox>

@@ -35,22 +35,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock
-            Grid.Row="1"
-            Grid.Column="0"
-            Padding="16,0,16,0"
-            Grid.ColumnSpan="2"
-            Text="{local:LocaleBinding OptionsWindow_TelepipeProxyUrlDescription}"
-            FontStyle="Italic"
-            TextWrapping="Wrap"
-            TextAlignment="Center"/>
-
-            <Label Grid.Row="2" Grid.Column="0" Content="{local:LocaleBinding OptionsWindow_TelepipeProxyUrl}"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding TelepipeProxyUrl, UpdateSourceTrigger=PropertyChanged}">
+            <Label Grid.Row="0" Grid.Column="0" Content="{local:LocaleBinding OptionsWindow_TelepipeProxyUrl}" ToolTip="{local:LocaleBinding OptionsWindow_TelepipeProxyUrlTooltip}"/>
+            <TextBox x:Name="TelepipeProxyUrlBox" ToolTip="{local:LocaleBinding OptionsWindow_TelepipeProxyUrlTooltip}" Grid.Row="0" Grid.Column="1" Text="{Binding TelepipeProxyUrl, UpdateSourceTrigger=PropertyChanged}">
                 <TextBox.Style>
                     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                         <Style.Triggers>
@@ -61,9 +48,21 @@
                     </Style>
                 </TextBox.Style>
             </TextBox>
+            <TextBlock Grid.Row="0" Grid.Column="1" IsHitTestVisible="False" Text="http://telepipe.io/config.json" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Foreground="DarkGray">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=TelepipeProxyUrlBox}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
 
-            <Label Grid.Row="3" Grid.Column="0" Content="{local:LocaleBinding OptionsWindow_LargeAddressAware}"/>
-            <CheckBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" IsChecked="{Binding LargeAddressAwareEnabled}"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="{local:LocaleBinding OptionsWindow_LargeAddressAware}" ToolTip="{local:LocaleBinding OptionsWindow_LargeAddressAwareTooltip}"/>
+            <CheckBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" IsChecked="{Binding LargeAddressAwareEnabled}" ToolTip="{local:LocaleBinding OptionsWindow_LargeAddressAwareTooltip}"/>
         </Grid>
         <Button
             Grid.Row="3"

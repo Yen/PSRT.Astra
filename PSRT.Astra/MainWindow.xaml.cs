@@ -75,6 +75,12 @@ namespace PSRT.Astra
             //    await _ViewModel.VerifyGameFilesAsync();
         }
 
+        private void _AboutButton_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new AboutWindow();
+            window.ShowDialog();
+        }
+
         private void _Hyperlink_RequestNavigateBrowser(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(e.Uri.ToString());

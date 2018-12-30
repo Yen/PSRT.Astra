@@ -101,6 +101,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AquaHttpClient.cs" />
     <Compile Include="Models\ArksLayer\ArksLayerDownloadConfiguration.cs" />
     <Compile Include="Models\ArksLayer\ArksLayerHttpClient.cs" />
@@ -146,6 +149,10 @@
     </Compile>
     <Compile Include="PSO2OptionsWindowViewModel.cs" />
     <Compile Include="StringFormatValueConverter.cs" />
+    <Page Include="AboutWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
