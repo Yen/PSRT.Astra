@@ -326,8 +326,8 @@ If unsure, set this to Borderless Fullscreen.</value>
 
 If unsure, set this to Enabled.</value>
   </data>
-  <data name="OptionsWindow_TelepipeProxyUrlDescription" xml:space="preserve">
-    <value>Url override for custom Telepipe proxy json configuration file. Leaving this empty uses the default Telepipe configuration.</value>
+  <data name="OptionsWindow_TelepipeProxyUrlTooltip" xml:space="preserve">
+    <value>Override the proxy URL. Leave this blank to use Telepipe's default.</value>
   </data>
   <data name="OptionsWindow_TelepipeProxyUrl" xml:space="preserve">
     <value>Telepipe Config Url</value>
@@ -358,5 +358,41 @@ The application will report it is updating all of your game files but do not wor
 Only downloads of corrupt/missing/outdated files occur.
 
 This operation will only happen to completion one time, after this the operation is near instant and ensures your PSO2 installation is always kept in a working state.</value>
+  </data>
+  <data name="AboutWindow_ArksLayerCredit" xml:space="preserve">
+    <value>Plugin framework and game translations (used with permission)</value>
+  </data>
+  <data name="AboutAstra" xml:space="preserve">
+    <value>About Astra</value>
+  </data>
+  <data name="AboutWindow_ArksLayer" xml:space="preserve">
+    <value>Arks Layer</value>
+  </data>
+  <data name="AboutWindow_Discord" xml:space="preserve">
+    <value>Discord</value>
+  </data>
+  <data name="AboutWindow_PSOW" xml:space="preserve">
+    <value>PSO-World</value>
+  </data>
+  <data name="AboutWindow_GitHub" xml:space="preserve">
+    <value>GitHub</value>
+  </data>
+  <data name="AboutWindow_DiscordDescription" xml:space="preserve">
+    <value>The PSRT community hub: chat with developers and get help with using Astra in real-time</value>
+  </data>
+  <data name="AboutWindow_PSOWDescription" xml:space="preserve">
+    <value>Request features and report bugs (responses may be slower)</value>
+  </data>
+  <data name="AboutWindow_GitHubDescription" xml:space="preserve">
+    <value>Follow Astra's development: read code and changelogs, request features, and report bugs</value>
+  </data>
+  <data name="AboutWindow_CopyrightInformation" xml:space="preserve">
+    <value>ⓒ 2018 George "Yen" Bott, in cooperation with all GitHub contributors. Distributed under the MIT license.</value>
+  </data>
+  <data name="MainWindow_AboutAstraTooltip" xml:space="preserve">
+    <value>Credits and contact information. </value>
+  </data>
+  <data name="OptionsWindow_LargeAddressAwareTooltip" xml:space="preserve">
+    <value>Allows PSO2 to assign itself more than 2GB RAM. Some users report this resolves crashes or texture corruption in certain situations.</value>
   </data>
 </root>
