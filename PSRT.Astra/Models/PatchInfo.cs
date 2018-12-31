@@ -11,13 +11,17 @@ using System.Threading.Tasks;
 
 namespace PSRT.Astra.Models
 {
-    public static class PatchInfo
+    public struct PatchInfo
     {
-        public static async Task<Dictionary<string, (string Hash, Uri DownloadPath)>> FetchPatchInfosAsync(InstallConfiguration installConfiguration, DownloadConfiguration downloadConfiguration, CancellationToken ct = default)
+        public string Name;
+        public string Hash;
+        public Uri DownloadPath;
+
+        public static async Task<List<PatchInfo>> FetchPatchInfosAsync(InstallConfiguration installConfiguration, DownloadConfiguration downloadConfiguration, CancellationToken ct = default)
         {
             ct.ThrowIfCancellationRequested();
 
-            var infos = new Dictionary<string, (string Hash, Uri DownloadPath)>();
+            var infos = new List<PatchInfo>();
 
             // patchlist
             using (var client = new AquaHttpClient())
@@ -57,7 +61,12 @@ namespace PSRT.Astra.Models
                             throw new Exception("Patch list line contained unknown root type \"{type}\"");
                     }
 
-                    infos[name] = (hash, new Uri(root, name));
+                    infos.Add(new PatchInfo
+                    {
+                        Name = name,
+                        Hash = hash,
+                        DownloadPath = new Uri(root, name)
+                    });
                 }
             }
 
@@ -82,8 +91,13 @@ namespace PSRT.Astra.Models
                     var name = parts[0];
                     // parts[1] is file size
                     var hash = parts[2];
-
-                    infos[name] = (hash, new Uri(downloadConfiguration.RootPatches, name));
+                    
+                    infos.Add(new PatchInfo
+                    {
+                        Name = name,
+                        Hash = hash,
+                        DownloadPath = new Uri(downloadConfiguration.RootPatches, name)
+                    });
                 }
             }
 

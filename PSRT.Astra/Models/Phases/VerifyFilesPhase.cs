@@ -28,9 +28,9 @@ namespace PSRT.Astra.Models.Phases
             _PatchCache = patchCache;
         }
 
-        public async Task RunAsync(List<(string Name, (string Hash, Uri DownloadPath))> toUpdate, CancellationToken ct = default)
+        public async Task RunAsync(PatchInfo[] toUpdate, CancellationToken ct = default)
         {
-            if (toUpdate.Count == 0)
+            if (toUpdate.Length == 0)
                 return;
 
             var state = new ProcessState
@@ -109,7 +109,7 @@ namespace PSRT.Astra.Models.Phases
             }
         }
 
-        private async Task _Process(ProcessState state, List<(string Name, (string Hash, Uri DownloadPath))> toUpdate, CancellationToken ct = default)
+        private async Task _Process(ProcessState state, PatchInfo[] toUpdate, CancellationToken ct = default)
         {
             using (var md5 = MD5.Create())
             using (var client = new AquaHttpClient())
@@ -123,7 +123,7 @@ namespace PSRT.Astra.Models.Phases
                     ct.ThrowIfCancellationRequested();
 
                     var index = Interlocked.Increment(ref state.AtomicIndex) - 1;
-                    if (index >= toUpdate.Count)
+                    if (index >= toUpdate.Length)
                     {
                         state.UpdateBuckets.Enqueue(entries);
                         break;
@@ -135,8 +135,8 @@ namespace PSRT.Astra.Models.Phases
                         entries = new List<PatchCacheEntry>();
                     }
 
-                    var (name, info) = toUpdate[index];
-                    var path = Path.Combine(_InstallConfiguration.PSO2BinDirectory, name.Substring(0, name.Length - 4));
+                    var patch = toUpdate[index];
+                    var path = Path.Combine(_InstallConfiguration.PSO2BinDirectory, patch.Name.Substring(0, patch.Name.Length - 4));
 
                     if (File.Exists(path))
                     {
@@ -160,12 +160,12 @@ namespace PSRT.Astra.Models.Phases
 
                             var hashString = string.Concat(hashBytes.Select(b => b.ToString("X2")));
 
-                            if (hashString == info.Hash)
+                            if (hashString == patch.Hash)
                             {
                                 entries.Add(new PatchCacheEntry()
                                 {
-                                    Name = name,
-                                    Hash = info.Hash,
+                                    Name = patch.Name,
+                                    Hash = patch.Hash,
                                     LastWriteTime = new FileInfo(path).LastWriteTimeUtc.ToFileTimeUtc()
                                 });
                                 continue;
@@ -176,7 +176,7 @@ namespace PSRT.Astra.Models.Phases
                     try
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(path));
-                        using (var responseStream = await client.GetStreamAsync(info.DownloadPath))
+                        using (var responseStream = await client.GetStreamAsync(patch.DownloadPath))
                         using (var fs = File.Create(path, 4096, FileOptions.Asynchronous))
                             await responseStream.CopyToAsync(fs, 4096, ct);
                     }
@@ -188,8 +188,8 @@ namespace PSRT.Astra.Models.Phases
 
                     entries.Add(new PatchCacheEntry()
                     {
-                        Name = name,
-                        Hash = info.Hash,
+                        Name = patch.Name,
+                        Hash = patch.Hash,
                         LastWriteTime = new FileInfo(path).LastWriteTimeUtc.ToFileTimeUtc()
                     });
                 }

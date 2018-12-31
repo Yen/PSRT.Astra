@@ -240,7 +240,7 @@ namespace PSRT.Astra
                             Log("Launch", $"Running {nameof(ComparePhase)}");
                             var comparePhase = new ComparePhase(InstallConfiguration, downloadConfiguration, patchCache);
                             var toUpdate = await comparePhase.RunAsync(_LaunchCancellationTokenSource.Token);
-                            if (toUpdate.Count == 0)
+                            if (toUpdate.Length == 0)
                                 break;
 
                             _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
@@ -297,7 +297,9 @@ namespace PSRT.Astra
                     catch (Exception ex)
                     {
                         App.Current.Logger.Info("Launch", "Error during launch phases", ex);
-                        Log("Launch", "Error during launch phases, retrying");
+                        Log("Launch", "Error during launch phases:");
+                        Log("Launch", ex.Message);
+                        Log("Launch", "Retrying...");
                         await Task.Delay(5000);
                         continue;
                     }
