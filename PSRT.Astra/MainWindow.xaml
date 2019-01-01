@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PSRT.Astra"
+        xmlns:views="clr-namespace:PSRT.Astra.Views"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
         MinHeight="360"
@@ -59,7 +60,7 @@
                 <Run Text="{local:LocaleBinding MainWindow_UpdateAvailableDownload}"/>
             </Hyperlink>
         </TextBlock>
-        <ListView ItemsSource="{Binding LogEntries}" Grid.Row="1" Grid.Column="1" ScrollViewer.ScrollChanged="_Log_ScrollChanged">
+        <!--<ListView ItemsSource="{Binding LogEntries}" Grid.Row="1" Grid.Column="1" ScrollViewer.ScrollChanged="_Log_ScrollChanged">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock>
@@ -69,7 +70,34 @@
                     </TextBlock>
                 </DataTemplate>
             </ListView.ItemTemplate>
-        </ListView>
+        </ListView>-->
+        <!--<Grid Grid.Row="1" Grid.Column="1" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <views:PhaseControl PhaseState="Error" Title="Test Error" />
+            <views:PhaseControl Grid.Row="1" PhaseState="Running" Title="Test Running">
+                <Label>asdas</Label>
+            </views:PhaseControl>
+        </Grid>-->
+        <Border
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="5"
+            BorderThickness="1"
+            BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}">
+            <ScrollViewer>
+                <StackPanel>
+                    <views:PhaseControl PhaseState="Success" Title="Test Success"/>
+                    <views:PhaseControl PhaseState="Error" Title="Test Error"/>
+                    <views:PhaseControl Grid.Row="1" PhaseState="Running" Title="Test Running">
+                        <Label>asdas</Label>
+                    </views:PhaseControl>
+                    <views:PhaseControl PhaseState="Queued" Title="Test Queued"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
         <Button
             IsEnabled="{Binding LaunchPSO2ButtonEnabled}"   
             ToolTip="{local:LocaleBinding MainWindow_LaunchPSO2Tooltip}"
