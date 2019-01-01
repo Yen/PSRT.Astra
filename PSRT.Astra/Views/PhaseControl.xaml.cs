@@ -25,8 +25,8 @@ namespace PSRT.Astra.Views
     {
         #region Converters
 
-        public static readonly PhaseStateColorConverter PhaseStateColorConverterInstance = new PhaseStateColorConverter();
-        public class PhaseStateColorConverter : IValueConverter
+        public static readonly PhaseStateBrushConverter PhaseStateBrushConverterInstance = new PhaseStateBrushConverter();
+        public class PhaseStateBrushConverter : IValueConverter
         {
             public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             {

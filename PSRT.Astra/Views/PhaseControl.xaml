@@ -30,7 +30,7 @@
                     Fill="{Binding
                         Path=PhaseState,
                         RelativeSource={RelativeSource AncestorType={x:Type local:PhaseControl}},
-                        Converter={x:Static local:PhaseControl.PhaseStateColorConverterInstance}
+                        Converter={x:Static local:PhaseControl.PhaseStateBrushConverterInstance}
                     }">
                     <Ellipse.Style>
                         <Style TargetType="Ellipse">
