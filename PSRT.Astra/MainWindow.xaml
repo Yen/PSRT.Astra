@@ -88,14 +88,13 @@
             BorderThickness="1"
             BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}">
             <ScrollViewer>
-                <StackPanel>
-                    <views:PhaseControl PhaseState="Success" Title="Test Success"/>
-                    <views:PhaseControl PhaseState="Error" Title="Test Error"/>
-                    <views:PhaseControl Grid.Row="1" PhaseState="Running" Title="Test Running">
-                        <Label>asdas</Label>
-                    </views:PhaseControl>
-                    <views:PhaseControl PhaseState="Queued" Title="Test Queued"/>
-                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Phases}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <views:PhaseControl Title="{Binding Title}" PhaseState="{Binding State}" Child="{Binding Child}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </ScrollViewer>
         </Border>
         <Button

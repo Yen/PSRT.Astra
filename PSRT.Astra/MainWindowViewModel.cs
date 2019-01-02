@@ -22,6 +22,7 @@ using PSRT.Astra.Models;
 using PSRT.Astra.Models.ArksLayer;
 using PSRT.Astra.Models.ArksLayer.Phases;
 using PSRT.Astra.Models.Phases;
+using PSRT.Astra.Views;
 using SharpCompress.Archives.Rar;
 
 namespace PSRT.Astra
@@ -108,6 +109,18 @@ namespace PSRT.Astra
 
         //
 
+        [AddINotifyPropertyChangedInterface]
+        public class PhaseState
+        {
+            public string Title { get; set; }
+            public PhaseControl.State State { get; set; }
+            public UIElement Child { get; set; }
+        }
+
+        public ObservableCollection<PhaseState> Phases { get; set; }
+
+        //
+
         public MainWindowViewModel(string pso2BinDirectory)
         {
             InstallConfiguration = new InstallConfiguration(pso2BinDirectory);
@@ -169,6 +182,38 @@ namespace PSRT.Astra
             LogEntries.Add(entry);
         }
 
+        private async Task<T> _AttemptPhase<T>(PhaseState state, Func<Task<T>> phase) where T : class
+        {
+            state.State = PhaseControl.State.Running;
+            T result;
+            try
+            {
+                result = await phase();
+            }
+            catch
+            {
+                state.State = PhaseControl.State.Error;
+                throw;
+            }
+            state.State = PhaseControl.State.Success;
+            return result;
+        }
+
+        private async Task _AttemptPhase(PhaseState state, Func<Task> phase)
+        {
+            state.State = PhaseControl.State.Running;
+            try
+            {
+                await phase();
+            }
+            catch
+            {
+                state.State = PhaseControl.State.Error;
+                throw;
+            }
+            state.State = PhaseControl.State.Success;
+        }
+
         public async Task LaunchAsync()
         {
             if (_ApplicationState == ApplicationState.Patching)
@@ -195,26 +240,85 @@ namespace PSRT.Astra
                 {
                     try
                     {
+                        var pso2DirectoriesPhaseState = new PhaseState
+                        {
+                            Title = "PSO2 Directories",
+                            State = PhaseControl.State.Queued
+                        };
+                        var modFilesPhaseState = new PhaseState
+                        {
+                            Title = "Copying mod files",
+                            State = PhaseControl.State.Queued
+                        };
+                        var deleteCensorFilePhaseState = new PhaseState
+                        {
+                            Title = "Deleting censor file",
+                            State = PhaseControl.State.Queued
+                        };
+                        var comparePhaseState = new PhaseState
+                        {
+                            Title = "Comparing files",
+                            State = PhaseControl.State.Queued
+                        };
+                        var verifyFilesPhaseState = new PhaseState
+                        {
+                            Title = "Verifying files",
+                            State = PhaseControl.State.Queued
+                        };
+                        var pso2hPhaseState = new PhaseState
+                        {
+                            Title = "Checking PSO2 hook",
+                            State = PhaseControl.State.Queued
+                        };
+                        var telepipeProxyPhaseState = new PhaseState
+                        {
+                            Title = "Checking Telepipe",
+                            State = PhaseControl.State.Queued
+                        };
+                        var englishPatchPhaseState = new PhaseState
+                        {
+                            Title = "Checking English patch",
+                            State = PhaseControl.State.Queued
+                        };
+                        var largeAddressAwarePhaseState = new PhaseState
+                        {
+                            Title = "Checking large address aware patch",
+                            State = PhaseControl.State.Queued
+                        };
+
+                        Phases = new ObservableCollection<PhaseState>(new List<PhaseState>
+                        {
+                            pso2DirectoriesPhaseState,
+                            modFilesPhaseState,
+                            deleteCensorFilePhaseState,
+                            comparePhaseState,
+                            verifyFilesPhaseState,
+                            pso2hPhaseState,
+                            telepipeProxyPhaseState,
+                            englishPatchPhaseState,
+                            largeAddressAwarePhaseState
+                        });
+
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                         App.Current.Logger.Info("Launch", $"Running {nameof(PSO2DirectoriesPhase)}");
                         Log("Launch", $"Running {nameof(PSO2DirectoriesPhase)}");
-                        var pso2DirectoriesPhase = new PSO2DirectoriesPhase(InstallConfiguration);
-                        await pso2DirectoriesPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                        await _AttemptPhase(pso2DirectoriesPhaseState,
+                            () => new PSO2DirectoriesPhase(InstallConfiguration).RunAsync(_LaunchCancellationTokenSource.Token));
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                         App.Current.Logger.Info("Launch", $"Running {nameof(ModFilesPhase)}");
                         Log("Launch", $"Running {nameof(ModFilesPhase)}");
-                        var modFilesPhase = new ModFilesPhase(InstallConfiguration);
-                        await modFilesPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                        await _AttemptPhase(modFilesPhaseState,
+                            () => new ModFilesPhase(InstallConfiguration).RunAsync(_LaunchCancellationTokenSource.Token));
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                         App.Current.Logger.Info("Launch", $"Running {nameof(DeleteCensorFilePhase)}");
                         Log("Launch", $"Running {nameof(DeleteCensorFilePhase)}");
-                        var deleteCensorFilePhase = new DeleteCensorFilePhase(InstallConfiguration);
-                        await deleteCensorFilePhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                        await _AttemptPhase(deleteCensorFilePhaseState,
+                            () => new DeleteCensorFilePhase(InstallConfiguration).RunAsync(_LaunchCancellationTokenSource.Token));
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
@@ -234,21 +338,27 @@ namespace PSRT.Astra
                         // verify phase took place are not missed
                         while (true)
                         {
+                            comparePhaseState.State = PhaseControl.State.Queued;
+                            verifyFilesPhaseState.State = PhaseControl.State.Queued;
+
                             _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                             App.Current.Logger.Info("Launch", $"Running {nameof(ComparePhase)}");
                             Log("Launch", $"Running {nameof(ComparePhase)}");
-                            var comparePhase = new ComparePhase(InstallConfiguration, downloadConfiguration, patchCache);
-                            var toUpdate = await comparePhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                            var toUpdate = await _AttemptPhase(comparePhaseState,
+                                () => new ComparePhase(InstallConfiguration, downloadConfiguration, patchCache).RunAsync(_LaunchCancellationTokenSource.Token));
                             if (toUpdate.Length == 0)
+                            {
+                                verifyFilesPhaseState.State = PhaseControl.State.Success;
                                 break;
+                            }
 
                             _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                             App.Current.Logger.Info("Launch", $"Running {nameof(VerifyFilesPhase)}");
                             Log("Launch", $"Running {nameof(VerifyFilesPhase)}");
-                            var verifyFilesPhase = new VerifyFilesPhase(InstallConfiguration, patchCache);
-                            await verifyFilesPhase.RunAsync(toUpdate, _LaunchCancellationTokenSource.Token);
+                            await _AttemptPhase(verifyFilesPhaseState,
+                                () => new VerifyFilesPhase(InstallConfiguration, patchCache).RunAsync(toUpdate, _LaunchCancellationTokenSource.Token));
                         }
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
@@ -261,22 +371,25 @@ namespace PSRT.Astra
 
                         App.Current.Logger.Info("Launch", $"Running {nameof(PSO2hPhase)}");
                         Log("Launch", $"Running {nameof(PSO2hPhase)}");
-                        var pso2hPhase = new PSO2hPhase(InstallConfiguration, pluginInfo, ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled);
-                        await pso2hPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                        await _AttemptPhase(pso2hPhaseState,
+                            () => new PSO2hPhase(InstallConfiguration, pluginInfo, ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled)
+                                .RunAsync(_LaunchCancellationTokenSource.Token));
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                         App.Current.Logger.Info("Launch", $"Running {nameof(TelepipeProxyPhase)}");
                         Log("Launch", $"Running {nameof(TelepipeProxyPhase)}");
-                        var telepipeProxyPhase = new TelepipeProxyPhase(InstallConfiguration, pluginInfo, ArksLayerTelepipeProxyEnabled);
-                        await telepipeProxyPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                        await _AttemptPhase(telepipeProxyPhaseState,
+                            () => new TelepipeProxyPhase(InstallConfiguration, pluginInfo, ArksLayerTelepipeProxyEnabled)
+                                .RunAsync(_LaunchCancellationTokenSource.Token));
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                         App.Current.Logger.Info("Launch", $"Running {nameof(EnglishPatchPhase)}");
                         Log("Launch", $"Running {nameof(EnglishPatchPhase)}");
-                        var englishPatchPhase = new EnglishPatchPhase(InstallConfiguration, patchCache, pluginInfo, ArksLayerEnglishPatchEnabled);
-                        await englishPatchPhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                        await _AttemptPhase(englishPatchPhaseState,
+                            () => new EnglishPatchPhase(InstallConfiguration, patchCache, pluginInfo, ArksLayerEnglishPatchEnabled)
+                                .RunAsync(_LaunchCancellationTokenSource.Token));
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
@@ -284,8 +397,9 @@ namespace PSRT.Astra
                         {
                             App.Current.Logger.Info("Launch", $"Running {nameof(LargeAddressAwarePhase)}");
                             Log("Launch", $"Running {nameof(LargeAddressAwarePhase)}");
-                            var largeAddressAwarePhase = new LargeAddressAwarePhase(InstallConfiguration);
-                            await largeAddressAwarePhase.RunAsync(_LaunchCancellationTokenSource.Token);
+                            await _AttemptPhase(largeAddressAwarePhaseState,
+                                () => new LargeAddressAwarePhase(InstallConfiguration)
+                                    .RunAsync(_LaunchCancellationTokenSource.Token));
                         }
                     }
                     catch (OperationCanceledException)
