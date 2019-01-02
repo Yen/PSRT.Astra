@@ -387,7 +387,7 @@ This operation will only happen to completion one time, after this the operation
     <value>Follow Astra's development: read code and changelogs, request features, and report bugs</value>
   </data>
   <data name="AboutWindow_CopyrightInformation" xml:space="preserve">
-    <value>ⓒ 2018 George "Yen" Bott, in cooperation with all GitHub contributors. Distributed under the MIT license.</value>
+    <value>ⓒ 2019 George "Yen" Bott, in cooperation with all GitHub contributors. Distributed under the MIT license.</value>
   </data>
   <data name="MainWindow_AboutAstraTooltip" xml:space="preserve">
     <value>Credits and contact information. </value>
