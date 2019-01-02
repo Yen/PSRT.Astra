@@ -69,7 +69,23 @@
                 Content="{Binding
                     Path=Child,
                     RelativeSource={RelativeSource AncestorType={x:Type local:PhaseControl}}
-                }"/>
+                }">
+                <ContentPresenter.Style>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding
+                                    Path=PhaseState,
+                                    RelativeSource={RelativeSource AncestorType={x:Type local:PhaseControl}}
+                                }"
+                                Value="Running">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentPresenter.Style>
+            </ContentPresenter>
         </Grid>
     </Border>
 </UserControl>

@@ -296,11 +296,24 @@ namespace PSRT.Astra
                         newPhases.Add(patchCacheState);
 
                         var comparePhase = new ComparePhase(InstallConfiguration);
-                        var comparePhaseState = new PhaseState
-                        {
-                            Title = "Comparing files"
-                        };
+                        var comparePhaseState = new PhaseState { Title = "Comparing files" };
                         newPhases.Add(comparePhaseState);
+                        {
+                            var compareProgressControl = new CompareProgressControl();
+                            compareProgressControl.SetBinding(CompareProgressControl.ProgressProperty, new Binding
+                            {
+                                Source = comparePhase.Progress,
+                                Path = new PropertyPath(nameof(comparePhase.Progress.Progress)),
+                                Mode = BindingMode.OneWay
+                            });
+                            compareProgressControl.SetBinding(CompareProgressControl.IsIndeterminateProperty, new Binding
+                            {
+                                Source = comparePhase.Progress,
+                                Path = new PropertyPath(nameof(comparePhase.Progress.IsIndeterminate)),
+                                Mode = BindingMode.OneWay
+                            });
+                            comparePhaseState.Child = compareProgressControl;
+                        }
 
                         var verifyFilesPhase = new VerifyFilesPhase(InstallConfiguration);
                         var verifyFilesPhaseState = new PhaseState

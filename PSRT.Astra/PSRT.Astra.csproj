@@ -118,6 +118,7 @@
     <Compile Include="Models\ArksLayer\Phases\PSO2hPhase.cs" />
     <Compile Include="Models\ArksLayer\Phases\TelepipeProxyPhase.cs" />
     <Compile Include="Models\Phases\ComparePhase.cs" />
+    <Compile Include="Models\Phases\CompareProgress.cs" />
     <Compile Include="Models\Phases\DeleteCensorFilePhase.cs" />
     <Compile Include="Models\Phases\LargeAddressAwarePhase.cs" />
     <Compile Include="Models\Phases\ModFilesPhase.cs" />
@@ -150,6 +151,9 @@
     </Compile>
     <Compile Include="PSO2OptionsWindowViewModel.cs" />
     <Compile Include="StringFormatValueConverter.cs" />
+    <Compile Include="Views\CompareProgressControl.xaml.cs">
+      <DependentUpon>CompareProgressControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PhaseControl.xaml.cs">
       <DependentUpon>PhaseControl.xaml</DependentUpon>
     </Compile>
@@ -181,6 +185,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\CompareProgressControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PhaseControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
