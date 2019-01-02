@@ -41,29 +41,17 @@ namespace PSRT.Astra.ViewModels
                 var updateInformation = await _GetUpdateInformationAsync();
                 if (updateInformation.Version > CurrentVersion)
                 {
+                    App.Current.Logger.Info("UpdateChecker", $"New update available (Version {updateInformation.Version})");
                     UpdatedVersionInformation = updateInformation;
-                    Log(new LogEntry
-                    {
-                        Source = "Update",
-                        Message = $"New update available (Version {updateInformation.Version})"
-                    });
                 }
                 else
                 {
-                    Log(new LogEntry
-                    {
-                        Source = "Update",
-                        Message = "Client is up-to-date"
-                    });
+                    App.Current.Logger.Info("UpdateChecker", "Client is up-to-date");
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Log(new LogEntry
-                {
-                    Source = "Update",
-                    Message = "Error checking for update"
-                });
+                App.Current.Logger.Error("UpdateChecker", "Error getting update information", ex);
             }
         }
 

@@ -59,21 +59,20 @@ namespace PSRT.Astra.Views
         private async void _SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             if (!await _ViewModel.CanOpenSettingsAsync())
+            {
+                App.Current.Logger.Warning(nameof(MainWindow), "User settings file does not exists, please run the game once to generate it");
+                MessageBox.Show("User settings file does not exists, please run the game once to generate it", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
+            }
 
             var window = new PSO2OptionsWindow();
             window.ShowDialog();
         }
 
-        private async void _AstraSettingsButton_Click(object sender, RoutedEventArgs e)
+        private void _AstraSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!await _ViewModel.CanOpenSettingsAsync())
-                return;
-
             var window = new OptionsWindow();
             window.ShowDialog();
-            //if (window.ShowDialog() ?? false)
-            //    await _ViewModel.VerifyGameFilesAsync();
         }
 
         private void _AboutButton_Click(object sender, RoutedEventArgs e)

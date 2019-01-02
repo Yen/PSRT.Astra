@@ -30,29 +30,12 @@ namespace PSRT.Astra.ViewModels
     [AddINotifyPropertyChangedInterface]
     public partial class MainWindowViewModel
     {
-        public enum ApplicationState
-        {
-            Idle,
-            Loading,
-            Patching,
-            GameRunning
-        };
-
         public RelayCommand LaunchCommand => new RelayCommand(async () => await LaunchAsync());
         public RelayCommand ResetGameGuardCommand => new RelayCommand(async () => await ResetGameGuardAsync());
 
         //
 
-        [AddINotifyPropertyChangedInterface]
-        public class LogEntry
-        {
-            public string Source { get; set; }
-            public string Message { get; set; }
-        }
-
         public InstallConfiguration InstallConfiguration { get; set; }
-
-        public ObservableCollection<LogEntry> LogEntries { get; } = new ObservableCollection<LogEntry>();
 
         public bool ArksLayerEnglishPatchEnabled { get; set; } = Properties.Settings.Default.EnglishPatchEnabled;
         public bool ArksLayerTelepipeProxyEnabled { get; set; } = Properties.Settings.Default.TelepipeProxyEnabled;
@@ -60,6 +43,14 @@ namespace PSRT.Astra.ViewModels
         private CancellationTokenSource _LaunchCancellationTokenSource { get; set; }
 
         //
+
+        public enum ApplicationState
+        {
+            Idle,
+            Loading,
+            Patching,
+            GameRunning
+        };
 
         private int _ActivityCount { get; set; } = 0;
 
@@ -133,7 +124,7 @@ namespace PSRT.Astra.ViewModels
 
             try
             {
-                Log("Astra", $"Game directory set to {Properties.Settings.Default.LastSelectedInstallLocation}");
+                App.Current.Logger.Info(nameof(MainWindowViewModel), $"Game directory set to {Properties.Settings.Default.LastSelectedInstallLocation}");
 
                 // start update in the background
                 _CheckForUpdate();
@@ -161,26 +152,14 @@ namespace PSRT.Astra.ViewModels
         {
             _ActivityCount += 1;
 
-            var userFileExists = await Task.Run(() => File.Exists(InstallConfiguration.PSO2DocumentsUserFile));
-            if (!userFileExists)
-                Log("Error", "User settings file does not exists, please run the game once to generate it");
-
-            _ActivityCount -= 1;
-            return userFileExists;
-        }
-
-        public void Log(string source, string message)
-        {
-            Log(new LogEntry()
+            try
             {
-                Source = source,
-                Message = message
-            });
-        }
-
-        public void Log(LogEntry entry)
-        {
-            LogEntries.Add(entry);
+                return await Task.Run(() => File.Exists(InstallConfiguration.PSO2DocumentsUserFile));
+            }
+            finally
+            {
+                _ActivityCount -= 1;
+            }
         }
 
         private async Task<T> _AttemptPhase<T>(PhaseState state, Func<Task<T>> phase) where T : class
@@ -238,17 +217,19 @@ namespace PSRT.Astra.ViewModels
         {
             if (_ApplicationState == ApplicationState.Patching)
             {
+                App.Current.Logger.Info(nameof(MainWindowViewModel), "Cancelling launch");
                 _LaunchCancellationTokenSource?.Cancel();
                 return;
             }
 
             _ActivityCount += 1;
 
+            App.Current.Logger.Info(nameof(MainWindowViewModel), "Starting launch procedure");
             try
             {
                 _LaunchCancellationTokenSource = new CancellationTokenSource();
 
-                Log("Launch", "Saving client settings");
+                App.Current.Logger.Info(nameof(MainWindowViewModel), "Saving client settings");
                 await Task.Run(() =>
                 {
                     Properties.Settings.Default.EnglishPatchEnabled = ArksLayerEnglishPatchEnabled;
@@ -258,6 +239,7 @@ namespace PSRT.Astra.ViewModels
 
                 while (true)
                 {
+                App.Current.Logger.Info(nameof(MainWindowViewModel), "Saving client settings");
                     try
                     {
                         var newPhases = new ObservableCollection<PhaseState>();
@@ -526,15 +508,11 @@ namespace PSRT.Astra.ViewModels
                     catch (OperationCanceledException)
                     {
                         App.Current.Logger.Info("Launch", "Launch cancelled");
-                        Log("Launch", "Launch cancelled");
                         return;
                     }
                     catch (Exception ex)
                     {
                         App.Current.Logger.Info("Launch", "Error during launch phases", ex);
-                        Log("Launch", "Error during launch phases:");
-                        Log("Launch", ex.Message);
-                        Log("Launch", "Retrying...");
                         await Task.Delay(5000);
                         continue;
                     }
@@ -555,10 +533,7 @@ namespace PSRT.Astra.ViewModels
 
             try
             {
-
                 App.Current.Logger.Error("GameGuard", "Removing GameGuard files and directories");
-                Log("GameGuard", "Removing GameGuard files and directories");
-
                 try
                 {
                     await Task.Run(() =>
@@ -577,12 +552,9 @@ namespace PSRT.Astra.ViewModels
                 catch (Exception ex)
                 {
                     App.Current.Logger.Error("GameGuard", "Error deleting game guard files", ex);
-                    Log("GameGuard", "Error. Could not delete all GameGuard files as GameGuard is still running, ensure PSO2 is closed and restart your PC");
                 }
 
                 App.Current.Logger.Error("GameGuard", "Removing GameGuard registries");
-                Log("GameGuard", "Removing GameGuard registries");
-
                 try
                 {
                     await Task.Run(() =>
@@ -594,7 +566,6 @@ namespace PSRT.Astra.ViewModels
                 catch (Exception ex)
                 {
                     App.Current.Logger.Error("GameGuard", "Unable to delete GameGuard registry files", ex);
-                    Log("GameGuard", "Error. Unable to delete GameGuard registry files");
                 }
 
             }
