@@ -95,5 +95,12 @@ namespace PSRT.Astra.Views
                 if (sender is FrameworkElement element)
                     element.BringIntoView();
         }
+
+        private async void _UploadErrorLogButton_Click(object sender, RoutedEventArgs e)
+        {
+            _ViewModel.UploadErrorButtonVisible = false;
+
+            await Task.Run(() => App.UploadAndOpenLog());
+        }
     }
 }

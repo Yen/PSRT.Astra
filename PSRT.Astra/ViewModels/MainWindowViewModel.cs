@@ -111,6 +111,8 @@ namespace PSRT.Astra.ViewModels
 
         public ObservableCollection<PhaseState> Phases { get; set; }
 
+        public bool UploadErrorButtonVisible { get; set; } = false;
+
         //
 
         public MainWindowViewModel(string pso2BinDirectory)
@@ -198,6 +200,7 @@ namespace PSRT.Astra.ViewModels
                 var task = phase();
                 while (await Task.WhenAny(task, Task.Delay(100)) != task)
                     state.Duration = DateTime.UtcNow - start;
+                await task;
                 state.Duration = DateTime.UtcNow - start;
             }
             catch (OperationCanceledException)
@@ -222,6 +225,8 @@ namespace PSRT.Astra.ViewModels
                 return;
             }
 
+            UploadErrorButtonVisible = false;
+
             _ActivityCount += 1;
 
             App.Current.Logger.Info(nameof(MainWindowViewModel), "Starting launch procedure");
@@ -239,7 +244,7 @@ namespace PSRT.Astra.ViewModels
 
                 while (true)
                 {
-                App.Current.Logger.Info(nameof(MainWindowViewModel), "Saving client settings");
+                    App.Current.Logger.Info(nameof(MainWindowViewModel), "Saving client settings");
                     try
                     {
                         var newPhases = new ObservableCollection<PhaseState>();
@@ -513,6 +518,7 @@ namespace PSRT.Astra.ViewModels
                     catch (Exception ex)
                     {
                         App.Current.Logger.Info("Launch", "Error during launch phases", ex);
+                        UploadErrorButtonVisible = true;
                         await Task.Delay(5000);
                         continue;
                     }

@@ -33,11 +33,11 @@ namespace PSRT.Astra
             // to contact
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            Logger.Info(nameof(Astra), $"Version {Assembly.GetExecutingAssembly().GetName().Version}");
+            Logger.Info(nameof(App), $"Version {Assembly.GetExecutingAssembly().GetName().Version}");
 
             if (Settings.Default.UpgradeRequired)
             {
-                Logger.Info(nameof(Astra), "Upgrading settings file");
+                Logger.Info(nameof(App), "Upgrading settings file");
 
                 Settings.Default.Upgrade();
                 Settings.Default.UpgradeRequired = false;
@@ -57,10 +57,32 @@ namespace PSRT.Astra
             if (messageBoxResult == MessageBoxResult.No)
                 return;
 
-            Logger.Info(nameof(Astra), "Uploading error information");
+            UploadAndOpenLog(e.Exception);
+        }
+
+        public static void UploadAndOpenLog(Exception ex = null)
+        {
+            App.Current.Logger.Info(nameof(App), "Uploading log");
 
             var uploadResult = Task.Run(async () =>
             {
+                var sections = new List<dynamic>();
+                sections.Add(new
+                {
+                    name = "Log",
+                    syntax = "text",
+                    contents = App.Current.Logger.Content
+                });
+                if (ex != null)
+                {
+                    sections.Add(new
+                    {
+                        name = "Exception",
+                        syntax = "text",
+                        contents = ex.ToString()
+                    });
+                }
+
                 using (var client = new HttpClient())
                 {
                     client.DefaultRequestHeaders.Add("X-Auth-Token", "ahDhbbK8esumH1uZgcvIwFjk2yMC4DhKZykRHoYDW");
@@ -68,21 +90,7 @@ namespace PSRT.Astra
                     {
                         description = $"PSRT.Astra {Assembly.GetExecutingAssembly().GetName().Version} | {DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")}",
                         expiration = "never",
-                        sections = new[]
-                        {
-                            new
-                            {
-                                name = "Log",
-                                syntax = "text",
-                                contents = Logger.Content
-                            },
-                            new
-                            {
-                                name = "Exception",
-                                syntax = "text",
-                                contents = e.Exception.ToString()
-                            }
-                        }
+                        sections
                     });
                     return await client.PostAsync("https://api.paste.ee/v1/pastes", new StringContent(json, Encoding.UTF8, "application/json"));
                 }
@@ -90,7 +98,7 @@ namespace PSRT.Astra
 
             if (uploadResult.StatusCode != HttpStatusCode.Created)
             {
-                MessageBox.Show(messageBoxTitle, "Unable to upload error information.", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show("Error uploading log", "Unable to upload log information.", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
 
