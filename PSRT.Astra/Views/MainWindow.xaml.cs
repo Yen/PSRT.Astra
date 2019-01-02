@@ -66,12 +66,14 @@ namespace PSRT.Astra.Views
             }
 
             var window = new PSO2OptionsWindow();
+            window.Owner = this;
             window.ShowDialog();
         }
 
         private void _AstraSettingsButton_Click(object sender, RoutedEventArgs e)
         {
             var window = new OptionsWindow();
+            window.Owner = this;
             window.ShowDialog();
         }
 
