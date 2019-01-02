@@ -12,33 +12,29 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
     public class EnglishPatchPhase
     {
         private InstallConfiguration _InstallConfiguration;
-        private PatchCache _PatchCache;
-        private PluginInfo _PluginInfo;
         private bool _Enabled;
 
-        public EnglishPatchPhase(InstallConfiguration installConfiguration, PatchCache patchCache, PluginInfo pluginInfo, bool enabled)
+        public EnglishPatchPhase(InstallConfiguration installConfiguration, bool enabled)
         {
             _InstallConfiguration = installConfiguration;
-            _PatchCache = patchCache;
-            _PluginInfo = pluginInfo;
             _Enabled = enabled;
         }
 
-        public async Task RunAsync(CancellationToken ct = default)
+        public async Task RunAsync(PatchCache patchCache, PluginInfo pluginInfo, CancellationToken ct = default)
         {
             if (_Enabled)
-                await _InstallAsync(ct);
+                await _InstallAsync(patchCache, pluginInfo, ct);
             else
                 await _RemoveAsync(ct);
         }
 
-        private async Task _InstallAsync(CancellationToken ct = default)
+        private async Task _InstallAsync(PatchCache patchCache, PluginInfo pluginInfo, CancellationToken ct = default)
         {
             App.Current.Logger.Info(nameof(EnglishPatchPhase), "Downloading english translation information");
             var translation = await TranslationInfo.FetchEnglishAsync(ct);
 
             App.Current.Logger.Info(nameof(EnglishPatchPhase), "Getting data from patch cache");
-            var cacheData = await _PatchCache.SelectAllAsync();
+            var cacheData = await patchCache.SelectAllAsync();
 
             string CreateRelativePath(string path)
             {
@@ -85,7 +81,7 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
                                 using (var fs = File.Create(path, 4096, FileOptions.Asynchronous))
                                     await archive.Entries.First().OpenEntryStream().CopyToAsync(fs);
 
-                                await _PatchCache.InsertUnderTransactionAsync(new[]
+                                await patchCache.InsertUnderTransactionAsync(new[]
                                 {
                                     new PatchCacheEntry()
                                     {
@@ -111,7 +107,7 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
                     using (var fs = File.Create(_InstallConfiguration.ArksLayer.EnglishRaiserPatch, 4096, FileOptions.Asynchronous))
                         await stream.CopyToAsync(fs);
 
-                    await _PatchCache.InsertUnderTransactionAsync(new[]
+                    await patchCache.InsertUnderTransactionAsync(new[]
                     {
                         new PatchCacheEntry()
                         {
@@ -125,10 +121,10 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
 
             App.Current.Logger.Info(nameof(EnglishPatchPhase), "Validating plugin dlls");
 
-            await _PluginInfo.PSO2BlockRenameDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginPSO2BlockRenameDll, ct);
-            await _PluginInfo.PSO2ItemTranslatorDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginPSO2ItemTranslatorDll, ct);
-            await _PluginInfo.PSO2TitleTranslatorDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginPSO2TitleTranslatorDll, ct);
-            await _PluginInfo.PSO2RAISERSystemDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginPSO2RAISERSystemDll, ct);
+            await pluginInfo.PSO2BlockRenameDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginPSO2BlockRenameDll, ct);
+            await pluginInfo.PSO2ItemTranslatorDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginPSO2ItemTranslatorDll, ct);
+            await pluginInfo.PSO2TitleTranslatorDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginPSO2TitleTranslatorDll, ct);
+            await pluginInfo.PSO2RAISERSystemDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginPSO2RAISERSystemDll, ct);
         }
 
         private async Task _RemoveAsync(CancellationToken ct)

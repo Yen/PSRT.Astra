@@ -13,7 +13,6 @@ namespace PSRT.Astra.Models.Phases
     public class VerifyFilesPhase
     {
         private InstallConfiguration _InstallConfiguration;
-        private PatchCache _PatchCache;
 
         private class ProcessState
         {
@@ -22,13 +21,12 @@ namespace PSRT.Astra.Models.Phases
             public ConcurrentQueue<List<PatchCacheEntry>> UpdateBuckets;
         }
 
-        public VerifyFilesPhase(InstallConfiguration installConfiguration, PatchCache patchCache)
+        public VerifyFilesPhase(InstallConfiguration installConfiguration)
         {
             _InstallConfiguration = installConfiguration;
-            _PatchCache = patchCache;
         }
 
-        public async Task RunAsync(PatchInfo[] toUpdate, CancellationToken ct = default)
+        public async Task RunAsync(PatchInfo[] toUpdate, PatchCache patchCache, CancellationToken ct = default)
         {
             if (toUpdate.Length == 0)
                 return;
@@ -92,7 +90,7 @@ namespace PSRT.Astra.Models.Phases
                 while (state.UpdateBuckets.TryDequeue(out var list))
                 {
                     if (list.Count > 0)
-                        await _PatchCache.InsertUnderTransactionAsync(list);
+                        await patchCache.InsertUnderTransactionAsync(list);
                 }
             }
 

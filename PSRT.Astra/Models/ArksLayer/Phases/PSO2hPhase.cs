@@ -12,30 +12,28 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
     public class PSO2hPhase
     {
         private InstallConfiguration _InstallConfiguration;
-        private PluginInfo _PluginInfo;
-        public bool _Enabled;
+        private bool _Enabled;
 
-        public PSO2hPhase(InstallConfiguration installConfiguration, PluginInfo pluginInfo, bool enabled)
+        public PSO2hPhase(InstallConfiguration installConfiguration, bool enabled)
         {
             _InstallConfiguration = installConfiguration;
-            _PluginInfo = pluginInfo;
             _Enabled = enabled;
         }
 
-        public async Task RunAsync(CancellationToken ct = default)
+        public async Task RunAsync(PluginInfo pluginInfo, CancellationToken ct = default)
         {
             if (_Enabled)
-                await _InstallAsync(ct);
+                await _InstallAsync(pluginInfo, ct);
             else
                 await _RemoveAsync(ct);
         }
 
-        private async Task _InstallAsync(CancellationToken ct = default)
+        private async Task _InstallAsync(PluginInfo pluginInfo, CancellationToken ct = default)
         {
             App.Current.Logger.Info(nameof(PSO2hPhase), "Validating pso2h dlls");
 
-            await _PluginInfo.DDrawDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.DDrawDll, ct);
-            await _PluginInfo.PSO2hDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PSO2hDll, ct);
+            await pluginInfo.DDrawDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.DDrawDll, ct);
+            await pluginInfo.PSO2hDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PSO2hDll, ct);
 
             App.Current.Logger.Info(nameof(PSO2hPhase), "Writing tweaker.bin");
             var magic = await Task.Run(() => TweakerBin.GenerateFileContents(_InstallConfiguration.PSO2BinDirectory));

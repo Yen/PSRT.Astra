@@ -42,6 +42,8 @@ namespace PSRT.Astra.Views
                             return Brushes.Lime;
                         case State.Error:
                             return Brushes.Red;
+                        case State.Canceled:
+                            return Brushes.DeepSkyBlue;
                     }
                 }
 
@@ -61,7 +63,8 @@ namespace PSRT.Astra.Views
             Queued,
             Running,
             Success,
-            Error
+            Error,
+            Canceled
         }
 
         public State PhaseState

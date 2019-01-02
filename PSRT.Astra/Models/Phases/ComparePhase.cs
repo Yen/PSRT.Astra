@@ -17,24 +17,20 @@ namespace PSRT.Astra.Models.Phases
         }
 
         private InstallConfiguration _InstallConfiguration;
-        private DownloadConfiguration _DownloadConfiguration;
-        private PatchCache _PatchCache;
 
 
-        public ComparePhase(InstallConfiguration installConfiguration, DownloadConfiguration downloadConfiguration, PatchCache patchCache)
+        public ComparePhase(InstallConfiguration installConfiguration)
         {
             _InstallConfiguration = installConfiguration;
-            _DownloadConfiguration = downloadConfiguration;
-            _PatchCache = patchCache;
         }
 
-        public async Task<PatchInfo[]> RunAsync(CancellationToken ct = default)
+        public async Task<PatchInfo[]> RunAsync(DownloadConfiguration downloadConfiguration, PatchCache patchCache, CancellationToken ct = default)
         {
             App.Current.Logger.Info(nameof(ComparePhase), "Fetching patches");
-            var patches = await PatchInfo.FetchPatchInfosAsync(_InstallConfiguration, _DownloadConfiguration, ct);
+            var patches = await PatchInfo.FetchPatchInfosAsync(_InstallConfiguration, downloadConfiguration, ct);
 
             App.Current.Logger.Info(nameof(ComparePhase), "Fetching cache data");
-            var cacheData = await _PatchCache.SelectAllAsync();
+            var cacheData = await patchCache.SelectAllAsync();
 
             App.Current.Logger.Info(nameof(ComparePhase), "Comparing file");
 

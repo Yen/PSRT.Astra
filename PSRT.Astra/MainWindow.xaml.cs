@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PSRT.Astra.Views;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -85,6 +86,13 @@ namespace PSRT.Astra
         private void _Hyperlink_RequestNavigateBrowser(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(e.Uri.ToString());
+        }
+
+        private void _PhaseControl_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+            if (e.Property == PhaseControl.PhaseStateProperty)
+                if (sender is FrameworkElement element)
+                    element.BringIntoView();
         }
     }
 }

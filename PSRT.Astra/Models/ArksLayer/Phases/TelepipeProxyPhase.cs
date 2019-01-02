@@ -14,25 +14,23 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
     public class TelepipeProxyPhase
     {
         private InstallConfiguration _InstallConfiguration;
-        private PluginInfo _PluginInfo;
         private bool _Enabled;
 
-        public TelepipeProxyPhase(InstallConfiguration installConfiguration, PluginInfo pluginInfo, bool enabled)
+        public TelepipeProxyPhase(InstallConfiguration installConfiguration, bool enabled)
         {
             _InstallConfiguration = installConfiguration;
-            _PluginInfo = pluginInfo;
             _Enabled = enabled;
         }
 
-        public async Task RunAsync(CancellationToken ct = default)
+        public async Task RunAsync(PluginInfo pluginInfo, CancellationToken ct = default)
         {
             if (_Enabled)
-                await _InstallAsync(ct);
+                await _InstallAsync(pluginInfo, ct);
             else
                 await _RemoveAsync(ct);
         }
 
-        private async Task _InstallAsync(CancellationToken ct = default)
+        private async Task _InstallAsync(PluginInfo pluginInfo, CancellationToken ct = default)
         {
             var proxyUrl = Properties.Settings.Default.TelepipeProxyUrl;
             bool isCustomProxy = !string.IsNullOrWhiteSpace(proxyUrl);
@@ -57,7 +55,7 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
 
             App.Current.Logger.Info(nameof(TelepipeProxyPhase), "Validating telepipe plugin dll");
 
-            await _PluginInfo.TelepipeProxyDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginTelepipeProxyDll, ct);
+            await pluginInfo.TelepipeProxyDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginTelepipeProxyDll, ct);
         }
 
         private async Task _RemoveAsync(CancellationToken ct = default)

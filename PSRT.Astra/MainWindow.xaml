@@ -60,27 +60,6 @@
                 <Run Text="{local:LocaleBinding MainWindow_UpdateAvailableDownload}"/>
             </Hyperlink>
         </TextBlock>
-        <!--<ListView ItemsSource="{Binding LogEntries}" Grid.Row="1" Grid.Column="1" ScrollViewer.ScrollChanged="_Log_ScrollChanged">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock>
-                        <Run Text="{Binding \Source}" FontWeight="Bold"/>
-                        <Run Text="→"/>
-                        <Run Text="{Binding Message}"/>
-                    </TextBlock>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>-->
-        <!--<Grid Grid.Row="1" Grid.Column="1" Margin="5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <views:PhaseControl PhaseState="Error" Title="Test Error" />
-            <views:PhaseControl Grid.Row="1" PhaseState="Running" Title="Test Running">
-                <Label>asdas</Label>
-            </views:PhaseControl>
-        </Grid>-->
         <Border
             Grid.Row="1"
             Grid.Column="1"
@@ -91,7 +70,11 @@
                 <ItemsControl ItemsSource="{Binding Phases}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <views:PhaseControl Title="{Binding Title}" PhaseState="{Binding State}" Child="{Binding Child}"/>
+                            <views:PhaseControl
+                                Title="{Binding Title}"
+                                PhaseState="{Binding State, NotifyOnTargetUpdated=True}"
+                                Child="{Binding Child}"
+                                TargetUpdated="_PhaseControl_TargetUpdated"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
