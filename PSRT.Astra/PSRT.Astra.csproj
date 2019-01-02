@@ -101,15 +101,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AboutWindow.xaml.cs">
+    <Compile Include="Views\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AquaHttpClient.cs" />
     <Compile Include="Models\ArksLayer\ArksLayerDownloadConfiguration.cs" />
     <Compile Include="Models\ArksLayer\ArksLayerHttpClient.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="MainWindowViewModel.GameWatcher.cs" />
-    <Compile Include="MainWindowViewModel.UpdateChecker.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.GameWatcher.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.UpdateChecker.cs" />
     <Compile Include="Models\ArksLayer\ArksLayerInstallConfiguration.cs" />
     <Compile Include="Models\ArksLayer\Phases\EnglishPatchPhase.cs" />
     <Compile Include="Models\ArksLayer\TweakerBin.cs" />
@@ -125,21 +125,21 @@
     <Compile Include="Models\Phases\PSO2DirectoriesPhase.cs" />
     <Compile Include="Models\Phases\VerifyFilesPhase.cs" />
     <Compile Include="Models\Phases\VerifyFilesProgress.cs" />
-    <Compile Include="OptionsWindow.xaml.cs">
+    <Compile Include="Views\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="OptionsWindowViewModel.cs" />
-    <Compile Include="PSO2OptionsWindow.xaml.cs">
+    <Compile Include="ViewModels\OptionsWindowViewModel.cs" />
+    <Compile Include="Views\PSO2OptionsWindow.xaml.cs">
       <DependentUpon>PSO2OptionsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InstallSelectorWindow.xaml.cs">
+    <Compile Include="Views\InstallSelectorWindow.xaml.cs">
       <DependentUpon>InstallSelectorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InstallSelectorWindowViewModel.cs" />
+    <Compile Include="ViewModels\InstallSelectorWindowViewModel.cs" />
     <Compile Include="LocaleManager.cs" />
     <Compile Include="Models\DownloadConfiguration.cs" />
     <Compile Include="Models\InstallConfiguration.cs" />
-    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Models\PatchCache.cs" />
     <Compile Include="Models\PatchCacheEntry.cs" />
     <Compile Include="Models\PatchInfo.cs" />
@@ -150,7 +150,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Localization.resx</DependentUpon>
     </Compile>
-    <Compile Include="PSO2OptionsWindowViewModel.cs" />
+    <Compile Include="ViewModels\PSO2OptionsWindowViewModel.cs" />
     <Compile Include="StringFormatValueConverter.cs" />
     <Compile Include="Views\ProgressControl.xaml.cs">
       <DependentUpon>ProgressControl.xaml</DependentUpon>
@@ -158,23 +158,23 @@
     <Compile Include="Views\PhaseControl.xaml.cs">
       <DependentUpon>PhaseControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="AboutWindow.xaml">
+    <Page Include="Views\AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="OptionsWindow.xaml">
+    <Page Include="Views\OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PSO2OptionsWindow.xaml">
+    <Page Include="Views\PSO2OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InstallSelectorWindow.xaml">
+    <Page Include="Views\InstallSelectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -182,7 +182,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

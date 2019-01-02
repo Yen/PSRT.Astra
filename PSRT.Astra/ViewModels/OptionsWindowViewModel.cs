@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PSRT.Astra
+namespace PSRT.Astra.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
     class OptionsWindowViewModel

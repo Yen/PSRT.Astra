@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PSRT.Astra
+namespace PSRT.Astra.ViewModels
 {
     public partial class MainWindowViewModel
     {

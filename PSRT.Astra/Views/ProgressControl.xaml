@@ -3,16 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PSRT.Astra.Views"
+             xmlns:astra="clr-namespace:PSRT.Astra"
+             xmlns:views="clr-namespace:PSRT.Astra.Views"
+             xmlns:viewModels="clr-namespace:PSRT.Astra.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel>
-        <Label Content="{Binding Path=Message, RelativeSource={RelativeSource AncestorType={x:Type local:ProgressControl}}}">
+        <Label Content="{Binding Path=Message, RelativeSource={RelativeSource AncestorType={x:Type views:ProgressControl}}}">
             <Label.Style>
                 <Style TargetType="Label">
                     <Style.Triggers>
                         <DataTrigger
-                            Binding="{Binding Path=Message, RelativeSource={RelativeSource AncestorType={x:Type local:ProgressControl}}}"
+                            Binding="{Binding Path=Message, RelativeSource={RelativeSource AncestorType={x:Type views:ProgressControl}}}"
                             Value="{x:Null}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
@@ -26,11 +28,11 @@
             Maximum="1"
             IsIndeterminate="{Binding
                 Path=IsIndeterminate,
-                RelativeSource={RelativeSource AncestorType={x:Type local:ProgressControl}}
+                RelativeSource={RelativeSource AncestorType={x:Type views:ProgressControl}}
             }"
             Value="{Binding
                 Path=Progress,
-                RelativeSource={RelativeSource AncestorType={x:Type local:ProgressControl}}
+                RelativeSource={RelativeSource AncestorType={x:Type views:ProgressControl}}
             }"/>
     </StackPanel>
 </UserControl>

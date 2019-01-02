@@ -1,4 +1,4 @@
-﻿using PSRT.Astra.Views;
+﻿using PSRT.Astra.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,7 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
-namespace PSRT.Astra
+namespace PSRT.Astra.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

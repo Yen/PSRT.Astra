@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace PSRT.Astra
+namespace PSRT.Astra.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
     public class InstallSelectorWindowViewModel

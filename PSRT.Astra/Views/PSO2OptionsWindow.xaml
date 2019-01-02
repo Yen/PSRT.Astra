@@ -1,16 +1,18 @@
-﻿<Window x:Class="PSRT.Astra.PSO2OptionsWindow"
+﻿<Window x:Class="PSRT.Astra.Views.PSO2OptionsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PSRT.Astra"
+        xmlns:astra="clr-namespace:PSRT.Astra"
+        xmlns:views="clr-namespace:PSRT.Astra.Views"
+        xmlns:viewModels="clr-namespace:PSRT.Astra.ViewModels"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance local:PSO2OptionsWindowViewModel}"
+        d:DataContext="{d:DesignInstance viewModels:PSO2OptionsWindowViewModel}"
         MinHeight="320" MinWidth="700" Height="320" Width="700" Loaded="Window_Loaded">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
-            <local:LocaleBinding Path="MainWindow_PSO2Options" />
-            <local:LocaleBinding Path="PSRTAstra" />
+            <astra:LocaleBinding Path="MainWindow_PSO2Options" />
+            <astra:LocaleBinding Path="PSRTAstra" />
         </MultiBinding>
     </Window.Title>
     <Grid>
@@ -34,7 +36,7 @@
                     <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_Resolution}"/>
+                <Label Grid.Column="0" Content="{astra:LocaleBinding PSO2OptionsWindow_Resolution}"/>
                 <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding ResolutionItems}" SelectedItem="{Binding ResolutionSelected}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -52,11 +54,11 @@
                     <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_WindowMode}"/>
+                <Label Grid.Column="0" Content="{astra:LocaleBinding PSO2OptionsWindow_WindowMode}"/>
                 <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding WindowModeItems}" SelectedItem="{Binding WindowModeSelected}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
+                            <TextBlock Text="{astra:LocaleDynamicBinding {Binding LocaleKey}}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -66,11 +68,11 @@
                     <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_ShaderQuality}"/>
+                <Label Grid.Column="0" Content="{astra:LocaleBinding PSO2OptionsWindow_ShaderQuality}"/>
                 <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding ShaderQualityItems}" SelectedItem="{Binding ShaderQualitySelected}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
+                            <TextBlock Text="{astra:LocaleDynamicBinding {Binding LocaleKey}}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -80,11 +82,11 @@
                     <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_TextureQuality}"/>
+                <Label Grid.Column="0" Content="{astra:LocaleBinding PSO2OptionsWindow_TextureQuality}"/>
                 <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding TextureQualityItems}" SelectedItem="{Binding TextureQualitySelected}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
+                            <TextBlock Text="{astra:LocaleDynamicBinding {Binding LocaleKey}}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -94,11 +96,11 @@
                     <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
-                <Label IsEnabled="{Binding Ready}" Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_FPSLimit}"/>
+                <Label IsEnabled="{Binding Ready}" Grid.Column="0" Content="{astra:LocaleBinding PSO2OptionsWindow_FPSLimit}"/>
                 <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding FrameLimitItems}" SelectedItem="{Binding FrameLimitSelected}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
+                            <TextBlock Text="{astra:LocaleDynamicBinding {Binding LocaleKey}}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -108,11 +110,11 @@
                     <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="{local:LocaleBinding PSO2OptionsWindow_UIScale}"/>
+                <Label Grid.Column="0" Content="{astra:LocaleBinding PSO2OptionsWindow_UIScale}"/>
                 <ComboBox IsEnabled="{Binding Ready}" Grid.Column="1" ItemsSource="{Binding InterfaceScaleItems}" SelectedItem="{Binding InterfaceScaleSelected}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{local:LocaleDynamicBinding {Binding LocaleKey}}"/>
+                            <TextBlock Text="{astra:LocaleDynamicBinding {Binding LocaleKey}}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -123,7 +125,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <CheckBox IsEnabled="{Binding Ready}" IsChecked="{Binding DirectX9ExEnabled}" Grid.Column="0" HorizontalAlignment="Left"/>
-                <Label Grid.Column="1" Content="{local:LocaleBinding PSO2OptionsWindow_EnableDirectX9Ex}"/>
+                <Label Grid.Column="1" Content="{astra:LocaleBinding PSO2OptionsWindow_EnableDirectX9Ex}"/>
             </Grid>
         </Grid>
         <Grid Grid.Column="1">
@@ -133,50 +135,50 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" x:Name="GraphicsPreset">
-                <Label HorizontalContentAlignment="Center" Content="{local:LocaleBinding PSO2OptionsWindow_GraphicsPreset}"/>
+                <Label HorizontalContentAlignment="Center" Content="{astra:LocaleBinding PSO2OptionsWindow_GraphicsPreset}"/>
                 <DockPanel VerticalAlignment="Center" Margin="5">
                     <TextBox Text="{Binding ElementName=GraphicsPresetSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Left" TextAlignment="Right" Width="40" />
                     <Slider x:Name="GraphicsPresetSlider" Maximum="6" Minimum="1" TickPlacement="BottomRight" Ticks="1,2,3,4,5,6" IsSnapToTickEnabled="True" Value="{Binding DrawLevelSelection}"/>
                 </DockPanel>
             </StackPanel>
-            <GroupBox Header="{local:LocaleBinding PSO2OptionsWindow_Information}" Grid.Row="1">
+            <GroupBox Header="{astra:LocaleBinding PSO2OptionsWindow_Information}" Grid.Row="1">
                 <TextBlock>
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_DefaultHelp}"/>
+                            <Setter Property="Text" Value="{astra:LocaleBinding PSO2OptionsWindow_DefaultHelp}"/>
                             <Setter Property="TextWrapping" Value="WrapWithOverflow" />
                             <Setter Property="Margin" Value="5" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ElementName=Resolution, Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_ResolutionHelp}"/>
+                                    <Setter Property="Text" Value="{astra:LocaleBinding PSO2OptionsWindow_ResolutionHelp}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=WindowMode, Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_WindowModeHelp}"/>
+                                    <Setter Property="Text" Value="{astra:LocaleBinding PSO2OptionsWindow_WindowModeHelp}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=ShaderQuality, Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_ShaderQualityHelp}"/>
+                                    <Setter Property="Text" Value="{astra:LocaleBinding PSO2OptionsWindow_ShaderQualityHelp}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=TextureQuality, Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_TextureQualityHelp}"/>
+                                    <Setter Property="Text" Value="{astra:LocaleBinding PSO2OptionsWindow_TextureQualityHelp}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=FPSLimit, Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_FPSLimitHelp}"/>
+                                    <Setter Property="Text" Value="{astra:LocaleBinding PSO2OptionsWindow_FPSLimitHelp}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=UIScale, Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_UIScaleHelp}"/>
+                                    <Setter Property="Text" Value="{astra:LocaleBinding PSO2OptionsWindow_UIScaleHelp}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=GraphicsPreset, Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_GraphicsPresetHelp}"/>
+                                    <Setter Property="Text" Value="{astra:LocaleBinding PSO2OptionsWindow_GraphicsPresetHelp}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ElementName=DirectX9Ex, Path=IsMouseOver}" Value="True">
-                                    <Setter Property="Text" Value="{local:LocaleBinding PSO2OptionsWindow_EnableDirectX9ExHelp}"/>
+                                    <Setter Property="Text" Value="{astra:LocaleBinding PSO2OptionsWindow_EnableDirectX9ExHelp}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
             </GroupBox>
-            <Button Grid.Row="2" Content="{local:LocaleBinding SaveChanges}" Command="{Binding SaveCommand}" FontSize="24"/>
+            <Button Grid.Row="2" Content="{astra:LocaleBinding SaveChanges}" Command="{Binding SaveCommand}" FontSize="24"/>
         </Grid>
     </Grid>
 </Window>

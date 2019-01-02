@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
 
-namespace PSRT.Astra
+namespace PSRT.Astra.ViewModels
 {
     [StructLayout(LayoutKind.Sequential)]
     struct DEVMODE

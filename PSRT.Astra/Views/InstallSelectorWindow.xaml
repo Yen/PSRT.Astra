@@ -1,16 +1,18 @@
-﻿<Window x:Class="PSRT.Astra.InstallSelectorWindow"
+﻿<Window x:Class="PSRT.Astra.Views.InstallSelectorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PSRT.Astra"
+        xmlns:astra="clr-namespace:PSRT.Astra"
+        xmlns:views="clr-namespace:PSRT.Astra.Views"
+        xmlns:viewModels="clr-namespace:PSRT.Astra.ViewModels"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance local:InstallSelectorWindowViewModel}"
+        d:DataContext="{d:DesignInstance viewModels:InstallSelectorWindowViewModel}"
         Height="240" Width="480" ResizeMode="NoResize">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
-            <local:LocaleBinding Path="InstallSelectorWindow_Title"/>
-            <local:LocaleBinding Path="PSRTAstra"/>
+            <astra:LocaleBinding Path="InstallSelectorWindow_Title"/>
+            <astra:LocaleBinding Path="PSRTAstra"/>
         </MultiBinding>
     </Window.Title>
     <Grid>
@@ -21,15 +23,15 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Label Content="{local:LocaleDynamicBinding {Binding SelectionMessage}}" HorizontalAlignment="Center"/>
+        <Label Content="{astra:LocaleDynamicBinding {Binding SelectionMessage}}" HorizontalAlignment="Center"/>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Row="2" Text="{Binding SelectedPath, UpdateSourceTrigger=PropertyChanged}" Background="{Binding SelectedPathColor}"/>
-            <Button Content="{local:LocaleBinding InstallSelectorWindow_Browse}" ToolTip="{local:LocaleBinding InstallSelectorWindow_BrowseTooltip}" Grid.Column="1" Click="_SelectDirectory_Click"/>
+            <Button Content="{astra:LocaleBinding InstallSelectorWindow_Browse}" ToolTip="{astra:LocaleBinding InstallSelectorWindow_BrowseTooltip}" Grid.Column="1" Click="_SelectDirectory_Click"/>
         </Grid>
-        <Button Grid.Row="3" Content="{local:LocaleDynamicBinding {Binding ConfirmationMessage}}" Grid.Column="1" IsEnabled="{Binding SelectedPathValid}" Click="_AcceptButton_Click" FontSize="36" />
+        <Button Grid.Row="3" Content="{astra:LocaleDynamicBinding {Binding ConfirmationMessage}}" Grid.Column="1" IsEnabled="{Binding SelectedPathValid}" Click="_AcceptButton_Click" FontSize="36" />
     </Grid>
 </Window>

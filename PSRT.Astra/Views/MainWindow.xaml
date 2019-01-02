@@ -1,12 +1,13 @@
-﻿<Window x:Class="PSRT.Astra.MainWindow"
+﻿<Window x:Class="PSRT.Astra.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PSRT.Astra"
+        xmlns:astra="clr-namespace:PSRT.Astra"
         xmlns:views="clr-namespace:PSRT.Astra.Views"
+        xmlns:viewModels="clr-namespace:PSRT.Astra.ViewModels"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
+        d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
         MinHeight="360"
         MinWidth="800"
         Height="480"
@@ -15,7 +16,7 @@
         Closed="Window_Closed">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} {1}">
-            <local:LocaleBinding Path="PSRTAstra"/>
+            <astra:LocaleBinding Path="PSRTAstra"/>
             <Binding Path="CurrentVersion" Mode="OneWay"/>
         </MultiBinding>
     </Window.Title>
@@ -47,8 +48,8 @@
             </TextBlock.Style>
             <Run>
                 <Run.Text>
-                    <MultiBinding Converter="{x:Static local:StringFormatValueConverter.Instance}">
-                        <local:LocaleBinding Path="MainWindow_UpdateAvailableMessage"/>
+                    <MultiBinding Converter="{x:Static astra:StringFormatValueConverter.Instance}">
+                        <astra:LocaleBinding Path="MainWindow_UpdateAvailableMessage"/>
                         <Binding Path="UpdatedVersionInformation.Version" Mode="OneWay"/>
                     </MultiBinding>
                 </Run.Text>
@@ -57,7 +58,7 @@
             <Hyperlink
                 NavigateUri="{Binding UpdatedVersionInformation.GithubUri, Mode=OneWay}"
                 RequestNavigate="_Hyperlink_RequestNavigateBrowser">
-                <Run Text="{local:LocaleBinding MainWindow_UpdateAvailableDownload}"/>
+                <Run Text="{astra:LocaleBinding MainWindow_UpdateAvailableDownload}"/>
             </Hyperlink>
         </TextBlock>
         <Border
@@ -83,17 +84,17 @@
         </Border>
         <Button
             IsEnabled="{Binding LaunchPSO2ButtonEnabled}"   
-            ToolTip="{local:LocaleBinding MainWindow_LaunchPSO2Tooltip}"
+            ToolTip="{astra:LocaleBinding MainWindow_LaunchPSO2Tooltip}"
             Grid.Row="1"
             Command="{Binding LaunchCommand}">
             <TextBlock
-                Text="{local:LocaleDynamicBinding {Binding LaunchPSO2ButtonLocaleKey, Mode=OneWay}}"
+                Text="{astra:LocaleDynamicBinding {Binding LaunchPSO2ButtonLocaleKey, Mode=OneWay}}"
                 FontSize="48"
                 FontWeight="Bold"
                 TextWrapping="Wrap"
                 TextAlignment="Center"/>
         </Button>
-        <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{local:LocaleBinding MainWindow_PSO2Options}" ToolTip="{local:LocaleBinding MainWindow_PSO2OptionsTooltip}" Grid.Row="2" FontSize="20" Click="_SettingsButton_Click"/>
+        <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{astra:LocaleBinding MainWindow_PSO2Options}" ToolTip="{astra:LocaleBinding MainWindow_PSO2OptionsTooltip}" Grid.Row="2" FontSize="20" Click="_SettingsButton_Click"/>
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -104,17 +105,17 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{local:LocaleBinding MainWindow_ResetGameGuard}" ToolTip="{local:LocaleBinding MainWindow_ResetGameGuardTooltip}" Grid.Row="0" Grid.Column="1" Command="{Binding ResetGameGuardCommand}"/>
-            <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{local:LocaleBinding MainWindow_AstraOptions}" ToolTip="{local:LocaleBinding MainWindow_AstraOptionsTooltip}" Grid.Row="1" Grid.Column="1" Click="_AstraSettingsButton_Click"/>
-            <Button Content="{local:LocaleBinding AboutAstra}" ToolTip="{local:LocaleBinding MainWindow_AboutAstraTooltip}" Grid.Row="2" Grid.Column="1" Click="_AboutButton_Click"/>
-            <CheckBox IsEnabled="{Binding ConfigButtonsEnabled}" ToolTip="{local:LocaleBinding MainWindow_EnglishPatchCheckboxTooltip}" IsChecked="{Binding ArksLayerEnglishPatchEnabled}" Grid.Row="0">
-                <TextBlock Text="{local:LocaleBinding MainWindow_EnglishPatchCheckbox}" />
+            <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{astra:LocaleBinding MainWindow_ResetGameGuard}" ToolTip="{astra:LocaleBinding MainWindow_ResetGameGuardTooltip}" Grid.Row="0" Grid.Column="1" Command="{Binding ResetGameGuardCommand}"/>
+            <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{astra:LocaleBinding MainWindow_AstraOptions}" ToolTip="{astra:LocaleBinding MainWindow_AstraOptionsTooltip}" Grid.Row="1" Grid.Column="1" Click="_AstraSettingsButton_Click"/>
+            <Button Content="{astra:LocaleBinding AboutAstra}" ToolTip="{astra:LocaleBinding MainWindow_AboutAstraTooltip}" Grid.Row="2" Grid.Column="1" Click="_AboutButton_Click"/>
+            <CheckBox IsEnabled="{Binding ConfigButtonsEnabled}" ToolTip="{astra:LocaleBinding MainWindow_EnglishPatchCheckboxTooltip}" IsChecked="{Binding ArksLayerEnglishPatchEnabled}" Grid.Row="0">
+                <TextBlock Text="{astra:LocaleBinding MainWindow_EnglishPatchCheckbox}" />
             </CheckBox>
-            <CheckBox IsEnabled="{Binding ConfigButtonsEnabled}" ToolTip="{local:LocaleBinding MainWindow_TelepipeCheckboxTooltip}" IsChecked="{Binding ArksLayerTelepipeProxyEnabled}" Grid.Row="1">
-                <TextBlock Text="{local:LocaleBinding MainWindow_TelepipeCheckbox}" />
+            <CheckBox IsEnabled="{Binding ConfigButtonsEnabled}" ToolTip="{astra:LocaleBinding MainWindow_TelepipeCheckboxTooltip}" IsChecked="{Binding ArksLayerTelepipeProxyEnabled}" Grid.Row="1">
+                <TextBlock Text="{astra:LocaleBinding MainWindow_TelepipeCheckbox}" />
             </CheckBox>
-            <CheckBox IsEnabled="False" ToolTip="{local:LocaleBinding MainWindow_PSRTCheckboxTooltip}" Grid.Row="2">
-                <TextBlock Text="{local:LocaleBinding MainWindow_PSRTCheckbox}" />
+            <CheckBox IsEnabled="False" ToolTip="{astra:LocaleBinding MainWindow_PSRTCheckboxTooltip}" Grid.Row="2">
+                <TextBlock Text="{astra:LocaleBinding MainWindow_PSRTCheckbox}" />
             </CheckBox>
         </Grid>
     </Grid>

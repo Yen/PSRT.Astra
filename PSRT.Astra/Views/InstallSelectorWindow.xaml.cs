@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PSRT.Astra.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -15,7 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace PSRT.Astra
+namespace PSRT.Astra.Views
 {
     /// <summary>
     /// Interaction logic for InstallSelectorWindow.xaml
