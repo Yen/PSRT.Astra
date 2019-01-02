@@ -299,14 +299,14 @@ namespace PSRT.Astra
                         var comparePhaseState = new PhaseState { Title = "Comparing files" };
                         newPhases.Add(comparePhaseState);
                         {
-                            var compareProgressControl = new CompareProgressControl();
-                            compareProgressControl.SetBinding(CompareProgressControl.ProgressProperty, new Binding
+                            var compareProgressControl = new ProgressControl();
+                            compareProgressControl.SetBinding(ProgressControl.ProgressProperty, new Binding
                             {
                                 Source = comparePhase.Progress,
                                 Path = new PropertyPath(nameof(comparePhase.Progress.Progress)),
                                 Mode = BindingMode.OneWay
                             });
-                            compareProgressControl.SetBinding(CompareProgressControl.IsIndeterminateProperty, new Binding
+                            compareProgressControl.SetBinding(ProgressControl.IsIndeterminateProperty, new Binding
                             {
                                 Source = comparePhase.Progress,
                                 Path = new PropertyPath(nameof(comparePhase.Progress.IsIndeterminate)),
@@ -321,6 +321,39 @@ namespace PSRT.Astra
                             Title = "Verifying files"
                         };
                         newPhases.Add(verifyFilesPhaseState);
+                        {
+                            var verifyFilesControl = new ProgressControl();
+                            verifyFilesControl.SetBinding(ProgressControl.ProgressProperty, new Binding
+                            {
+                                Source = verifyFilesPhase.Progress,
+                                Path = new PropertyPath(nameof(verifyFilesPhase.Progress.Progress)),
+                                Mode = BindingMode.OneWay
+                            });
+                            verifyFilesControl.SetBinding(ProgressControl.IsIndeterminateProperty, new Binding
+                            {
+                                Source = verifyFilesPhase.Progress,
+                                Path = new PropertyPath(nameof(verifyFilesPhase.Progress.IsIndeterminate)),
+                                Mode = BindingMode.OneWay
+                            });
+                            var verifyFilesControlMessageBinding = new MultiBinding
+                            {
+                                StringFormat = "{0} files verified of {1}"
+                            };
+                            verifyFilesControlMessageBinding.Bindings.Add(new Binding
+                            {
+                                Source = verifyFilesPhase.Progress,
+                                Path = new PropertyPath(nameof(verifyFilesPhase.Progress.CompletedCount)),
+                                Mode = BindingMode.OneWay
+                            });
+                            verifyFilesControlMessageBinding.Bindings.Add(new Binding
+                            {
+                                Source = verifyFilesPhase.Progress,
+                                Path = new PropertyPath(nameof(verifyFilesPhase.Progress.TotalCount)),
+                                Mode = BindingMode.OneWay
+                            });
+                            verifyFilesControl.SetBinding(ProgressControl.MessageProperty, verifyFilesControlMessageBinding);
+                            verifyFilesPhaseState.Child = verifyFilesControl;
+                        }
 
                         var pluginInfoState = new PhaseState
                         {

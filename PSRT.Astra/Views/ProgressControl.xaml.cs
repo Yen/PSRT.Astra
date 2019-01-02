@@ -15,10 +15,7 @@ using System.Windows.Shapes;
 
 namespace PSRT.Astra.Views
 {
-    /// <summary>
-    /// Interaction logic for CompareProgressControl.xaml
-    /// </summary>
-    public partial class CompareProgressControl : UserControl
+    public partial class ProgressControl : UserControl
     {
         public double Progress
         {
@@ -29,7 +26,7 @@ namespace PSRT.Astra.Views
         public static readonly DependencyProperty ProgressProperty = DependencyProperty.Register(
             nameof(Progress),
             typeof(double),
-            typeof(CompareProgressControl));
+            typeof(ProgressControl));
 
         public bool IsIndeterminate
         {
@@ -40,9 +37,20 @@ namespace PSRT.Astra.Views
         public static readonly DependencyProperty IsIndeterminateProperty = DependencyProperty.Register(
             nameof(IsIndeterminate),
             typeof(bool),
-            typeof(CompareProgressControl));
+            typeof(ProgressControl));
 
-        public CompareProgressControl()
+        public string Message
+        {
+            get => (string)GetValue(MessageProperty);
+            set => SetValue(MessageProperty, value);
+        }
+
+        public static readonly DependencyProperty MessageProperty = DependencyProperty.Register(
+            nameof(Message),
+            typeof(string),
+            typeof(ProgressControl));
+
+        public ProgressControl()
         {
             InitializeComponent();
         }

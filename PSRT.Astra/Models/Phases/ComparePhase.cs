@@ -44,7 +44,7 @@ namespace PSRT.Astra.Models.Phases
                 .ToArray();
 
             var progressValueAtomic = 0;
-            
+
             App.Current.Logger.Info(nameof(ComparePhase), "Comparing files");
             Progress.IsIndeterminate = false;
             var processTask = Task.Factory.StartNew(() =>
@@ -123,11 +123,19 @@ namespace PSRT.Astra.Models.Phases
 
             await Task.Factory.StartNew(() =>
             {
-                while (!processTask.Wait(100))
-                    Progress.Progress = (progressValueAtomic / (double)workingPatches.Length);
-                Progress.Progress = 100.0;
+                try
+                {
+                    while (!processTask.Wait(200))
+                        Progress.Progress = (progressValueAtomic / (double)workingPatches.Length);
+                    Progress.Progress = 1;
+                }
+                catch (AggregateException ex) when (ex.InnerExceptions.Count == 1 && ex.InnerException is OperationCanceledException)
+                {
+                    throw ex.InnerException;
+                }
             }, TaskCreationOptions.LongRunning);
 
+            await processTask;
 
             return workingPatches
                 .Where(p => p.ShouldUpdate)

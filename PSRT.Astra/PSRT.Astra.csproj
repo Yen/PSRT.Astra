@@ -124,6 +124,7 @@
     <Compile Include="Models\Phases\ModFilesPhase.cs" />
     <Compile Include="Models\Phases\PSO2DirectoriesPhase.cs" />
     <Compile Include="Models\Phases\VerifyFilesPhase.cs" />
+    <Compile Include="Models\Phases\VerifyFilesProgress.cs" />
     <Compile Include="OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
@@ -151,8 +152,8 @@
     </Compile>
     <Compile Include="PSO2OptionsWindowViewModel.cs" />
     <Compile Include="StringFormatValueConverter.cs" />
-    <Compile Include="Views\CompareProgressControl.xaml.cs">
-      <DependentUpon>CompareProgressControl.xaml</DependentUpon>
+    <Compile Include="Views\ProgressControl.xaml.cs">
+      <DependentUpon>ProgressControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PhaseControl.xaml.cs">
       <DependentUpon>PhaseControl.xaml</DependentUpon>
@@ -185,7 +186,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\CompareProgressControl.xaml">
+    <Page Include="Views\ProgressControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
