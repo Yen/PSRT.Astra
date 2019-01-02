@@ -30,7 +30,7 @@ namespace PSRT.Astra.Views
         {
             public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             {
-                if (value is State state && targetType == typeof(Brush))
+                if (value is State state)
                 {
                     switch (value)
                     {
@@ -46,6 +46,23 @@ namespace PSRT.Astra.Views
                             return Brushes.DeepSkyBlue;
                     }
                 }
+
+                return Binding.DoNothing;
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public static readonly DurationFormatConverter DurationFormatConverterInstance = new DurationFormatConverter();
+        public class DurationFormatConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                if (value is TimeSpan duration)
+                    return $"{Math.Floor(duration.TotalHours)}:{duration.Minutes:D2}:{duration.Seconds:D2}:{duration.Milliseconds / 100}";
 
                 return Binding.DoNothing;
             }
@@ -107,6 +124,20 @@ namespace PSRT.Astra.Views
                 typeof(string),
                 typeof(PhaseControl),
                 new FrameworkPropertyMetadata()
+            );
+
+        public TimeSpan Duration
+        {
+            get => (TimeSpan)GetValue(DurationProperty);
+            set => SetValue(DurationProperty, value);
+        }
+
+        public static readonly DependencyProperty DurationProperty
+            = DependencyProperty.Register(
+                nameof(Duration),
+                typeof(TimeSpan),
+                typeof(PhaseControl),
+                new FrameworkPropertyMetadata(TimeSpan.Zero)
             );
 
         public PhaseControl()

@@ -54,7 +54,15 @@
                         Path=Title,
                         RelativeSource={RelativeSource AncestorType={x:Type local:PhaseControl}}
                     }"/>
-                <Label Grid.Column="2" VerticalAlignment="Center">10 hours</Label>
+                <Label
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    FontFamily="Courier New"
+                    Content="{Binding
+                        Path=Duration,
+                        RelativeSource={RelativeSource AncestorType={x:Type local:PhaseControl}},
+                        Converter={x:Static local:PhaseControl.DurationFormatConverterInstance}
+                    }"/>
             </Grid>
             <ContentPresenter
                 Grid.Row="1"

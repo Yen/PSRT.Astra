@@ -114,6 +114,7 @@ namespace PSRT.Astra
         {
             public string Title { get; set; }
             public PhaseControl.State State { get; set; } = PhaseControl.State.Queued;
+            public TimeSpan Duration { get; set; } = TimeSpan.Zero;
             public UIElement Child { get; set; }
         }
 
@@ -188,7 +189,12 @@ namespace PSRT.Astra
             T result;
             try
             {
-                result = await phase();
+                var start = DateTime.UtcNow;
+                var task = phase();
+                while (await Task.WhenAny(task, Task.Delay(100)) != task)
+                    state.Duration = DateTime.UtcNow - start;
+                result = await task;
+                state.Duration = DateTime.UtcNow - start;
             }
             catch (OperationCanceledException)
             {
@@ -209,7 +215,11 @@ namespace PSRT.Astra
             state.State = PhaseControl.State.Running;
             try
             {
-                await phase();
+                var start = DateTime.UtcNow;
+                var task = phase();
+                while (await Task.WhenAny(task, Task.Delay(100)) != task)
+                    state.Duration = DateTime.UtcNow - start;
+                state.Duration = DateTime.UtcNow - start;
             }
             catch (OperationCanceledException)
             {

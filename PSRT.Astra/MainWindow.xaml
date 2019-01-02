@@ -74,6 +74,7 @@
                                 Title="{Binding Title}"
                                 PhaseState="{Binding State, NotifyOnTargetUpdated=True}"
                                 Child="{Binding Child}"
+                                Duration="{Binding Duration}"
                                 TargetUpdated="_PhaseControl_TargetUpdated"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
