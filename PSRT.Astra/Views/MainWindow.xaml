@@ -101,7 +101,7 @@
         </Grid>
         <Button
             IsEnabled="{Binding LaunchPSO2ButtonEnabled}"   
-            ToolTip="{astra:LocaleBinding MainWindow_LaunchPSO2Tooltip}"
+            ToolTip="{astra:LocaleDynamicBinding {Binding LaunchPSO2ButtonTooltipLocaleKey, Mode=OneWay}}"
             Grid.Row="1"
             Command="{Binding LaunchCommand}">
             <TextBlock

@@ -180,33 +180,6 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disabled.
-        /// </summary>
-        internal static string Disabled {
-            get {
-                return ResourceManager.GetString("Disabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Discard Changes.
-        /// </summary>
-        internal static string DiscardChanges {
-            get {
-                return ResourceManager.GetString("DiscardChanges", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enabled.
-        /// </summary>
-        internal static string Enabled {
-            get {
-                return ResourceManager.GetString("Enabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Select your PSO2 installation directory.
         /// </summary>
         internal static string InstallSelectorWindow {
@@ -320,15 +293,6 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ArksLayer.
-        /// </summary>
-        internal static string Log_ArksLayer {
-            get {
-                return ResourceManager.GetString("Log_ArksLayer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to About Astra.
         /// </summary>
         internal static string MainWindow_AboutAstra {
@@ -338,7 +302,7 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Credits and contact information. .
+        ///   Looks up a localized string similar to Credits and contact information..
         /// </summary>
         internal static string MainWindow_AboutAstraTooltip {
             get {
@@ -383,20 +347,74 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel launch.
+        /// </summary>
+        internal static string MainWindow_LaunchButton_Cancel {
+            get {
+                return ResourceManager.GetString("MainWindow_LaunchButton_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop all running operations and cancel the launch.
+        /// </summary>
+        internal static string MainWindow_LaunchButton_CancelTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_LaunchButton_CancelTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Launch PSO2.
         /// </summary>
-        internal static string MainWindow_LaunchPSO2 {
+        internal static string MainWindow_LaunchButton_Launch {
             get {
-                return ResourceManager.GetString("MainWindow_LaunchPSO2", resourceCulture);
+                return ResourceManager.GetString("MainWindow_LaunchButton_Launch", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Start the game!.
         /// </summary>
-        internal static string MainWindow_LaunchPSO2Tooltip {
+        internal static string MainWindow_LaunchButton_LaunchTooltip {
             get {
-                return ResourceManager.GetString("MainWindow_LaunchPSO2Tooltip", resourceCulture);
+                return ResourceManager.GetString("MainWindow_LaunchButton_LaunchTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading.
+        /// </summary>
+        internal static string MainWindow_LaunchButton_Loading {
+            get {
+                return ResourceManager.GetString("MainWindow_LaunchButton_Loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Astra is loading, please wait.
+        /// </summary>
+        internal static string MainWindow_LaunchButton_LoadingTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_LaunchButton_LoadingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for PSO2 to exit.
+        /// </summary>
+        internal static string MainWindow_LaunchButton_PSO2Running {
+            get {
+                return ResourceManager.GetString("MainWindow_LaunchButton_PSO2Running", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Astra cannot make changes to PSO2 while the game is running.
+        /// </summary>
+        internal static string MainWindow_LaunchButton_PSO2RunningTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_LaunchButton_PSO2RunningTooltip", resourceCulture);
             }
         }
         
@@ -929,6 +947,15 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save Changes.
+        /// </summary>
+        internal static string PSO2OptionsWindow_SaveChanges {
+            get {
+                return ResourceManager.GetString("PSO2OptionsWindow_SaveChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shader Quality.
         /// </summary>
         internal static string PSO2OptionsWindow_ShaderQuality {
@@ -1044,15 +1071,6 @@ namespace PSRT.Astra.Properties {
         internal static string PSRTAstra {
             get {
                 return ResourceManager.GetString("PSRTAstra", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Save Changes.
-        /// </summary>
-        internal static string SaveChanges {
-            get {
-                return ResourceManager.GetString("SaveChanges", resourceCulture);
             }
         }
     }

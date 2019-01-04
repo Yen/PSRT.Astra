@@ -85,13 +85,33 @@ namespace PSRT.Astra.ViewModels
                 switch (_ApplicationState)
                 {
                     case ApplicationState.Idle:
-                        return "MainWindow_LaunchPSO2";
+                        return "MainWindow_LaunchButton_Launch";
                     case ApplicationState.Loading:
-                        return "MainWindow_Loading";
+                        return "MainWindow_LaunchButton_Loading";
                     case ApplicationState.Patching:
-                        return "MainWindow_Cancel";
+                        return "MainWindow_LaunchButton_Cancel";
                     case ApplicationState.GameRunning:
-                        return "MainWindow_PSO2Running";
+                        return "MainWindow_LaunchButton_PSO2Running";
+                }
+
+                return null;
+            }
+        }
+
+        public string LaunchPSO2ButtonTooltipLocaleKey
+        {
+            get
+            {
+                switch (_ApplicationState)
+                {
+                    case ApplicationState.Idle:
+                        return "MainWindow_LaunchButton_LaunchTooltip";
+                    case ApplicationState.Loading:
+                        return "MainWindow_LaunchButton_LoadingTooltip";
+                    case ApplicationState.Patching:
+                        return "MainWindow_LaunchButton_CancelTooltip";
+                    case ApplicationState.GameRunning:
+                        return "MainWindow_LaunchButton_PSO2RunningTooltip";
                 }
 
                 return null;

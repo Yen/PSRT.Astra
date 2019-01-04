@@ -150,9 +150,6 @@
   <data name="InstallSelectorWindow_UpdatePSO2" xml:space="preserve">
     <value>Launch Astra</value>
   </data>
-  <data name="Log_ArksLayer" xml:space="preserve">
-    <value>ArksLayer</value>
-  </data>
   <data name="MainWindow_AstraOptions" xml:space="preserve">
     <value>Astra Options</value>
   </data>
@@ -165,10 +162,10 @@
   <data name="MainWindow_EnglishPatchCheckboxTooltip" xml:space="preserve">
     <value>Downloads and enables ARKS Layer's translation tools—use this if you want to play PSO2 in English</value>
   </data>
-  <data name="MainWindow_LaunchPSO2" xml:space="preserve">
+  <data name="MainWindow_LaunchButton_Launch" xml:space="preserve">
     <value>Launch PSO2</value>
   </data>
-  <data name="MainWindow_LaunchPSO2Tooltip" xml:space="preserve">
+  <data name="MainWindow_LaunchButton_LaunchTooltip" xml:space="preserve">
     <value>Start the game!</value>
   </data>
   <data name="MainWindow_PSO2Options" xml:space="preserve">
@@ -297,11 +294,8 @@ If unsure, set this to 60 FPS.</value>
 
 If unsure, set this to Borderless Fullscreen.</value>
   </data>
-  <data name="SaveChanges" xml:space="preserve">
+  <data name="PSO2OptionsWindow_SaveChanges" xml:space="preserve">
     <value>Save Changes</value>
-  </data>
-  <data name="DiscardChanges" xml:space="preserve">
-    <value>Discard Changes</value>
   </data>
   <data name="PSO2OptionsWindow_DiscardChanges" xml:space="preserve">
     <value>Are you sure you want to discard your changes?</value>
@@ -311,12 +305,6 @@ If unsure, set this to Borderless Fullscreen.</value>
   </data>
   <data name="PSO2OptionsWindow_FPSLimitUnlimited" xml:space="preserve">
     <value>Unlimited</value>
-  </data>
-  <data name="Disabled" xml:space="preserve">
-    <value>Disabled</value>
-  </data>
-  <data name="Enabled" xml:space="preserve">
-    <value>Enabled</value>
   </data>
   <data name="PSO2OptionsWindow_EnableDirectX9Ex" xml:space="preserve">
     <value>Enable DirectX 9Ex Features</value>
@@ -390,7 +378,7 @@ This operation will only happen to completion one time, after this the operation
     <value>ⓒ 2019 George "Yen" Bott, in cooperation with all GitHub contributors. Distributed under the MIT license.</value>
   </data>
   <data name="MainWindow_AboutAstraTooltip" xml:space="preserve">
-    <value>Credits and contact information. </value>
+    <value>Credits and contact information.</value>
   </data>
   <data name="OptionsWindow_LargeAddressAwareTooltip" xml:space="preserve">
     <value>Allows PSO2 to assign itself more than 2GB RAM. Some users report this resolves crashes or texture corruption in certain situations.</value>
@@ -461,5 +449,23 @@ Would you like to upload the error information?</value>
     <value>{0} files verified of {1}</value>
     <comment>{0} is the number of files that have been verified.
 {1} is the total number that the phase has to do</comment>
+  </data>
+  <data name="MainWindow_LaunchButton_Cancel" xml:space="preserve">
+    <value>Cancel launch</value>
+  </data>
+  <data name="MainWindow_LaunchButton_CancelTooltip" xml:space="preserve">
+    <value>Stop all running operations and cancel the launch</value>
+  </data>
+  <data name="MainWindow_LaunchButton_Loading" xml:space="preserve">
+    <value>Loading</value>
+  </data>
+  <data name="MainWindow_LaunchButton_LoadingTooltip" xml:space="preserve">
+    <value>Astra is loading, please wait</value>
+  </data>
+  <data name="MainWindow_LaunchButton_PSO2Running" xml:space="preserve">
+    <value>Waiting for PSO2 to exit</value>
+  </data>
+  <data name="MainWindow_LaunchButton_PSO2RunningTooltip" xml:space="preserve">
+    <value>Astra cannot make changes to PSO2 while the game is running</value>
   </data>
 </root>

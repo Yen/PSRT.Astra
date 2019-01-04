@@ -178,7 +178,7 @@
                     </TextBlock.Style>
                 </TextBlock>
             </GroupBox>
-            <Button Grid.Row="2" Content="{astra:LocaleBinding SaveChanges}" Command="{Binding SaveCommand}" FontSize="24"/>
+            <Button Grid.Row="2" Content="{astra:LocaleBinding PSO2OptionsWindow_SaveChanges}" Command="{Binding SaveCommand}" FontSize="24"/>
         </Grid>
     </Grid>
 </Window>
