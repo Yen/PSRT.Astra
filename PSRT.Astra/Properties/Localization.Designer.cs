@@ -383,7 +383,7 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loading.
+        ///   Looks up a localized string similar to Cancel launch.
         /// </summary>
         internal static string MainWindow_LaunchButton_Loading {
             get {

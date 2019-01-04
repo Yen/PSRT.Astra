@@ -54,7 +54,7 @@ namespace PSRT.Astra.ViewModels
 
         private int _ActivityCount { get; set; } = 0;
 
-        private ApplicationState _ApplicationState
+        public ApplicationState State
         {
             get
             {
@@ -72,51 +72,11 @@ namespace PSRT.Astra.ViewModels
         }
 
         public bool LaunchPSO2ButtonEnabled
-            => _ApplicationState == ApplicationState.Idle
-            || _ApplicationState == ApplicationState.Patching;
+            => State == ApplicationState.Idle
+            || State == ApplicationState.Patching;
 
         public bool ConfigButtonsEnabled
-            => _ApplicationState == ApplicationState.Idle;
-
-        public string LaunchPSO2ButtonLocaleKey
-        {
-            get
-            {
-                switch (_ApplicationState)
-                {
-                    case ApplicationState.Idle:
-                        return "MainWindow_LaunchButton_Launch";
-                    case ApplicationState.Loading:
-                        return "MainWindow_LaunchButton_Loading";
-                    case ApplicationState.Patching:
-                        return "MainWindow_LaunchButton_Cancel";
-                    case ApplicationState.GameRunning:
-                        return "MainWindow_LaunchButton_PSO2Running";
-                }
-
-                return null;
-            }
-        }
-
-        public string LaunchPSO2ButtonTooltipLocaleKey
-        {
-            get
-            {
-                switch (_ApplicationState)
-                {
-                    case ApplicationState.Idle:
-                        return "MainWindow_LaunchButton_LaunchTooltip";
-                    case ApplicationState.Loading:
-                        return "MainWindow_LaunchButton_LoadingTooltip";
-                    case ApplicationState.Patching:
-                        return "MainWindow_LaunchButton_CancelTooltip";
-                    case ApplicationState.GameRunning:
-                        return "MainWindow_LaunchButton_PSO2RunningTooltip";
-                }
-
-                return null;
-            }
-        }
+            => State == ApplicationState.Idle;
 
         //
 
@@ -238,7 +198,7 @@ namespace PSRT.Astra.ViewModels
 
         public async Task LaunchAsync()
         {
-            if (_ApplicationState == ApplicationState.Patching)
+            if (State == ApplicationState.Patching)
             {
                 App.Current.Logger.Info(nameof(MainWindowViewModel), "Cancelling launch");
                 _LaunchCancellationTokenSource?.Cancel();

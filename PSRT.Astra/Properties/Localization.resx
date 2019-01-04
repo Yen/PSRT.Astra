@@ -457,7 +457,7 @@ Would you like to upload the error information?</value>
     <value>Stop all running operations and cancel the launch</value>
   </data>
   <data name="MainWindow_LaunchButton_Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>Cancel launch</value>
   </data>
   <data name="MainWindow_LaunchButton_LoadingTooltip" xml:space="preserve">
     <value>Astra is loading, please wait</value>

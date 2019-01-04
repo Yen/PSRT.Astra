@@ -99,17 +99,41 @@
                 Style="{x:Null}"
                 Click="_UploadErrorLogButton_Click"/>
         </Grid>
-        <Button
-            IsEnabled="{Binding LaunchPSO2ButtonEnabled}"   
-            ToolTip="{astra:LocaleDynamicBinding {Binding LaunchPSO2ButtonTooltipLocaleKey, Mode=OneWay}}"
-            Grid.Row="1"
-            Command="{Binding LaunchCommand}">
-            <TextBlock
-                Text="{astra:LocaleDynamicBinding {Binding LaunchPSO2ButtonLocaleKey, Mode=OneWay}}"
-                FontSize="48"
-                FontWeight="Bold"
-                TextWrapping="Wrap"
-                TextAlignment="Center"/>
+        <Button Grid.Row="1" IsEnabled="{Binding LaunchPSO2ButtonEnabled}" Command="{Binding LaunchCommand}">
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="ToolTip" Value="{astra:LocaleBinding MainWindow_LaunchButton_LoadingTooltip}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding State}" Value="Idle">
+                            <Setter Property="ToolTip" Value="{astra:LocaleBinding MainWindow_LaunchButton_LaunchTooltip}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding State}" Value="Patching">
+                            <Setter Property="ToolTip" Value="{astra:LocaleBinding MainWindow_LaunchButton_LoadingTooltip}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding State}" Value="GameRunning">
+                            <Setter Property="ToolTip" Value="{astra:LocaleBinding MainWindow_LaunchButton_PSO2RunningTooltip}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            <TextBlock FontSize="48" FontWeight="Bold" TextWrapping="Wrap" TextAlignment="Center">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Setter Property="Text" Value="{astra:LocaleBinding MainWindow_LaunchButton_Loading}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding State}" Value="Idle">
+                                <Setter Property="Text" Value="{astra:LocaleBinding MainWindow_LaunchButton_Launch}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}" Value="Patching">
+                                <Setter Property="Text" Value="{astra:LocaleBinding MainWindow_LaunchButton_Loading}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}" Value="GameRunning">
+                                <Setter Property="Text" Value="{astra:LocaleBinding MainWindow_LaunchButton_PSO2Running}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
         </Button>
         <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{astra:LocaleBinding MainWindow_PSO2Options}" ToolTip="{astra:LocaleBinding MainWindow_PSO2OptionsTooltip}" Grid.Row="2" FontSize="20" Click="_SettingsButton_Click"/>
         <Grid Grid.Row="2" Grid.Column="1">
