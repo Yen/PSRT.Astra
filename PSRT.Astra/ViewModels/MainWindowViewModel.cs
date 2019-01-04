@@ -103,7 +103,7 @@ namespace PSRT.Astra.ViewModels
         [AddINotifyPropertyChangedInterface]
         public class PhaseState
         {
-            public string Title { get; set; }
+            public string TitleKey { get; set; }
             public PhaseControl.State State { get; set; } = PhaseControl.State.Queued;
             public TimeSpan Duration { get; set; } = TimeSpan.Zero;
             public UIElement Child { get; set; }
@@ -252,38 +252,41 @@ namespace PSRT.Astra.ViewModels
                         var pso2DirectoriesPhase = new PSO2DirectoriesPhase(InstallConfiguration);
                         var pso2DirectoriesPhaseState = new PhaseState
                         {
-                            Title = "PSO2 Directories"
+                            TitleKey = "MainWindow_Phase_PSO2Directories"
                         };
                         newPhases.Add(pso2DirectoriesPhaseState);
 
                         var modFilesPhase = new ModFilesPhase(InstallConfiguration);
                         var modFilesPhaseState = new PhaseState
                         {
-                            Title = "Copying mod files"
+                            TitleKey = "MainWindow_Phase_ModFiles"
                         };
                         newPhases.Add(modFilesPhaseState);
 
                         var deleteCensorFilePhase = new DeleteCensorFilePhase(InstallConfiguration);
                         var deleteCensorFilePhaseState = new PhaseState
                         {
-                            Title = "Deleting censor file"
+                            TitleKey = "MainWindow_Phase_DeleteCensorFile"
                         };
                         newPhases.Add(deleteCensorFilePhaseState);
 
                         var downloadConfigurationState = new PhaseState
                         {
-                            Title = "Downloading configuration file"
+                            TitleKey = "MainWindow_Phase_DownloadConfiguration"
                         };
                         newPhases.Add(downloadConfigurationState);
 
                         var patchCacheState = new PhaseState
                         {
-                            Title = "Connecting to patch cache database"
+                            TitleKey = "MainWindow_Phase_PatchCache"
                         };
                         newPhases.Add(patchCacheState);
 
                         var comparePhase = new ComparePhase(InstallConfiguration);
-                        var comparePhaseState = new PhaseState { Title = "Comparing files" };
+                        var comparePhaseState = new PhaseState
+                        {
+                            TitleKey = "MainWindow_Phase_Compare"
+                        };
                         newPhases.Add(comparePhaseState);
                         {
                             var compareProgressControl = new ProgressControl();
@@ -305,7 +308,7 @@ namespace PSRT.Astra.ViewModels
                         var verifyFilesPhase = new VerifyFilesPhase(InstallConfiguration);
                         var verifyFilesPhaseState = new PhaseState
                         {
-                            Title = "Verifying files"
+                            TitleKey = "MainWindow_Phase_VerifyFiles"
                         };
                         newPhases.Add(verifyFilesPhaseState);
                         {
@@ -324,8 +327,9 @@ namespace PSRT.Astra.ViewModels
                             });
                             var verifyFilesControlMessageBinding = new MultiBinding
                             {
-                                StringFormat = "{0} files verified of {1}"
+                                Converter = StringFormatValueConverter.Instance
                             };
+                            verifyFilesControlMessageBinding.Bindings.Add(new LocaleBindingExtension("MainWindow_Phase_VerifyFiles_Message"));
                             verifyFilesControlMessageBinding.Bindings.Add(new Binding
                             {
                                 Source = verifyFilesPhase.Progress,
@@ -344,28 +348,34 @@ namespace PSRT.Astra.ViewModels
 
                         var pluginInfoState = new PhaseState
                         {
-                            Title = "Downloading plugin info"
+                            TitleKey = "MainWindow_Phase_PluginInfo"
                         };
                         newPhases.Add(pluginInfoState);
 
                         var pso2hPhase = new PSO2hPhase(InstallConfiguration, ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled);
                         var pso2hPhaseState = new PhaseState
                         {
-                            Title = $"{(ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled ? "Installing" : "Removing")} PSO2 hook"
+                            TitleKey = ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled
+                                ? "MainWindow_Phase_PSO2h_TitleEnabled"
+                                : "MainWindow_Phase_PSO2h_TitleDisabled"
                         };
                         newPhases.Add(pso2hPhaseState);
 
                         var telepipeProxyPhase = new TelepipeProxyPhase(InstallConfiguration, ArksLayerTelepipeProxyEnabled);
                         var telepipeProxyPhaseState = new PhaseState
                         {
-                            Title = $"{(ArksLayerTelepipeProxyEnabled ? "Installing" : "Removing")} Telepipe"
+                            TitleKey = ArksLayerTelepipeProxyEnabled
+                                ? "MainWindow_Phase_TelepipeProxy_TitleEnabled"
+                                : "MainWindow_Phase_TelepipeProxy_TitleDisabled"
                         };
                         newPhases.Add(telepipeProxyPhaseState);
 
                         var englishPatchPhase = new EnglishPatchPhase(InstallConfiguration, ArksLayerEnglishPatchEnabled);
                         var englishPatchPhaseState = new PhaseState
                         {
-                            Title = $"{(ArksLayerEnglishPatchEnabled ? "Installing" : "Removing")} English patch"
+                            TitleKey = ArksLayerEnglishPatchEnabled
+                                ? "MainWindow_Phase_EnglishPatch_TitleEnabled"
+                                : "MainWindow_Phase_EnglishPatch_TitleDisabled"
                         };
                         newPhases.Add(englishPatchPhaseState);
 
@@ -376,14 +386,14 @@ namespace PSRT.Astra.ViewModels
                             largeAddressAwarePhase = new LargeAddressAwarePhase(InstallConfiguration);
                             largeAddressAwarePhaseState = new PhaseState
                             {
-                                Title = $"Installing large address aware patch"
+                                TitleKey = "MainWindow_Phase_LargeAddressAware"
                             };
                             newPhases.Add(largeAddressAwarePhaseState);
                         }
 
                         var launchPSO2State = new PhaseState
                         {
-                            Title = "Launch Phantasy Star Online 2"
+                            TitleKey = "MainWindow_Phase_LaunchPSO2"
                         };
                         newPhases.Add(launchPSO2State);
 

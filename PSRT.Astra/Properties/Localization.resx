@@ -362,7 +362,7 @@ This operation will only happen to completion one time, after this the operation
   <data name="AboutWindow_ArksLayerCredit" xml:space="preserve">
     <value>Plugin framework and game translations (used with permission)</value>
   </data>
-  <data name="AboutAstra" xml:space="preserve">
+  <data name="MainWindow_AboutAstra" xml:space="preserve">
     <value>About Astra</value>
   </data>
   <data name="AboutWindow_ArksLayer" xml:space="preserve">
@@ -394,5 +394,72 @@ This operation will only happen to completion one time, after this the operation
   </data>
   <data name="OptionsWindow_LargeAddressAwareTooltip" xml:space="preserve">
     <value>Allows PSO2 to assign itself more than 2GB RAM. Some users report this resolves crashes or texture corruption in certain situations.</value>
+  </data>
+  <data name="Astra_UnhandledException_WindowMessage" xml:space="preserve">
+    <value>PSRT Astra has encountered an unrecoverable error.
+If this is a repeating issue, please click below to upload the error information and share it with a developer.
+Would you like to upload the error information?</value>
+  </data>
+  <data name="Astra_UnhandledException_WindowTitle" xml:space="preserve">
+    <value>PSRT Astra fatal exception</value>
+  </data>
+  <data name="Astra_UploadLogError_WindowMessage" xml:space="preserve">
+    <value>Unable to upload log information.</value>
+  </data>
+  <data name="Astra_UploadLogError_WindowTitle" xml:space="preserve">
+    <value>Error uploading log</value>
+  </data>
+  <data name="MainWindow_Phase_Compare" xml:space="preserve">
+    <value>Comparing files</value>
+  </data>
+  <data name="MainWindow_Phase_DeleteCensorFile" xml:space="preserve">
+    <value>Deleting censor file</value>
+  </data>
+  <data name="MainWindow_Phase_DownloadConfiguration" xml:space="preserve">
+    <value>Downloading configuration file</value>
+  </data>
+  <data name="MainWindow_Phase_EnglishPatch_TitleDisabled" xml:space="preserve">
+    <value>Removing English patch</value>
+  </data>
+  <data name="MainWindow_Phase_EnglishPatch_TitleEnabled" xml:space="preserve">
+    <value>Installing English patch</value>
+  </data>
+  <data name="MainWindow_Phase_LargeAddressAware" xml:space="preserve">
+    <value>Installing large address aware patch</value>
+  </data>
+  <data name="MainWindow_Phase_LaunchPSO2" xml:space="preserve">
+    <value>Launch Phantasy Star Online 2</value>
+  </data>
+  <data name="MainWindow_Phase_ModFiles" xml:space="preserve">
+    <value>Copying mod files</value>
+  </data>
+  <data name="MainWindow_Phase_PatchCache" xml:space="preserve">
+    <value>Connecting to patch cache database</value>
+  </data>
+  <data name="MainWindow_Phase_PluginInfo" xml:space="preserve">
+    <value>Downloading plugin info</value>
+  </data>
+  <data name="MainWindow_Phase_PSO2Directories" xml:space="preserve">
+    <value>Creating PSO2 Directories</value>
+  </data>
+  <data name="MainWindow_Phase_PSO2h_TitleDisabled" xml:space="preserve">
+    <value>Removing PSO2 hook</value>
+  </data>
+  <data name="MainWindow_Phase_PSO2h_TitleEnabled" xml:space="preserve">
+    <value>Installing PSO2 hook</value>
+  </data>
+  <data name="MainWindow_Phase_TelepipeProxy_TitleDisabled" xml:space="preserve">
+    <value>Removing Telepipe proxy</value>
+  </data>
+  <data name="MainWindow_Phase_TelepipeProxy_TitleEnabled" xml:space="preserve">
+    <value>Installing Telepipe proxy</value>
+  </data>
+  <data name="MainWindow_Phase_VerifyFiles" xml:space="preserve">
+    <value>Verifying files</value>
+  </data>
+  <data name="MainWindow_Phase_VerifyFiles_Message" xml:space="preserve">
+    <value>{0} files verified of {1}</value>
+    <comment>{0} is the number of files that have been verified.
+{1} is the total number that the phase has to do</comment>
   </data>
 </root>

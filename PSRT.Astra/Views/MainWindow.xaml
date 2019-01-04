@@ -80,7 +80,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <views:PhaseControl
-                                    Title="{Binding Title}"
+                                    Title="{astra:LocaleDynamicBinding {Binding TitleKey}}"
                                     PhaseState="{Binding State, NotifyOnTargetUpdated=True}"
                                     Child="{Binding Child}"
                                     Duration="{Binding Duration}"
@@ -124,7 +124,7 @@
             </Grid.ColumnDefinitions>
             <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{astra:LocaleBinding MainWindow_ResetGameGuard}" ToolTip="{astra:LocaleBinding MainWindow_ResetGameGuardTooltip}" Grid.Row="0" Grid.Column="1" Command="{Binding ResetGameGuardCommand}"/>
             <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{astra:LocaleBinding MainWindow_AstraOptions}" ToolTip="{astra:LocaleBinding MainWindow_AstraOptionsTooltip}" Grid.Row="1" Grid.Column="1" Click="_AstraSettingsButton_Click"/>
-            <Button Content="{astra:LocaleBinding AboutAstra}" ToolTip="{astra:LocaleBinding MainWindow_AboutAstraTooltip}" Grid.Row="2" Grid.Column="1" Click="_AboutButton_Click"/>
+            <Button Content="{astra:LocaleBinding MainWindow_AboutAstra}" ToolTip="{astra:LocaleBinding MainWindow_AboutAstraTooltip}" Grid.Row="2" Grid.Column="1" Click="_AboutButton_Click"/>
             <CheckBox IsEnabled="{Binding ConfigButtonsEnabled}" ToolTip="{astra:LocaleBinding MainWindow_EnglishPatchCheckboxTooltip}" IsChecked="{Binding ArksLayerEnglishPatchEnabled}" Grid.Row="0">
                 <TextBlock Text="{astra:LocaleBinding MainWindow_EnglishPatchCheckbox}" />
             </CheckBox>

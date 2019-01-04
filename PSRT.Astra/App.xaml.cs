@@ -51,9 +51,11 @@ namespace PSRT.Astra
         {
             Logger.Warning(nameof(Astra), "Entered dispatcher unhandled exception handler", e.Exception);
 
-            const string messageBoxTitle = "PSRT Astra fatal exception";
-            const string messageBoxContent = "PSRT Astra has encountered an unrecoverable error.\n\nIf this is a repeating issue, please click below to upload the error information and share it with a developer.\n\nWould you like to upload the error information?";
-            var messageBoxResult = MessageBox.Show(messageBoxContent, messageBoxTitle, MessageBoxButton.YesNo, MessageBoxImage.Error);
+            var messageBoxResult = MessageBox.Show(
+                LocaleManager.Instance["Astra_UnhandledException_WindowTitle"],
+                LocaleManager.Instance["Astra_UnhandledException_WindowMessage"],
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Error);
             if (messageBoxResult == MessageBoxResult.No)
                 return;
 
@@ -98,7 +100,11 @@ namespace PSRT.Astra
 
             if (uploadResult.StatusCode != HttpStatusCode.Created)
             {
-                MessageBox.Show("Error uploading log", "Unable to upload log information.", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show(
+                    LocaleManager.Instance["Astra_UploadLogError_WindowTitle"],
+                    LocaleManager.Instance["Astra_UploadLogError_WindowMessage"],
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Exclamation);
                 return;
             }
 

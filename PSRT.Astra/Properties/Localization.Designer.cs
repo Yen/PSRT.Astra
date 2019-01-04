@@ -61,15 +61,6 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About Astra.
-        /// </summary>
-        internal static string AboutAstra {
-            get {
-                return ResourceManager.GetString("AboutAstra", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Arks Layer.
         /// </summary>
         internal static string AboutWindow_ArksLayer {
@@ -147,6 +138,44 @@ namespace PSRT.Astra.Properties {
         internal static string AboutWindow_PSOWDescription {
             get {
                 return ResourceManager.GetString("AboutWindow_PSOWDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PSRT Astra has encountered an unrecoverable error.
+        ///If this is a repeating issue, please click below to upload the error information and share it with a developer.
+        ///Would you like to upload the error information?.
+        /// </summary>
+        internal static string Astra_UnhandledException_WindowMessage {
+            get {
+                return ResourceManager.GetString("Astra_UnhandledException_WindowMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PSRT Astra fatal exception.
+        /// </summary>
+        internal static string Astra_UnhandledException_WindowTitle {
+            get {
+                return ResourceManager.GetString("Astra_UnhandledException_WindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to upload log information..
+        /// </summary>
+        internal static string Astra_UploadLogError_WindowMessage {
+            get {
+                return ResourceManager.GetString("Astra_UploadLogError_WindowMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error uploading log.
+        /// </summary>
+        internal static string Astra_UploadLogError_WindowTitle {
+            get {
+                return ResourceManager.GetString("Astra_UploadLogError_WindowTitle", resourceCulture);
             }
         }
         
@@ -300,6 +329,15 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About Astra.
+        /// </summary>
+        internal static string MainWindow_AboutAstra {
+            get {
+                return ResourceManager.GetString("MainWindow_AboutAstra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Credits and contact information. .
         /// </summary>
         internal static string MainWindow_AboutAstraTooltip {
@@ -359,6 +397,159 @@ namespace PSRT.Astra.Properties {
         internal static string MainWindow_LaunchPSO2Tooltip {
             get {
                 return ResourceManager.GetString("MainWindow_LaunchPSO2Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comparing files.
+        /// </summary>
+        internal static string MainWindow_Phase_Compare {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_Compare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleting censor file.
+        /// </summary>
+        internal static string MainWindow_Phase_DeleteCensorFile {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_DeleteCensorFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading configuration file.
+        /// </summary>
+        internal static string MainWindow_Phase_DownloadConfiguration {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_DownloadConfiguration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing English patch.
+        /// </summary>
+        internal static string MainWindow_Phase_EnglishPatch_TitleDisabled {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_EnglishPatch_TitleDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installing English patch.
+        /// </summary>
+        internal static string MainWindow_Phase_EnglishPatch_TitleEnabled {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_EnglishPatch_TitleEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installing large address aware patch.
+        /// </summary>
+        internal static string MainWindow_Phase_LargeAddressAware {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_LargeAddressAware", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch Phantasy Star Online 2.
+        /// </summary>
+        internal static string MainWindow_Phase_LaunchPSO2 {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_LaunchPSO2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copying mod files.
+        /// </summary>
+        internal static string MainWindow_Phase_ModFiles {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_ModFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connecting to patch cache database.
+        /// </summary>
+        internal static string MainWindow_Phase_PatchCache {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_PatchCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading plugin info.
+        /// </summary>
+        internal static string MainWindow_Phase_PluginInfo {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_PluginInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating PSO2 Directories.
+        /// </summary>
+        internal static string MainWindow_Phase_PSO2Directories {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_PSO2Directories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing PSO2 hook.
+        /// </summary>
+        internal static string MainWindow_Phase_PSO2h_TitleDisabled {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_PSO2h_TitleDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installing PSO2 hook.
+        /// </summary>
+        internal static string MainWindow_Phase_PSO2h_TitleEnabled {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_PSO2h_TitleEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing Telepipe proxy.
+        /// </summary>
+        internal static string MainWindow_Phase_TelepipeProxy_TitleDisabled {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_TelepipeProxy_TitleDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installing Telepipe proxy.
+        /// </summary>
+        internal static string MainWindow_Phase_TelepipeProxy_TitleEnabled {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_TelepipeProxy_TitleEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verifying files.
+        /// </summary>
+        internal static string MainWindow_Phase_VerifyFiles {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_VerifyFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} files verified of {1}.
+        /// </summary>
+        internal static string MainWindow_Phase_VerifyFiles_Message {
+            get {
+                return ResourceManager.GetString("MainWindow_Phase_VerifyFiles_Message", resourceCulture);
             }
         }
         
