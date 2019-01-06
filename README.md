@@ -1,43 +1,44 @@
-## [**Download Latest Release**](https://github.com/Yen/PSRT.Astra/releases/latest)
-## [**最新バージョンのダウンロード**](https://github.com/Yen/PSRT.Astra/releases/latest)
+### [**Download Latest Release**](https://github.com/Yen/PSRT.Astra/releases/latest) / [**最新バージョンのダウンロード**](https://github.com/Yen/PSRT.Astra/releases/latest)
 
-# PSRT.Astra
+# PSRT.Astra - a lean, lightweight PSO2 launcher
 
 [![Build Status](https://dev.azure.com/PSRT/PSRT.Astra/_apis/build/status/Yen.PSRT.Astra)](https://dev.azure.com/PSRT/PSRT.Astra/_build/latest?definitionId=1)
 [![Download Now](https://img.shields.io/github/downloads/Yen/PSRT.Astra/total.svg?style=popout)](https://github.com/Yen/PSRT.Astra/releases/latest)
 
 ![PSRT.Astra](https://i.imgur.com/tDvBbNm.png)
 
-# Why?
+# Features
 
-## Speed and validity
+- Clean, simple interface
+- Quickly checks game integrity before every launch
+- Supports the Arks Layer English patch and Telepipe proxy server<sup>1</sup>
+- Loads mods from a separate folder—no need to back up original files
+- Optionally patches `pso2.exe` to allow unrestricted RAM use (Large Address Aware)<sup>2</sup>
+- Works on any PSO2 installation, no matter what launcher you use
 
-Astra was built as a reponse to issues with installation corruption in the PSO2 Tweaker. The main issue stemmed from the fact that the Tweaker did not perform file checks on launch, only when requested. This meant if your installation was corrupted somehow it would not be detected until your game crashed. This also had the problem that if your game _was_ corrupted your only option was to sit through a 30 minute slow file check, even if the only corruption was a single 1 or 0 being out of place.
+<sup>1</sup> Used with permission from the [Arks Layer](https://arks-layer.com/) team. Support their work!
 
-**Astra solves this.**
+<sup>2</sup> Some players have reported this resolves texture corruption and crashing issues in certain cases.
 
-Astra uses a complex caching and record keeping technique so that an entire file check can be done in a matter of seconds. As such, this operation is run automatically each time the application is launched! You can try this out for yourself: Go into the pso2 game files, delete a random file, start Astra. You will see that with surgical precision Astra is able to locate the missing game file, patch just that file, and be ready to play. All with in a matter of seconds!
+## Planned
 
-Now this method does not come without issues of course. It is techincally possible to get a corrupted installation if a program manually modifies the last write times of the file system entities to perfectly match what is in the database but with different data in the file... But this is a very _rare_ edge case that I don't know of a single way it could come about except for intentionally trying to corrupt your installation. Even if this was to happen however, the solution would be to perfom an old style "full scan", so it's always _as_ good as the current method, but better 99% of the time.
+- Additional UI translations
+- Extended plugin framework
 
-A key part that helps Astra keep on top of things in regards to your game state is that Astra trusts nobody but itself. Each time the application starts Astra assumes that every file in your PSO2 installation is corrupt until it has proven to itself its not. The only thing it trusts is it's own database file, which should not get modified by any other application. As such, this file can be trusted to be in a valid state.
+# About
 
-This "no trust" design means you can run Astra on any installation of PSO2 you like, downloaded by the official client or downloaded by the PSO2 Tweaker. Astra might have to take some time to learn about your installation on the first run, but after that no matter what you do to it, Astra will always be able to get your installation into a running state and should never let you launch a corrupt or outdated game.
+Astra was built to resolve issues with game file integrity in the PSO2 Tweaker, which only performed file checks when updating or when requested; if your installation was corrupted somehow, it wouldn't be detected until your game crashed. Fixing it required a slow file check, even if only a single bit was out of place.
 
-## Legacy 
+Astra uses a complex caching and record-keeping technique, allowing it to do a quick file check every time you launch the game—if you have missing or outdated files, Astra will handle it automatically.<sup>3</sup> You can try this out for yourself: go into PSO2's `win32` folder, delete a random file, and start Astra. Astra will locate the missing game file, re-download just that file, and start the game in seconds.
 
-A second factor for why Astra was written was that the PSO2 Tweaker is old now. It is by no means bad software but it suffers from decisions made years ago. Astra was written from the ground up using modern technologies and algorithms meaning that going forwards it should be easier to implement and extend new features.
+If you use cosmetic mods, Astra can load your modified files from a separate directory. The fast file check allows you to enable and disable mods without the hassle of backing up original game files, so it's easy to keep track of them and manage conflicts. Just check the "Custom mod files" box and place your modified files in `pso2_bin/mods/`—they'll be copied into the `win32` folder at launch.<sup>4</sup>
 
-Astra being new also means there is _considerably_ less code behind it, this means less code that could be broken, hopefully leading to a more stable application.
+On every launch, Astra assumes that all of your game files are corrupt until proven otherwise. It trusts nothing but itself, so other launchers or utilities can't bring it "out of sync". After a short initial scan of your game installation, no matter how it was downloaded or what happens afterward, Astra will always be able to get your game running. The only thing it "trusts" is its own database file, which should never be modified by any other application.
 
-## Design
+Astra was written from the ground up using modern technologies and algorithms, and with less total code behind it, it should be easier to implement new features and fix bugs going forward. It ships with sane defaults and no unnecessary options, keeping the codebase lean and the interface simple. Whenever possible, everything should "just work."
 
-Astra was built with a basic user premise in mind:
-1. Run program
-2. Press play
+---
 
-A user should not have to deal with anything else. If they have gotten to the point where they can click the play button, then their game should work how they want. As such almost all options that are presented to the user are optional and should not require the user to worry about them once they have decided.
+<sup>3</sup> It's technically possible to get a corrupted installation if a program manually modifies the last write times of the file system entities to perfectly match what is in the database but with different data in the file. This would only ever happen if you were deliberately trying to break Astra, and even if it did, an old-style "full scan" would resolve the issue (same as the Tweaker).
 
-# Arks Layer
-
-The Arks Layer team has very kindly allowed us to utilise their tools as Astra does not attempt to replicate the functionality of any of these, just the Tweaker itself. As such, Astra ships with support for the English patch and the Telepipe Proxy. It should be noted that Arks Layer does not allow the use of their tools without request! If you are considering using the code here to replicate functionality be warned that you **must** request access from them first. The user agent used by Astra was provided _for_ the use by Astra only.
+<sup>4</sup> If you install mods to the `win32` folder directly, Astra will assume they're corrupt files and replace them with the original files; if you're migrating to Astra from another launcher, please back up your mods beforehand!
