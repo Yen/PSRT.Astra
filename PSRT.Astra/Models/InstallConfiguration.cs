@@ -68,12 +68,12 @@ namespace PSRT.Astra.Models
 
             PSO2BinDirectory = pso2BinDirectory;
 
-            ModsDirectory = Path.Combine(PSO2BinDirectory, "mods/");
+            ModsDirectory = Path.Combine(PSO2BinDirectory, "mods");
 
-            DataDirectory = Path.Combine(PSO2BinDirectory, "data/");
-            DataLicenseDirectory = Path.Combine(DataDirectory, "license/");
-            DataWin32Directory = Path.Combine(DataDirectory, "win32/");
-            DataWin32ScriptDirectory = Path.Combine(DataWin32Directory, "script/");
+            DataDirectory = Path.Combine(PSO2BinDirectory, "data");
+            DataLicenseDirectory = Path.Combine(DataDirectory, "license");
+            DataWin32Directory = Path.Combine(DataDirectory, "win32");
+            DataWin32ScriptDirectory = Path.Combine(DataWin32Directory, "script");
 
             PSO2Executable = Path.Combine(PSO2BinDirectory, "pso2.exe");
             PSO2LauncherExecutable = Path.Combine(PSO2BinDirectory, "pso2launcher.exe");
@@ -84,7 +84,7 @@ namespace PSRT.Astra.Models
             PatchCacheDatabase = Path.Combine(PSO2BinDirectory, "patchcache.db");
             CensorFile = Path.Combine(DataWin32Directory, "ffbff2ac5b7a7948961212cefd4d402c");
 
-            GameGuardDirectory = Path.Combine(PSO2BinDirectory, "GameGuard/");
+            GameGuardDirectory = Path.Combine(PSO2BinDirectory, "GameGuard");
             GameGuardFile = Path.Combine(PSO2BinDirectory, "GameGuard.des");
 
             LargeAddressAwareConfig = Path.Combine(PSO2BinDirectory, "largeAddressAware.json");
