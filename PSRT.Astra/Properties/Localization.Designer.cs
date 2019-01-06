@@ -717,6 +717,15 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upload error log.
+        /// </summary>
+        internal static string MainWindow_UploadErrorLogButton {
+            get {
+                return ResourceManager.GetString("MainWindow_UploadErrorLogButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verify (File Check).
         /// </summary>
         internal static string MainWindow_VerifyFiles {

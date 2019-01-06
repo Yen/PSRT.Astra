@@ -484,4 +484,7 @@ no corruption occurs with game updates</value>
   <data name="MainWindow_UpdateError" xml:space="preserve">
     <value>Unable to fetch update information</value>
   </data>
+  <data name="MainWindow_UploadErrorLogButton" xml:space="preserve">
+    <value>Upload error log</value>
+  </data>
 </root>
