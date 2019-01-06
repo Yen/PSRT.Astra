@@ -32,7 +32,18 @@ namespace PSRT.Astra.ViewModels
         private void _CheckGameWatcher()
         {
             var processes = Process.GetProcessesByName("pso2");
-            IsPSO2Running = processes.Length != 0;
+            if (processes.Length > 0)
+            {
+                IsPSO2Running = true;
+            }
+            else
+            {
+                // set IsChangelogVisible to true if the state was changed
+                // from running to not running
+                if (IsPSO2Running == true)
+                    IsChangelogVisible = true;
+                IsPSO2Running = false;
+            }
         }
 
         private void _DestroyGameWatcher()

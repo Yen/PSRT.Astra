@@ -321,11 +321,11 @@ If unsure, set this to Enabled.</value>
     <value>Telepipe Config Url</value>
   </data>
   <data name="MainWindow_UpdateAvailableMessage" xml:space="preserve">
-    <value>New PSRT.Astra Version {0} is available.</value>
+    <value>New update available!</value>
     <comment>{0} = Version number</comment>
   </data>
   <data name="MainWindow_UpdateAvailableDownload" xml:space="preserve">
-    <value>Click here to download!</value>
+    <value>Click here to download</value>
   </data>
   <data name="OptionsWindow_Title" xml:space="preserve">
     <value>Options</value>
@@ -474,5 +474,14 @@ Would you like to upload the error information?</value>
   <data name="MainWindow_ModFilesCheckboxTooltip" xml:space="preserve">
     <value>Copy mod files from the pso2_bin/mods/ directory to ensure
 no corruption occurs with game updates</value>
+  </data>
+  <data name="MainWindow_ReleaseNotes" xml:space="preserve">
+    <value>Release notes</value>
+  </data>
+  <data name="MainWindow_UpdateChecking" xml:space="preserve">
+    <value>Fetching update information</value>
+  </data>
+  <data name="MainWindow_UpdateError" xml:space="preserve">
+    <value>Unable to fetch update information</value>
   </data>
 </root>

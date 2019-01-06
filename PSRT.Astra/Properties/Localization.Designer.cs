@@ -636,6 +636,15 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Release notes.
+        /// </summary>
+        internal static string MainWindow_ReleaseNotes {
+            get {
+                return ResourceManager.GetString("MainWindow_ReleaseNotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset GameGuard.
         /// </summary>
         internal static string MainWindow_ResetGameGuard {
@@ -672,7 +681,7 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click here to download!.
+        ///   Looks up a localized string similar to Click here to download.
         /// </summary>
         internal static string MainWindow_UpdateAvailableDownload {
             get {
@@ -681,11 +690,29 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New PSRT.Astra Version {0} is available..
+        ///   Looks up a localized string similar to New update available!.
         /// </summary>
         internal static string MainWindow_UpdateAvailableMessage {
             get {
                 return ResourceManager.GetString("MainWindow_UpdateAvailableMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fetching update information.
+        /// </summary>
+        internal static string MainWindow_UpdateChecking {
+            get {
+                return ResourceManager.GetString("MainWindow_UpdateChecking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to fetch update information.
+        /// </summary>
+        internal static string MainWindow_UpdateError {
+            get {
+                return ResourceManager.GetString("MainWindow_UpdateError", resourceCulture);
             }
         }
         

@@ -79,6 +79,8 @@ namespace PSRT.Astra.ViewModels
         public bool ConfigButtonsEnabled
             => State == ApplicationState.Idle;
 
+        public bool IsChangelogVisible { get; set; } = true;
+
         //
 
         [AddINotifyPropertyChangedInterface]
@@ -207,6 +209,7 @@ namespace PSRT.Astra.ViewModels
             }
 
             UploadErrorButtonVisible = false;
+            IsChangelogVisible = false;
 
             _ActivityCount += 1;
 

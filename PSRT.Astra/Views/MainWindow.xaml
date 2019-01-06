@@ -6,6 +6,7 @@
         xmlns:astra="clr-namespace:PSRT.Astra"
         xmlns:views="clr-namespace:PSRT.Astra.Views"
         xmlns:viewModels="clr-namespace:PSRT.Astra.ViewModels"
+        xmlns:markdig="clr-namespace:Markdig.Wpf;assembly=Markdig.Wpf"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
         MinHeight="360"
@@ -25,7 +26,6 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -33,39 +33,7 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBlock
-            Grid.ColumnSpan="2"
-            Padding="8,0,8,4"
-            Background="LightGreen"
-            TextAlignment="Center"
-            FontSize="16">
-            <TextBlock.Style>
-                <Style TargetType="TextBlock">
-                    <Setter Property="Visibility" Value="Visible"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding UpdatedVersionInformation}" Value="{x:Null}">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
-            <Run>
-                <Run.Text>
-                    <MultiBinding Converter="{x:Static astra:StringFormatValueConverter.Instance}">
-                        <astra:LocaleBinding Path="MainWindow_UpdateAvailableMessage"/>
-                        <Binding Path="UpdatedVersionInformation.Version" Mode="OneWay"/>
-                    </MultiBinding>
-                </Run.Text>
-            </Run>
-            <Run Text="&#x0a;"/> <!-- New line -->
-            <Hyperlink
-                NavigateUri="{Binding UpdatedVersionInformation.GithubUri, Mode=OneWay}"
-                RequestNavigate="_Hyperlink_RequestNavigateBrowser">
-                <Run Text="{astra:LocaleBinding MainWindow_UpdateAvailableDownload}"/>
-            </Hyperlink>
-        </TextBlock>
         <Grid
-            Grid.Row="1"
             Grid.Column="1"
             Margin="5">
             <Grid.RowDefinitions>
@@ -75,8 +43,28 @@
             <Border
                 BorderThickness="1"
                 BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}">
-                <ScrollViewer>
-                    <ItemsControl ItemsSource="{Binding Phases}">
+                <Border.Resources>
+
+                    <StackPanel x:Key="UpdateAvailableHeader">
+                        <Label Foreground="Green" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Content="{astra:LocaleBinding MainWindow_UpdateAvailableMessage}"/>
+                        <TextBlock FontSize="16" HorizontalAlignment="Center">
+                            <Hyperlink NavigateUri="{Binding UpdatedVersionInformation.GithubUri, Mode=OneWay}" RequestNavigate="_Hyperlink_RequestNavigateBrowser">
+                                <Run Text="{astra:LocaleBinding MainWindow_UpdateAvailableDownload}"/>
+                            </Hyperlink>
+                        </TextBlock>
+                        <Separator Margin="8"/>
+                    </StackPanel>
+                    
+                    <StackPanel x:Key="ReleaseNotes">
+                        <TextBlock Margin="18,8,18,0" HorizontalAlignment="Left" TextWrapping="NoWrap">
+                            <Run FontSize="32" Text="{Binding UpdatedVersionInformation.Version, StringFormat=Astra {0}}"/>
+                            <Run FontSize="16"> - </Run>
+                            <Run FontSize="16" Text="{astra:LocaleBinding MainWindow_ReleaseNotes}"/>
+                        </TextBlock>
+                        <markdig:MarkdownViewer Focusable="False" Markdown="{Binding UpdatedVersionInformation.UpdateBody}"/>
+                    </StackPanel>
+
+                    <ItemsControl x:Key="PhaseList" ItemsSource="{Binding Phases}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <views:PhaseControl
@@ -88,7 +76,86 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                </ScrollViewer>
+
+                    <StackPanel x:Key="UpdateChecking" VerticalAlignment="Center">
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16">
+                            <Label.Style>
+                                <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
+                                    <Setter Property="Content" Value="{astra:LocaleBinding MainWindow_UpdateChecking}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ErrorFetchingUpdateInformation}" Value="True">
+                                            <Setter Property="Content" Value="{astra:LocaleBinding MainWindow_UpdateError}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Label.Style>
+                        </Label>
+                        <ProgressBar Margin="16" Height="24" IsIndeterminate="True">
+                            <ProgressBar.Style>
+                                <Style TargetType="ProgressBar" BasedOn="{StaticResource {x:Type ProgressBar}}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ErrorFetchingUpdateInformation}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ProgressBar.Style>
+                        </ProgressBar>
+                    </StackPanel>
+
+                </Border.Resources>
+                <ContentControl>
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl" BasedOn="{StaticResource {x:Type ContentControl}}">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <ScrollViewer>
+                                        <ScrollViewer.Style>
+                                            <Style TargetType="ScrollViewer" BasedOn="{StaticResource {x:Type ScrollViewer}}">
+                                                <Setter Property="Content" Value="{StaticResource PhaseList}"/>
+                                                <Style.Triggers>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding State}" Value="Idle"/>
+                                                            <Condition Binding="{Binding IsChangelogVisible}" Value="True"/>
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <StackPanel>
+                                                                    <ContentControl>
+                                                                        <ContentControl.Style>
+                                                                            <Style TargetType="ContentControl" BasedOn="{StaticResource {x:Type ContentControl}}">
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding IsUpdateAvailable}" Value="True">
+                                                                                        <Setter Property="Content" Value="{StaticResource UpdateAvailableHeader}"/>
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </ContentControl.Style>
+                                                                    </ContentControl>
+                                                                    <ContentControl Content="{StaticResource ReleaseNotes}"/>
+                                                                </StackPanel>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ScrollViewer.Style>
+                                    </ScrollViewer>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding UpdatedVersionInformation}" Value="{x:Null}"/>
+                                        <Condition Binding="{Binding IsChangelogVisible}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Content" Value="{StaticResource UpdateChecking}"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
             </Border>
             <!--Maunally override the style to be null here because we are using global
             styles to set a margin and this is terrible-->
@@ -99,7 +166,7 @@
                 Style="{x:Null}"
                 Click="_UploadErrorLogButton_Click"/>
         </Grid>
-        <Button Grid.Row="1" IsEnabled="{Binding LaunchPSO2ButtonEnabled}" Command="{Binding LaunchCommand}">
+        <Button IsEnabled="{Binding LaunchPSO2ButtonEnabled}" Command="{Binding LaunchCommand}">
             <Button.Style>
                 <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="ToolTip" Value="{astra:LocaleBinding MainWindow_LaunchButton_LoadingTooltip}"/>
@@ -136,7 +203,7 @@
             </TextBlock>
         </Button>
         <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{astra:LocaleBinding MainWindow_PSO2Options}" ToolTip="{astra:LocaleBinding MainWindow_PSO2OptionsTooltip}" Grid.Row="2" FontSize="20" Click="_SettingsButton_Click"/>
-        <Grid Grid.Row="2" Grid.Column="1">
+        <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>

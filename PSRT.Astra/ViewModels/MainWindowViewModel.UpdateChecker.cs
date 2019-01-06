@@ -17,12 +17,15 @@ namespace PSRT.Astra.ViewModels
     {
         public Version CurrentVersion { get; set; } = Assembly.GetExecutingAssembly().GetName().Version;
         public ClientUpdateInformation UpdatedVersionInformation { get; set; }
+        public bool IsUpdateAvailable { get; set; } = false;
+        public bool ErrorFetchingUpdateInformation { get; set; } = false;
 
         [AddINotifyPropertyChangedInterface]
         public class ClientUpdateInformation
         {
             public Uri GithubUri { get; set; }
             public Version Version { get; set; }
+            public string UpdateBody { get; set; }
         }
 
         private class GithubUpdateInformation
@@ -32,26 +35,32 @@ namespace PSRT.Astra.ViewModels
 
             [JsonProperty(PropertyName = "tag_name", Required = Required.Always)]
             public string TagName = null;
+
+            [JsonProperty(PropertyName = "body", Required = Required.Always)]
+            public string Body = null;
         }
 
         private async void _CheckForUpdate()
         {
             try
             {
-                var updateInformation = await _GetUpdateInformationAsync();
-                if (updateInformation.Version > CurrentVersion)
+                UpdatedVersionInformation = await _GetUpdateInformationAsync();
+
+                if (UpdatedVersionInformation.Version > CurrentVersion)
                 {
-                    App.Current.Logger.Info("UpdateChecker", $"New update available (Version {updateInformation.Version})");
-                    UpdatedVersionInformation = updateInformation;
+                    App.Current.Logger.Info("UpdateChecker", $"New update available (Version {UpdatedVersionInformation.Version})");
+                    IsUpdateAvailable = true;
                 }
                 else
                 {
                     App.Current.Logger.Info("UpdateChecker", "Client is up-to-date");
+                    IsUpdateAvailable = false;
                 }
             }
             catch (Exception ex)
             {
                 App.Current.Logger.Error("UpdateChecker", "Error getting update information", ex);
+                ErrorFetchingUpdateInformation = true;
             }
         }
 
@@ -76,7 +85,8 @@ namespace PSRT.Astra.ViewModels
                 return new ClientUpdateInformation
                 {
                     GithubUri = new Uri(json.HtmlUrl),
-                    Version = Version.Parse(cleanedTag)
+                    Version = Version.Parse(cleanedTag),
+                    UpdateBody = json.Body
                 };
             }
         }
