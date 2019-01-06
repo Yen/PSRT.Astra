@@ -25,10 +25,8 @@ namespace PSRT.Astra.Models.ArksLayer
             using (var md5 = MD5.Create())
             {
                 var hashBytes = md5.ComputeHash(Encoding.UTF8.GetBytes(combinedSeed));
-                var hexedStrings = hashBytes.Select(b => b.ToString("X2", CultureInfo.InvariantCulture));
-                var hexed = string.Concat(hexedStrings);
-
-                return hexed.ToLower(CultureInfo.InvariantCulture);
+                var hexedStrings = hashBytes.Select(b => b.ToString("x2", CultureInfo.InvariantCulture));
+                return string.Concat(hexedStrings);
             }
         }
     }
