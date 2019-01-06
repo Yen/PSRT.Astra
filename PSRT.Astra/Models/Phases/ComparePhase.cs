@@ -43,32 +43,35 @@ namespace PSRT.Astra.Models.Phases
                 })
                 .ToArray();
 
+            var nextIndexAtomic = 0;
             var progressValueAtomic = 0;
+
+            var errorTokenSource = new CancellationTokenSource();
+            var combinedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct, errorTokenSource.Token);
 
             App.Current.Logger.Info(nameof(ComparePhase), "Comparing files");
             Progress.IsIndeterminate = false;
-            var processTask = Task.Factory.StartNew(() =>
+
+            void ProcessLoop()
             {
-                var parallelOptions = new ParallelOptions
+                try
                 {
-                    CancellationToken = ct
-                };
-                var parallelResult = Parallel.For(
-                    0,
-                    workingPatches.Length,
-                    parallelOptions,
-                    index =>
+                    while (true)
                     {
+                        var index = Interlocked.Increment(ref nextIndexAtomic);
+                        if (index >= workingPatches.Length)
+                            return;
+
+                        combinedTokenSource.Token.ThrowIfCancellationRequested();
+
                         try
                         {
                             ref var patch = ref workingPatches[index];
 
-                            ct.ThrowIfCancellationRequested();
-
                             var relativeFilePath = patch.PatchInfo.Name
-                                .Substring(0, patch.PatchInfo.Name.Length - 4)
-                                .Replace('/', Path.DirectorySeparatorChar)
-                                .ToLower();
+                                        .Substring(0, patch.PatchInfo.Name.Length - 4)
+                                        .Replace('/', Path.DirectorySeparatorChar)
+                                        .ToLower();
                             var filePath = Path.Combine(_InstallConfiguration.PSO2BinDirectory, relativeFilePath);
 
                             // skip this if mod files are not enabled so they are marked as invalid
@@ -79,14 +82,14 @@ namespace PSRT.Astra.Models.Phases
                                 {
                                     var modFilePath = Path.Combine(_InstallConfiguration.ModsDirectory, Path.GetFileName(relativeFilePath));
                                     if (File.Exists(modFilePath))
-                                        return;
+                                        continue;
                                 }
                             }
 
                             if (!File.Exists(filePath))
                             {
                                 patch.ShouldUpdate = true;
-                                return;
+                                continue;
                             }
 
                             // skip pso2.exe if the file is large address aware patched
@@ -94,13 +97,13 @@ namespace PSRT.Astra.Models.Phases
                                 && Properties.Settings.Default.LargeAddressAwareEnabled
                                 && LargeAddressAware.IsLargeAddressAwarePactchApplied(_InstallConfiguration, patch.PatchInfo.Hash))
                             {
-                                return;
+                                continue;
                             }
 
                             if (!cacheData.ContainsKey(patch.PatchInfo.Name))
                             {
                                 patch.ShouldUpdate = true;
-                                return;
+                                continue;
                             }
 
                             var cacheEntry = cacheData[patch.PatchInfo.Name];
@@ -108,36 +111,36 @@ namespace PSRT.Astra.Models.Phases
                             if (patch.PatchInfo.Hash != cacheEntry.Hash)
                             {
                                 patch.ShouldUpdate = true;
-                                return;
+                                continue;
                             }
 
                             var info = new FileInfo(filePath);
                             if (info.LastWriteTimeUtc.ToFileTimeUtc() != cacheEntry.LastWriteTime)
                             {
                                 patch.ShouldUpdate = true;
-                                return;
+                                continue;
                             }
                         }
                         finally
                         {
                             Interlocked.Increment(ref progressValueAtomic);
                         }
-                    });
-            }, TaskCreationOptions.LongRunning);
+                    }
+                }
+                catch
+                {
+                    errorTokenSource.Cancel();
+                    throw;
+                }
+            }
 
-            await Task.Factory.StartNew(() =>
-            {
-                try
-                {
-                    while (!processTask.Wait(200))
-                        Progress.Progress = (progressValueAtomic / (double)workingPatches.Length);
-                    Progress.Progress = 1;
-                }
-                catch (AggregateException ex) when (ex.InnerExceptions.Count == 1 && ex.InnerException is OperationCanceledException)
-                {
-                    throw ex.InnerException;
-                }
-            }, TaskCreationOptions.LongRunning);
+            var tasks = Enumerable.Range(0, Environment.ProcessorCount)
+                .Select(i => ConcurrencyUtils.RunOnDedicatedThreadAsync(ProcessLoop));
+            var processTask = Task.WhenAll(tasks);
+
+            while (await Task.WhenAny(processTask, Task.Delay(200)) != processTask)
+                Progress.Progress = (progressValueAtomic / (double)workingPatches.Length);
+            Progress.Progress = 1;
 
             await processTask;
 

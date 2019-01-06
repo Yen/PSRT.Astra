@@ -229,9 +229,10 @@ namespace PSRT.Astra.ViewModels
 
                 while (true)
                 {
-                    App.Current.Logger.Info(nameof(MainWindowViewModel), "Saving client settings");
                     try
                     {
+                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
                         var newPhases = new ObservableCollection<PhaseState>();
 
                         var pso2DirectoriesPhase = new PSO2DirectoriesPhase(InstallConfiguration);
@@ -522,7 +523,13 @@ namespace PSRT.Astra.ViewModels
                     {
                         App.Current.Logger.Info("Launch", "Error during launch phases", ex);
                         UploadErrorButtonVisible = true;
-                        await Task.Delay(5000);
+
+                        try
+                        {
+                            await Task.Delay(TimeSpan.FromSeconds(10), _LaunchCancellationTokenSource.Token);
+                        }
+                        catch (OperationCanceledException) { }
+
                         continue;
                     }
 
