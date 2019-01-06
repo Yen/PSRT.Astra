@@ -71,12 +71,16 @@ namespace PSRT.Astra.Models.Phases
                                 .ToLower();
                             var filePath = Path.Combine(_InstallConfiguration.PSO2BinDirectory, relativeFilePath);
 
-                            // skip file if a file with the same name exists in the mods folder
-                            if (Path.GetDirectoryName(filePath).ToLower() == _InstallConfiguration.DataWin32Directory.ToLower())
+                            // skip this if mod files are not enabled so they are marked as invalid
+                            if (Properties.Settings.Default.ModFilesEnabled)
                             {
-                                var modFilePath = Path.Combine(_InstallConfiguration.ModsDirectory, Path.GetFileName(relativeFilePath));
-                                if (File.Exists(modFilePath))
-                                    return;
+                                // skip file if a file with the same name exists in the mods folder
+                                if (Path.GetDirectoryName(filePath).ToLower() == _InstallConfiguration.DataWin32Directory.ToLower())
+                                {
+                                    var modFilePath = Path.Combine(_InstallConfiguration.ModsDirectory, Path.GetFileName(relativeFilePath));
+                                    if (File.Exists(modFilePath))
+                                        return;
+                                }
                             }
 
                             if (!File.Exists(filePath))

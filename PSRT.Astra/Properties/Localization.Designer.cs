@@ -302,7 +302,7 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Credits and contact information..
+        ///   Looks up a localized string similar to Credits and contact information.
         /// </summary>
         internal static string MainWindow_AboutAstraTooltip {
             get {
@@ -415,6 +415,25 @@ namespace PSRT.Astra.Properties {
         internal static string MainWindow_LaunchButton_PSO2RunningTooltip {
             get {
                 return ResourceManager.GetString("MainWindow_LaunchButton_PSO2RunningTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom mod files.
+        /// </summary>
+        internal static string MainWindow_ModFilesCheckbox {
+            get {
+                return ResourceManager.GetString("MainWindow_ModFilesCheckbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy mod files from the pso2_bin/mods/ directory to ensure
+        ///no corruption occurs with game updates.
+        /// </summary>
+        internal static string MainWindow_ModFilesCheckboxTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_ModFilesCheckboxTooltip", resourceCulture);
             }
         }
         

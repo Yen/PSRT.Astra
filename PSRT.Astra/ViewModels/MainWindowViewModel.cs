@@ -39,6 +39,7 @@ namespace PSRT.Astra.ViewModels
 
         public bool ArksLayerEnglishPatchEnabled { get; set; } = Properties.Settings.Default.EnglishPatchEnabled;
         public bool ArksLayerTelepipeProxyEnabled { get; set; } = Properties.Settings.Default.TelepipeProxyEnabled;
+        public bool ModFilesEnabled { get; set; } = Properties.Settings.Default.ModFilesEnabled;
 
         private CancellationTokenSource _LaunchCancellationTokenSource { get; set; }
 
@@ -219,6 +220,7 @@ namespace PSRT.Astra.ViewModels
                 {
                     Properties.Settings.Default.EnglishPatchEnabled = ArksLayerEnglishPatchEnabled;
                     Properties.Settings.Default.TelepipeProxyEnabled = ArksLayerTelepipeProxyEnabled;
+                    Properties.Settings.Default.ModFilesEnabled = ModFilesEnabled;
                     Properties.Settings.Default.Save();
                 });
 
@@ -236,12 +238,17 @@ namespace PSRT.Astra.ViewModels
                         };
                         newPhases.Add(pso2DirectoriesPhaseState);
 
-                        var modFilesPhase = new ModFilesPhase(InstallConfiguration);
-                        var modFilesPhaseState = new PhaseState
+                        ModFilesPhase modFilesPhase = null;
+                        PhaseState modFilesPhaseState = null;
+                        if (Properties.Settings.Default.ModFilesEnabled)
                         {
-                            TitleKey = "MainWindow_Phase_ModFiles"
-                        };
-                        newPhases.Add(modFilesPhaseState);
+                            modFilesPhase = new ModFilesPhase(InstallConfiguration);
+                            modFilesPhaseState = new PhaseState
+                            {
+                                TitleKey = "MainWindow_Phase_ModFiles"
+                            };
+                            newPhases.Add(modFilesPhaseState);
+                        }
 
                         var deleteCensorFilePhase = new DeleteCensorFilePhase(InstallConfiguration);
                         var deleteCensorFilePhaseState = new PhaseState
@@ -388,9 +395,12 @@ namespace PSRT.Astra.ViewModels
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                        App.Current.Logger.Info("Launch", $"Running {nameof(ModFilesPhase)}");
-                        await _AttemptPhase(modFilesPhaseState,
-                            () => modFilesPhase.RunAsync(_LaunchCancellationTokenSource.Token));
+                        if (modFilesPhase != null && modFilesPhaseState != null)
+                        {
+                            App.Current.Logger.Info("Launch", $"Running {nameof(ModFilesPhase)}");
+                            await _AttemptPhase(modFilesPhaseState,
+                                () => modFilesPhase.RunAsync(_LaunchCancellationTokenSource.Token));
+                        }
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 

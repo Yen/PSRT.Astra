@@ -378,7 +378,7 @@ This operation will only happen to completion one time, after this the operation
     <value>ⓒ 2019 George "Yen" Bott, in cooperation with all GitHub contributors. Distributed under the MIT license.</value>
   </data>
   <data name="MainWindow_AboutAstraTooltip" xml:space="preserve">
-    <value>Credits and contact information.</value>
+    <value>Credits and contact information</value>
   </data>
   <data name="OptionsWindow_LargeAddressAwareTooltip" xml:space="preserve">
     <value>Allows PSO2 to assign itself more than 2GB RAM. Some users report this resolves crashes or texture corruption in certain situations.</value>
@@ -467,5 +467,12 @@ Would you like to upload the error information?</value>
   </data>
   <data name="MainWindow_LaunchButton_PSO2RunningTooltip" xml:space="preserve">
     <value>Astra cannot make changes to PSO2 while the game is running</value>
+  </data>
+  <data name="MainWindow_ModFilesCheckbox" xml:space="preserve">
+    <value>Custom mod files</value>
+  </data>
+  <data name="MainWindow_ModFilesCheckboxTooltip" xml:space="preserve">
+    <value>Copy mod files from the pso2_bin/mods/ directory to ensure
+no corruption occurs with game updates</value>
   </data>
 </root>
