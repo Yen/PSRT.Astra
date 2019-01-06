@@ -54,7 +54,7 @@
                         </TextBlock>
                         <Separator Margin="8"/>
                     </StackPanel>
-                    
+
                     <StackPanel x:Key="ReleaseNotes">
                         <TextBlock Margin="18,8,18,0" HorizontalAlignment="Left" TextWrapping="NoWrap">
                             <Run FontSize="32" Text="{Binding UpdatedVersionInformation.Version, StringFormat=Astra {0}}"/>
@@ -114,11 +114,7 @@
                                             <Style TargetType="ScrollViewer" BasedOn="{StaticResource {x:Type ScrollViewer}}">
                                                 <Setter Property="Content" Value="{StaticResource PhaseList}"/>
                                                 <Style.Triggers>
-                                                    <MultiDataTrigger>
-                                                        <MultiDataTrigger.Conditions>
-                                                            <Condition Binding="{Binding State}" Value="Idle"/>
-                                                            <Condition Binding="{Binding IsChangelogVisible}" Value="True"/>
-                                                        </MultiDataTrigger.Conditions>
+                                                    <DataTrigger Binding="{Binding IsChangelogVisible}" Value="True">
                                                         <Setter Property="Content">
                                                             <Setter.Value>
                                                                 <StackPanel>
@@ -137,7 +133,7 @@
                                                                 </StackPanel>
                                                             </Setter.Value>
                                                         </Setter>
-                                                    </MultiDataTrigger>
+                                                    </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </ScrollViewer.Style>
