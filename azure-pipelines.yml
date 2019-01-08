@@ -8,7 +8,7 @@ pool:
 
 variables:
   solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
+  buildPlatform: 'x86'
   buildConfiguration: 'Release'
 
 steps:
@@ -26,7 +26,7 @@ steps:
     
 - task: CopyFiles@2
   inputs:
-    sourceFolder: '$(Build.SourcesDirectory)/PSRT.Astra/bin/Release'
+    sourceFolder: '$(Build.SourcesDirectory)/PSRT.Astra/bin/x86/Release'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true
     

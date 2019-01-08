@@ -31,6 +31,11 @@ namespace PSRT.Astra.Models.Phases
 
         public async Task RunAsync(PatchInfo[] toUpdate, PatchCache patchCache, CancellationToken ct = default)
         {
+            Progress.Progress = 0;
+            Progress.IsIndeterminate = true;
+            Progress.CompletedCount = 0;
+            Progress.TotalCount = 0;
+
             if (toUpdate.Length == 0)
                 return;
 

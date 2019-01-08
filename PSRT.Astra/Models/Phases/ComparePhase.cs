@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PSRT.Astra.Native;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -29,6 +30,9 @@ namespace PSRT.Astra.Models.Phases
 
         public async Task<PatchInfo[]> RunAsync(DownloadConfiguration downloadConfiguration, PatchCache patchCache, CancellationToken ct = default)
         {
+            Progress.Progress = 0;
+            Progress.IsIndeterminate = true;
+
             App.Current.Logger.Info(nameof(ComparePhase), "Fetching patches");
             var patches = await PatchInfo.FetchPatchInfosAsync(_InstallConfiguration, downloadConfiguration, ct);
 
@@ -56,6 +60,8 @@ namespace PSRT.Astra.Models.Phases
             {
                 try
                 {
+                    var pso2ExecutableFileName = Path.GetFileName(_InstallConfiguration.PSO2Executable);
+
                     while (true)
                     {
                         var index = Interlocked.Increment(ref nextIndexAtomic);
@@ -73,6 +79,7 @@ namespace PSRT.Astra.Models.Phases
                                         .Replace('/', Path.DirectorySeparatorChar)
                                         .ToLower();
                             var filePath = Path.Combine(_InstallConfiguration.PSO2BinDirectory, relativeFilePath);
+                            var fileName = Path.GetFileName(relativeFilePath);
 
                             // skip this if mod files are not enabled so they are marked as invalid
                             if (Properties.Settings.Default.ModFilesEnabled)
@@ -80,24 +87,10 @@ namespace PSRT.Astra.Models.Phases
                                 // skip file if a file with the same name exists in the mods folder
                                 if (Path.GetDirectoryName(filePath).ToLower() == _InstallConfiguration.DataWin32Directory.ToLower())
                                 {
-                                    var modFilePath = Path.Combine(_InstallConfiguration.ModsDirectory, Path.GetFileName(relativeFilePath));
+                                    var modFilePath = Path.Combine(_InstallConfiguration.ModsDirectory, fileName);
                                     if (File.Exists(modFilePath))
                                         continue;
                                 }
-                            }
-
-                            if (!File.Exists(filePath))
-                            {
-                                patch.ShouldUpdate = true;
-                                continue;
-                            }
-
-                            // skip pso2.exe if the file is large address aware patched
-                            if (Path.GetFileName(relativeFilePath) == Path.GetFileName(_InstallConfiguration.PSO2Executable)
-                                && Properties.Settings.Default.LargeAddressAwareEnabled
-                                && LargeAddressAware.IsLargeAddressAwarePactchApplied(_InstallConfiguration, patch.PatchInfo.Hash))
-                            {
-                                continue;
                             }
 
                             if (!cacheData.ContainsKey(patch.PatchInfo.Name))
@@ -114,12 +107,16 @@ namespace PSRT.Astra.Models.Phases
                                 continue;
                             }
 
-                            var info = new FileInfo(filePath);
-                            if (info.LastWriteTimeUtc.ToFileTimeUtc() != cacheEntry.LastWriteTime)
+                            // skip pso2.exe if the file is large address aware patched
+                            if (fileName == pso2ExecutableFileName
+                                && File.Exists(filePath)
+                                && Properties.Settings.Default.LargeAddressAwareEnabled
+                                && LargeAddressAware.IsLargeAddressAwarePactchApplied(_InstallConfiguration, patch.PatchInfo.Hash))
                             {
-                                patch.ShouldUpdate = true;
                                 continue;
                             }
+
+                            patch.ShouldUpdate = !ComparePhaseInternals.CompareFileTime(filePath, cacheEntry.LastWriteTime);
                         }
                         finally
                         {

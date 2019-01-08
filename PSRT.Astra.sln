@@ -1,20 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2015
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSRT.Astra", "PSRT.Astra\PSRT.Astra.csproj", "{D1ED2F29-8E46-498C-A954-6A133F6A4A23}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PSRT.Astra.Native", "PSRT.Astra.Native\PSRT.Astra.Native.vcxproj", "{89471D69-9A46-48AB-9375-40C41D889F8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D1ED2F29-8E46-498C-A954-6A133F6A4A23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D1ED2F29-8E46-498C-A954-6A133F6A4A23}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D1ED2F29-8E46-498C-A954-6A133F6A4A23}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D1ED2F29-8E46-498C-A954-6A133F6A4A23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1ED2F29-8E46-498C-A954-6A133F6A4A23}.Debug|x86.ActiveCfg = Debug|x86
+		{D1ED2F29-8E46-498C-A954-6A133F6A4A23}.Debug|x86.Build.0 = Debug|x86
+		{D1ED2F29-8E46-498C-A954-6A133F6A4A23}.Release|x86.ActiveCfg = Release|x86
+		{D1ED2F29-8E46-498C-A954-6A133F6A4A23}.Release|x86.Build.0 = Release|x86
+		{89471D69-9A46-48AB-9375-40C41D889F8E}.Debug|x86.ActiveCfg = Debug|Win32
+		{89471D69-9A46-48AB-9375-40C41D889F8E}.Debug|x86.Build.0 = Debug|Win32
+		{89471D69-9A46-48AB-9375-40C41D889F8E}.Release|x86.ActiveCfg = Release|Win32
+		{89471D69-9A46-48AB-9375-40C41D889F8E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
