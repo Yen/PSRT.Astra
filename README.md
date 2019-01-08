@@ -23,7 +23,7 @@
 ## Planned
 
 - Additional UI translations
-- Extended plugin framework
+- ???
 
 # About
 
