@@ -39,7 +39,27 @@ namespace PSRT.Astra.Models.Phases
             App.Current.Logger.Info(nameof(ComparePhase), "Fetching cache data");
             var cacheData = await patchCache.SelectAllAsync();
 
+            var internalPatches = new Dictionary<string, ComparePhaseInternals.Patch>();
+            await Task.Run(() =>
+            {
+                foreach (var p in patches)
+                    if (cacheData.ContainsKey(p.Name))
+                        internalPatches[p.Name] = new ComparePhaseInternals.Patch
+                        {
+                            LastWriteTime = cacheData[p.Name].LastWriteTime,
+                            ShouldUpdate = true
+                        };
+            });
+
+            await Task.Run(() => ComparePhaseInternals.PreProcessPatches(internalPatches, _InstallConfiguration.PSO2BinDirectory));
+
+            var internalPatchesShouldUpdateKeys = internalPatches
+                .Where(p => p.Value.ShouldUpdate)
+                .Select(p => p.Key)
+                .ToArray();
+
             var workingPatches = patches
+                .Where(p => internalPatchesShouldUpdateKeys.Any(k => k == p.Name))
                 .Select(p => new UpdateInfo
                 {
                     PatchInfo = p,
