@@ -80,8 +80,8 @@ namespace PSRT.Astra.Models.ArksLayer
 
                     return new PluginInfo
                     {
-                        PSO2hDll = downloadJson["PluginAPI"],
-                        DDrawDll = downloadJson["PluginLoader"],
+                        PSO2hDll = downloadJson["PluginLoader"],
+                        DDrawDll = downloadJson["PluginHook"],
                         TelepipeProxyDll = downloadJson["TelepipeProxy"],
                         PSO2BlockRenameDll = downloadJson["BlockTranslation"],
                         PSO2ItemTranslatorDll = downloadJson["ItemTranslation"],
