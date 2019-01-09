@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace PSRT.Astra
 {
@@ -25,7 +27,7 @@ namespace PSRT.Astra
                     return _Builder.ToString();
             }
         }
-        
+
         public void Info(string domain, string message) => Write(Level.Info, domain, message);
         public void Warning(string domain, string message) => Write(Level.Warning, domain, message);
         public void Error(string domain, string message) => Write(Level.Error, domain, message);
@@ -45,7 +47,7 @@ namespace PSRT.Astra
         public void Write(Level level, string domain, string message, Exception exception)
         {
             var line = $"{_GetPrefix(level, domain)} {message}";
-            var exceptionString = exception.ToString();
+            var exceptionString = _GetExceptionStringInvariantCulture(exception);
 
             lock (_Lock)
             {
@@ -54,13 +56,13 @@ namespace PSRT.Astra
             }
         }
 
-        private string _GetPrefix(Level level, string domain)
+        private static string _GetPrefix(Level level, string domain)
         {
             var levelString = _GetLevelString(level);
             return $"[{levelString} {DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")}]({domain})";
         }
 
-        private string _GetLevelString(Level level)
+        private static string _GetLevelString(Level level)
         {
             const int length = 5;
 
@@ -75,6 +77,25 @@ namespace PSRT.Astra
             }
 
             return new string(' ', length);
+        }
+
+        private static string _GetExceptionStringInvariantCulture(Exception ex)
+        {
+            var currentCulture = Thread.CurrentThread.CurrentCulture;
+            var currentUICulture = Thread.CurrentThread.CurrentUICulture;
+
+            try
+            {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+
+                return ex.ToString();
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = currentCulture;
+                Thread.CurrentThread.CurrentUICulture = currentUICulture;
+            }
         }
     }
 }
