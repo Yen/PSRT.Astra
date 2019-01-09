@@ -27,7 +27,6 @@ namespace PSRT.Astra.Models.ArksLayer
 
         public string EnglishBlockPatch { get; }
         public string EnglishItemPatch { get; }
-        public string EnglishRaiserPatch { get; }
         public string EnglishTextPatch { get; }
         public string EnglishTitlePatch { get; }
 
@@ -56,7 +55,6 @@ namespace PSRT.Astra.Models.ArksLayer
 
             EnglishBlockPatch = Path.Combine(PatchesDirectory, "translation_blocks.bin");
             EnglishItemPatch = Path.Combine(PatchesDirectory, "translation_items.bin");
-            EnglishRaiserPatch = Path.Combine(PatchesDirectory, "translation_raiser.bin");
             EnglishTextPatch = Path.Combine(PatchesDirectory, "patch.tar");
             EnglishTitlePatch = Path.Combine(PatchesDirectory, "translation_titles.bin");
 

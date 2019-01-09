@@ -9,6 +9,10 @@ namespace PSRT.Astra.Models.ArksLayer
 {
     public class ArksLayerHttpClient : HttpClient
     {
-        public ArksLayerHttpClient() => DefaultRequestHeaders.Add("User-Agent", "PSRT.Astra");
+        public ArksLayerHttpClient()
+        {
+            DefaultRequestHeaders.Add("User-Agent", "PSRT.Astra");
+            DefaultRequestHeaders.Add("Cache-Control", "no-cache, no-store, must-revalidate");
+        }
     }
 }

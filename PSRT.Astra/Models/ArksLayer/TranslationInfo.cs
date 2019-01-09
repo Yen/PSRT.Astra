@@ -26,10 +26,6 @@ namespace PSRT.Astra.Models.ArksLayer
         [JsonRequired]
         public string ItemPatch;
         [JsonRequired]
-        public string RaiserMD5;
-        [JsonRequired]
-        public string RaiserPatch;
-        [JsonRequired]
         public string TextMD5;
         [JsonRequired]
         public string TextPatch;

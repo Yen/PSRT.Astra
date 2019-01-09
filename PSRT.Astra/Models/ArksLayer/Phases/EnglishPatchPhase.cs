@@ -76,18 +76,20 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
                         using (var stream = await response.Content.ReadAsStreamAsync())
                         using (var archive = RarArchive.Open(stream))
                         {
-                            if (archive.Entries.Count > 0)
+                            foreach (var file in archive.Entries.Where(e => !e.IsDirectory))
                             {
-                                using (var fs = File.Create(path, 4096, FileOptions.Asynchronous))
-                                    await archive.Entries.First().OpenEntryStream().CopyToAsync(fs);
+                                var filePath = Path.Combine(_InstallConfiguration.ArksLayer.PatchesDirectory, file.Key);
+
+                                using (var fs = File.Create(filePath, 4096, FileOptions.Asynchronous))
+                                    await file.OpenEntryStream().CopyToAsync(fs);
 
                                 await patchCache.InsertUnderTransactionAsync(new[]
                                 {
                                     new PatchCacheEntry()
                                     {
-                                        Name = CreateRelativePath(path),
+                                        Name = CreateRelativePath(filePath),
                                         Hash = downloadHash,
-                                        LastWriteTime = new FileInfo(path).LastWriteTimeUtc.ToFileTimeUtc()
+                                        LastWriteTime = new FileInfo(filePath).LastWriteTimeUtc.ToFileTimeUtc()
                                     }
                                 });
                             }
@@ -99,24 +101,6 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
                 await VerifyAndDownlodRar(_InstallConfiguration.ArksLayer.EnglishItemPatch, translation.ItemMD5, new Uri(translation.ItemPatch));
                 await VerifyAndDownlodRar(_InstallConfiguration.ArksLayer.EnglishTextPatch, translation.TextMD5, new Uri(translation.TextPatch));
                 await VerifyAndDownlodRar(_InstallConfiguration.ArksLayer.EnglishTitlePatch, translation.TitleMD5, new Uri(translation.TitlePatch));
-
-                if (Verify(_InstallConfiguration.ArksLayer.EnglishRaiserPatch, translation.RaiserMD5) == false)
-                {
-                    App.Current.Logger.Info(nameof(EnglishPatchPhase), $"Downloading \"{Path.GetFileName(new Uri(translation.RaiserPatch).LocalPath)}\"");
-                    using (var stream = await client.GetStreamAsync(translation.RaiserPatch))
-                    using (var fs = File.Create(_InstallConfiguration.ArksLayer.EnglishRaiserPatch, 4096, FileOptions.Asynchronous))
-                        await stream.CopyToAsync(fs);
-
-                    await patchCache.InsertUnderTransactionAsync(new[]
-                    {
-                        new PatchCacheEntry()
-                        {
-                            Name = CreateRelativePath(_InstallConfiguration.ArksLayer.EnglishRaiserPatch),
-                            Hash = translation.RaiserMD5,
-                            LastWriteTime = new FileInfo(_InstallConfiguration.ArksLayer.EnglishRaiserPatch).LastWriteTimeUtc.ToFileTimeUtc()
-                        }
-                    });
-                }
             }
 
             App.Current.Logger.Info(nameof(EnglishPatchPhase), "Validating plugin dlls");
