@@ -171,6 +171,7 @@
     <Compile Include="Views\PhaseControl.xaml.cs">
       <DependentUpon>PhaseControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Win32Bindings.cs" />
     <Page Include="Views\AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -256,12 +257,6 @@
     <Content Include="Resources\LargeAddressAware\EDITBIN.EXE" />
     <Content Include="Resources\LargeAddressAware\LINK.EXE" />
     <Content Include="Resources\LargeAddressAware\MSPDB60.DLL" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PSRT.Astra.Native\PSRT.Astra.Native.vcxproj">
-      <Project>{89471d69-9a46-48ab-9375-40c41d889f8e}</Project>
-      <Name>PSRT.Astra.Native</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

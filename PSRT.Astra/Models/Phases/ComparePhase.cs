@@ -1,5 +1,4 @@
-﻿using PSRT.Astra.Native;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -21,6 +20,12 @@ namespace PSRT.Astra.Models.Phases
             public bool ShouldUpdate;
         }
 
+        private struct PreProcessInfo
+        {
+            public long LastWriteTime;
+            public bool ShouldUpdate;
+        }
+
         private InstallConfiguration _InstallConfiguration;
 
         public ComparePhase(InstallConfiguration installConfiguration)
@@ -39,21 +44,21 @@ namespace PSRT.Astra.Models.Phases
             App.Current.Logger.Info(nameof(ComparePhase), "Fetching cache data");
             var cacheData = await patchCache.SelectAllAsync();
 
-            var internalPatches = new Dictionary<string, ComparePhaseInternals.Patch>();
+            var preProcessData = new Dictionary<string, PreProcessInfo>();
             await Task.Run(() =>
             {
                 foreach (var p in patches)
                     if (cacheData.ContainsKey(p.Name))
-                        internalPatches[p.Name] = new ComparePhaseInternals.Patch
+                        preProcessData[p.Name] = new PreProcessInfo
                         {
                             LastWriteTime = cacheData[p.Name].LastWriteTime,
                             ShouldUpdate = true
                         };
             });
 
-            await Task.Run(() => ComparePhaseInternals.PreProcessPatches(internalPatches, _InstallConfiguration.PSO2BinDirectory));
+            await Task.Run(() => _PreProcessPatches(preProcessData));
 
-            var internalPatchesShouldUpdateKeys = internalPatches
+            var internalPatchesShouldUpdateKeys = preProcessData
                 .Where(p => p.Value.ShouldUpdate)
                 .Select(p => p.Key)
                 .ToArray();
@@ -136,7 +141,8 @@ namespace PSRT.Astra.Models.Phases
                                 continue;
                             }
 
-                            patch.ShouldUpdate = !ComparePhaseInternals.CompareFileTime(filePath, cacheEntry.LastWriteTime);
+                            var fileInfo = new FileInfo(filePath);
+                            patch.ShouldUpdate = fileInfo.LastWriteTimeUtc.ToFileTimeUtc() != cacheEntry.LastWriteTime;
                         }
                         finally
                         {
@@ -165,6 +171,40 @@ namespace PSRT.Astra.Models.Phases
                 .Where(p => p.ShouldUpdate)
                 .Select(p => p.PatchInfo)
                 .ToArray();
+        }
+
+        private void _PreProcessPatches(Dictionary<string, PreProcessInfo> patches)
+        {
+            var findData = new Win32Bindings.WIN32_FIND_DATA();
+            var handle = Win32Bindings.FindFirstFile(Path.Combine(_InstallConfiguration.PSO2BinDirectory, @"data\win32\*"), out findData);
+            if (handle.ToInt64() == -1)
+                return;
+
+            try
+            {
+                do
+                {
+                    if ((findData.dwFileAttributes & (FileAttributes.Directory | FileAttributes.Hidden)) != 0)
+                        continue;
+
+                    var fileName = $"data/win32/{findData.cFileName}.pat";
+                    if (!patches.ContainsKey(fileName))
+                        continue;
+
+                    var lastWriteTimeLong = (long)(((ulong)findData.ftLastWriteTime.dwHighDateTime) << 32) | (uint)findData.ftLastWriteTime.dwLowDateTime;
+
+                    var patch = patches[fileName];
+                    if (patch.LastWriteTime == lastWriteTimeLong)
+                    {
+                        patch.ShouldUpdate = false;
+                        patches[fileName] = patch;
+                    }
+                } while (Win32Bindings.FindNextFile(handle, out findData));
+            }
+            finally
+            {
+                Win32Bindings.FindClose(handle);
+            }
         }
     }
 }
