@@ -48,18 +48,18 @@ namespace PSRT.Astra.ViewModels
 
                 if (UpdatedVersionInformation.Version > CurrentVersion)
                 {
-                    App.Current.Logger.Info("UpdateChecker", $"New update available (Version {UpdatedVersionInformation.Version})");
+                    App.Logger.Info("UpdateChecker", $"New update available (Version {UpdatedVersionInformation.Version})");
                     IsUpdateAvailable = true;
                 }
                 else
                 {
-                    App.Current.Logger.Info("UpdateChecker", "Client is up-to-date");
+                    App.Logger.Info("UpdateChecker", "Client is up-to-date");
                     IsUpdateAvailable = false;
                 }
             }
             catch (Exception ex)
             {
-                App.Current.Logger.Error("UpdateChecker", "Error getting update information", ex);
+                App.Logger.Error("UpdateChecker", "Error getting update information", ex);
                 ErrorFetchingUpdateInformation = true;
             }
         }

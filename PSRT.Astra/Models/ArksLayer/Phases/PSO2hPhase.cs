@@ -30,12 +30,12 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
 
         private async Task _InstallAsync(PluginInfo pluginInfo, CancellationToken ct = default)
         {
-            App.Current.Logger.Info(nameof(PSO2hPhase), "Validating pso2h dlls");
+            App.Logger.Info(nameof(PSO2hPhase), "Validating pso2h dlls");
 
             await pluginInfo.DDrawDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.DDrawDll, ct);
             await pluginInfo.PSO2hDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PSO2hDll, ct);
 
-            App.Current.Logger.Info(nameof(PSO2hPhase), "Writing tweaker.bin");
+            App.Logger.Info(nameof(PSO2hPhase), "Writing tweaker.bin");
             var magic = await Task.Run(() => TweakerBin.GenerateFileContents(_InstallConfiguration.PSO2BinDirectory));
 
             using (var fs = File.Create(_InstallConfiguration.ArksLayer.TweakerBin, 4096, FileOptions.Asynchronous))
@@ -47,12 +47,12 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
         {
             await Task.Run(() =>
             {
-                App.Current.Logger.Info(nameof(PSO2hPhase), "Removing pso2h dlls");
+                App.Logger.Info(nameof(PSO2hPhase), "Removing pso2h dlls");
 
                 File.Delete(_InstallConfiguration.ArksLayer.DDrawDll);
                 File.Delete(_InstallConfiguration.ArksLayer.PSO2hDll);
 
-                App.Current.Logger.Info(nameof(PSO2hPhase), "Removing tweaker.bin");
+                App.Logger.Info(nameof(PSO2hPhase), "Removing tweaker.bin");
 
                 File.Delete(_InstallConfiguration.ArksLayer.TweakerBin);
             });

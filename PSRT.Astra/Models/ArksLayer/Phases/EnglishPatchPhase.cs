@@ -30,10 +30,10 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
 
         private async Task _InstallAsync(PatchCache patchCache, PluginInfo pluginInfo, CancellationToken ct = default)
         {
-            App.Current.Logger.Info(nameof(EnglishPatchPhase), "Downloading english translation information");
+            App.Logger.Info(nameof(EnglishPatchPhase), "Downloading english translation information");
             var translation = await TranslationInfo.FetchEnglishAsync(ct);
 
-            App.Current.Logger.Info(nameof(EnglishPatchPhase), "Getting data from patch cache");
+            App.Logger.Info(nameof(EnglishPatchPhase), "Getting data from patch cache");
             var cacheData = await patchCache.SelectAllAsync();
 
             string CreateRelativePath(string path)
@@ -71,7 +71,7 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
                 {
                     if (Verify(path, downloadHash) == false)
                     {
-                        App.Current.Logger.Info(nameof(EnglishPatchPhase), $"Downloading \"{Path.GetFileName(downloadPath.LocalPath)}\"");
+                        App.Logger.Info(nameof(EnglishPatchPhase), $"Downloading \"{Path.GetFileName(downloadPath.LocalPath)}\"");
                         using (var response = await client.GetAsync(downloadPath))
                         using (var stream = await response.Content.ReadAsStreamAsync())
                         using (var archive = RarArchive.Open(stream))
@@ -103,7 +103,7 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
                 await VerifyAndDownlodRar(_InstallConfiguration.ArksLayer.EnglishTitlePatch, translation.TitleMD5, new Uri(translation.TitlePatch));
             }
 
-            App.Current.Logger.Info(nameof(EnglishPatchPhase), "Validating plugin dlls");
+            App.Logger.Info(nameof(EnglishPatchPhase), "Validating plugin dlls");
 
             await pluginInfo.PSO2BlockRenameDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginPSO2BlockRenameDll, ct);
             await pluginInfo.PSO2ItemTranslatorDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginPSO2ItemTranslatorDll, ct);
@@ -115,7 +115,7 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
         {
             await Task.Run(() =>
             {
-                App.Current.Logger.Info(nameof(EnglishPatchPhase), "Deleting plugin dlls");
+                App.Logger.Info(nameof(EnglishPatchPhase), "Deleting plugin dlls");
 
                 File.Delete(_InstallConfiguration.ArksLayer.PluginPSO2BlockRenameDll);
                 File.Delete(_InstallConfiguration.ArksLayer.PluginPSO2ItemTranslatorDll);

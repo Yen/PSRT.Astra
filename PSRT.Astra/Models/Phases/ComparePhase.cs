@@ -38,10 +38,10 @@ namespace PSRT.Astra.Models.Phases
             Progress.Progress = 0;
             Progress.IsIndeterminate = true;
 
-            App.Current.Logger.Info(nameof(ComparePhase), "Fetching patches");
+            App.Logger.Info(nameof(ComparePhase), "Fetching patches");
             var patches = await PatchInfo.FetchPatchInfosAsync(_InstallConfiguration, downloadConfiguration, ct);
 
-            App.Current.Logger.Info(nameof(ComparePhase), "Fetching cache data");
+            App.Logger.Info(nameof(ComparePhase), "Fetching cache data");
             var cacheData = await patchCache.SelectAllAsync();
 
             var preProcessData = new Dictionary<string, PreProcessInfo>();
@@ -78,7 +78,7 @@ namespace PSRT.Astra.Models.Phases
             var errorTokenSource = new CancellationTokenSource();
             var combinedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct, errorTokenSource.Token);
 
-            App.Current.Logger.Info(nameof(ComparePhase), "Comparing files");
+            App.Logger.Info(nameof(ComparePhase), "Comparing files");
             Progress.IsIndeterminate = false;
 
             void ProcessLoop()

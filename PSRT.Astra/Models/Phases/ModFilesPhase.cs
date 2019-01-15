@@ -27,11 +27,11 @@ namespace PSRT.Astra.Models.Phases
 
                 if (modFiles.Length > 0)
                 {
-                    App.Current.Logger.Info(nameof(ModFilesPhase), $"Copying {modFiles.Length} file{(modFiles.Length == 1 ? string.Empty : "s")}");
+                    App.Logger.Info(nameof(ModFilesPhase), $"Copying {modFiles.Length} file{(modFiles.Length == 1 ? string.Empty : "s")}");
 
                     foreach (var file in modFiles)
                     {
-                        App.Current.Logger.Info(nameof(ModFilesPhase), $"Copying {file}");
+                        App.Logger.Info(nameof(ModFilesPhase), $"Copying {file}");
 
                         var dataPath = Path.Combine(_InstallConfiguration.DataWin32Directory, file);
                         File.Delete(dataPath);

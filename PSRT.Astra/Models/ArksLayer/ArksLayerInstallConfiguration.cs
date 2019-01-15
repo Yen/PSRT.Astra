@@ -35,7 +35,7 @@ namespace PSRT.Astra.Models.ArksLayer
 
         public ArksLayerInstallConfiguration(InstallConfiguration configuration)
         {
-            App.Current.Logger.Info(nameof(ArksLayerInstallConfiguration), "Creating ArksLayer install configuration");
+            App.Logger.Info(nameof(ArksLayerInstallConfiguration), "Creating ArksLayer install configuration");
 
             PluginsDirectory = Path.Combine(configuration.PSO2BinDirectory, "plugins/");
             PluginsDisabledDirectory = Path.Combine(PluginsDirectory, "disabled/");

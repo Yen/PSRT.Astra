@@ -19,7 +19,7 @@ namespace PSRT.Astra.Models.Phases
 
         public async Task RunAsync(CancellationToken ct = default)
         {
-            App.Current.Logger.Info(nameof(PSO2DirectoriesPhase), "Creating directories");
+            App.Logger.Info(nameof(PSO2DirectoriesPhase), "Creating directories");
 
             await Task.Run(() =>
             {

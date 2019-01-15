@@ -60,7 +60,7 @@ namespace PSRT.Astra.Views
         {
             if (!await _ViewModel.CanOpenSettingsAsync())
             {
-                App.Current.Logger.Warning(nameof(MainWindow), "User settings file does not exists, please run the game once to generate it");
+                App.Logger.Warning(nameof(MainWindow), "User settings file does not exists, please run the game once to generate it");
                 MessageBox.Show("User settings file does not exists, please run the game once to generate it", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }

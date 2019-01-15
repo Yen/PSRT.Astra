@@ -36,7 +36,7 @@ namespace PSRT.Astra.Models.ArksLayer
 
         public static async Task<Dictionary<string, TranslationInfo>> FetchAllAsync(CancellationToken ct = default)
         {
-            App.Current.Logger.Info(nameof(TranslationInfo), "Downloading translation info");
+            App.Logger.Info(nameof(TranslationInfo), "Downloading translation info");
 
             using (var client = new ArksLayerHttpClient())
             {

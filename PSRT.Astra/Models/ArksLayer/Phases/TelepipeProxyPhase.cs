@@ -36,7 +36,7 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
             bool isCustomProxy = !string.IsNullOrWhiteSpace(proxyUrl);
             string url = isCustomProxy ? proxyUrl : "http://telepipe.io/config.json";
 
-            App.Current.Logger.Info(nameof(TelepipeProxyPhase), $"Downloading config from {proxyUrl}");
+            App.Logger.Info(nameof(TelepipeProxyPhase), $"Downloading config from {proxyUrl}");
 
             using (var client = new HttpClient())
             {
@@ -44,16 +44,16 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
                 var config = JsonConvert.DeserializeObject<ProxyInfo>(configString);
                 var publicKey = await client.GetByteArrayAsync(config.PublicKeyUrl);
 
-                App.Current.Logger.Info(nameof(TelepipeProxyPhase), "Writing config file");
+                App.Logger.Info(nameof(TelepipeProxyPhase), "Writing config file");
                 await Task.Run(() =>
                     File.WriteAllText(_InstallConfiguration.ArksLayer.TelepipeProxyConfig, config.Host));
 
-                App.Current.Logger.Info(nameof(TelepipeProxyPhase), "Writing public key");
+                App.Logger.Info(nameof(TelepipeProxyPhase), "Writing public key");
                 await Task.Run(() =>
                     File.WriteAllBytes(_InstallConfiguration.ArksLayer.TelepipeProxyPublicKey, publicKey));
             }
 
-            App.Current.Logger.Info(nameof(TelepipeProxyPhase), "Validating telepipe plugin dll");
+            App.Logger.Info(nameof(TelepipeProxyPhase), "Validating telepipe plugin dll");
 
             await pluginInfo.TelepipeProxyDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginTelepipeProxyDll, ct);
         }
@@ -62,13 +62,13 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
         {
             await Task.Run(() =>
             {
-                App.Current.Logger.Info(nameof(TelepipeProxyPhase), "Deleting config file");
+                App.Logger.Info(nameof(TelepipeProxyPhase), "Deleting config file");
                 File.Delete(_InstallConfiguration.ArksLayer.TelepipeProxyConfig);
 
-                App.Current.Logger.Info(nameof(TelepipeProxyPhase), "Deleting public key");
+                App.Logger.Info(nameof(TelepipeProxyPhase), "Deleting public key");
                 File.Delete(_InstallConfiguration.ArksLayer.TelepipeProxyPublicKey);
 
-                App.Current.Logger.Info(nameof(TelepipeProxyPhase), "Deleting telepipe proxy dll");
+                App.Logger.Info(nameof(TelepipeProxyPhase), "Deleting telepipe proxy dll");
                 File.Delete(_InstallConfiguration.ArksLayer.PluginTelepipeProxyDll);
             });
         }

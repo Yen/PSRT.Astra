@@ -109,7 +109,7 @@ namespace PSRT.Astra.ViewModels
 
             try
             {
-                App.Current.Logger.Info(nameof(MainWindowViewModel), $"Game directory set to {Properties.Settings.Default.LastSelectedInstallLocation}");
+                App.Logger.Info(nameof(MainWindowViewModel), $"Game directory set to {Properties.Settings.Default.LastSelectedInstallLocation}");
 
                 // start update in the background
                 _CheckForUpdate();
@@ -128,6 +128,8 @@ namespace PSRT.Astra.ViewModels
 
         public Task DestroyAsync()
         {
+            _LaunchCancellationTokenSource?.Cancel();
+
             _DestroyGameWatcher();
 
             return Task.CompletedTask;
@@ -203,7 +205,7 @@ namespace PSRT.Astra.ViewModels
         {
             if (State == ApplicationState.Patching)
             {
-                App.Current.Logger.Info(nameof(MainWindowViewModel), "Cancelling launch");
+                App.Logger.Info(nameof(MainWindowViewModel), "Cancelling launch");
                 _LaunchCancellationTokenSource?.Cancel();
                 return;
             }
@@ -213,12 +215,12 @@ namespace PSRT.Astra.ViewModels
 
             _ActivityCount += 1;
 
-            App.Current.Logger.Info(nameof(MainWindowViewModel), "Starting launch procedure");
+            App.Logger.Info(nameof(MainWindowViewModel), "Starting launch procedure");
             try
             {
                 _LaunchCancellationTokenSource = new CancellationTokenSource();
 
-                App.Current.Logger.Info(nameof(MainWindowViewModel), "Saving client settings");
+                App.Logger.Info(nameof(MainWindowViewModel), "Saving client settings");
                 await Task.Run(() =>
                 {
                     Properties.Settings.Default.EnglishPatchEnabled = ArksLayerEnglishPatchEnabled;
@@ -393,7 +395,7 @@ namespace PSRT.Astra.ViewModels
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                        App.Current.Logger.Info("Launch", $"Running {nameof(PSO2DirectoriesPhase)}");
+                        App.Logger.Info("Launch", $"Running {nameof(PSO2DirectoriesPhase)}");
                         await _AttemptPhase(pso2DirectoriesPhaseState,
                             () => pso2DirectoriesPhase.RunAsync(_LaunchCancellationTokenSource.Token));
 
@@ -401,26 +403,26 @@ namespace PSRT.Astra.ViewModels
 
                         if (modFilesPhase != null && modFilesPhaseState != null)
                         {
-                            App.Current.Logger.Info("Launch", $"Running {nameof(ModFilesPhase)}");
+                            App.Logger.Info("Launch", $"Running {nameof(ModFilesPhase)}");
                             await _AttemptPhase(modFilesPhaseState,
                                 () => modFilesPhase.RunAsync(_LaunchCancellationTokenSource.Token));
                         }
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                        App.Current.Logger.Info("Launch", $"Running {nameof(DeleteCensorFilePhase)}");
+                        App.Logger.Info("Launch", $"Running {nameof(DeleteCensorFilePhase)}");
                         await _AttemptPhase(deleteCensorFilePhaseState,
                             () => deleteCensorFilePhase.RunAsync(_LaunchCancellationTokenSource.Token));
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                        App.Current.Logger.Info("Launch", "Fetching download configuration");
+                        App.Logger.Info("Launch", "Fetching download configuration");
                         var downloadConfiguration = await _AttemptPhase(downloadConfigurationState,
                             () => DownloadConfiguration.CreateDefaultAsync(_LaunchCancellationTokenSource.Token));
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                        App.Current.Logger.Info("Launch", "Connecting to patch cache database");
+                        App.Logger.Info("Launch", "Connecting to patch cache database");
                         var patchCache = await _AttemptPhase(patchCacheState,
                             () => PatchCache.CreateAsync(InstallConfiguration));
 
@@ -435,7 +437,7 @@ namespace PSRT.Astra.ViewModels
 
                             _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                            App.Current.Logger.Info("Launch", $"Running {nameof(ComparePhase)}");
+                            App.Logger.Info("Launch", $"Running {nameof(ComparePhase)}");
                             var toUpdate = await _AttemptPhase(comparePhaseState,
                                 () => comparePhase.RunAsync(downloadConfiguration, patchCache, _LaunchCancellationTokenSource.Token));
                             if (toUpdate.Length == 0)
@@ -446,32 +448,32 @@ namespace PSRT.Astra.ViewModels
 
                             _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                            App.Current.Logger.Info("Launch", $"Running {nameof(VerifyFilesPhase)}");
+                            App.Logger.Info("Launch", $"Running {nameof(VerifyFilesPhase)}");
                             await _AttemptPhase(verifyFilesPhaseState,
                                 () => verifyFilesPhase.RunAsync(toUpdate, patchCache, _LaunchCancellationTokenSource.Token));
                         }
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                        App.Current.Logger.Info("Launch", "Fetching plugin info");
+                        App.Logger.Info("Launch", "Fetching plugin info");
                         var pluginInfo = await _AttemptPhase(pluginInfoState,
                             () => PluginInfo.FetchAsync(_LaunchCancellationTokenSource.Token));
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                        App.Current.Logger.Info("Launch", $"Running {nameof(PSO2hPhase)}");
+                        App.Logger.Info("Launch", $"Running {nameof(PSO2hPhase)}");
                         await _AttemptPhase(pso2hPhaseState,
                             () => pso2hPhase.RunAsync(pluginInfo, _LaunchCancellationTokenSource.Token));
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                        App.Current.Logger.Info("Launch", $"Running {nameof(TelepipeProxyPhase)}");
+                        App.Logger.Info("Launch", $"Running {nameof(TelepipeProxyPhase)}");
                         await _AttemptPhase(telepipeProxyPhaseState,
                             () => telepipeProxyPhase.RunAsync(pluginInfo, _LaunchCancellationTokenSource.Token));
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                        App.Current.Logger.Info("Launch", $"Running {nameof(EnglishPatchPhase)}");
+                        App.Logger.Info("Launch", $"Running {nameof(EnglishPatchPhase)}");
                         await _AttemptPhase(englishPatchPhaseState,
                             () => englishPatchPhase.RunAsync(patchCache, pluginInfo, _LaunchCancellationTokenSource.Token));
 
@@ -479,7 +481,7 @@ namespace PSRT.Astra.ViewModels
 
                         if (largeAddressAwarePhaseState != null && largeAddressAwarePhase != null)
                         {
-                            App.Current.Logger.Info("Launch", $"Running {nameof(LargeAddressAwarePhase)}");
+                            App.Logger.Info("Launch", $"Running {nameof(LargeAddressAwarePhase)}");
                             await _AttemptPhase(largeAddressAwarePhaseState,
                                 () => largeAddressAwarePhase.RunAsync(_LaunchCancellationTokenSource.Token));
                         }
@@ -488,7 +490,7 @@ namespace PSRT.Astra.ViewModels
 
                         // cancellation no longer works after this point
 
-                        App.Current.Logger.Info("Launch", "Starting PSO2");
+                        App.Logger.Info("Launch", "Starting PSO2");
 
                         await _AttemptPhase(launchPSO2State, async () =>
                         {
@@ -512,16 +514,16 @@ namespace PSRT.Astra.ViewModels
                             });
                         });
 
-                        App.Current.Logger.Info("Launch", "PSO2 launch process ended");
+                        App.Logger.Info("Launch", "PSO2 launch process ended");
                     }
                     catch (OperationCanceledException)
                     {
-                        App.Current.Logger.Info("Launch", "Launch cancelled");
+                        App.Logger.Info("Launch", "Launch cancelled");
                         return;
                     }
                     catch (Exception ex)
                     {
-                        App.Current.Logger.Info("Launch", "Error during launch phases", ex);
+                        App.Logger.Info("Launch", "Error during launch phases", ex);
                         UploadErrorButtonVisible = true;
 
                         try
@@ -549,7 +551,7 @@ namespace PSRT.Astra.ViewModels
 
             try
             {
-                App.Current.Logger.Error("GameGuard", "Removing GameGuard files and directories");
+                App.Logger.Error("GameGuard", "Removing GameGuard files and directories");
                 try
                 {
                     await Task.Run(() =>
@@ -567,10 +569,10 @@ namespace PSRT.Astra.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    App.Current.Logger.Error("GameGuard", "Error deleting game guard files", ex);
+                    App.Logger.Error("GameGuard", "Error deleting game guard files", ex);
                 }
 
-                App.Current.Logger.Error("GameGuard", "Removing GameGuard registries");
+                App.Logger.Error("GameGuard", "Removing GameGuard registries");
                 try
                 {
                     await Task.Run(() =>
@@ -581,7 +583,7 @@ namespace PSRT.Astra.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    App.Current.Logger.Error("GameGuard", "Unable to delete GameGuard registry files", ex);
+                    App.Logger.Error("GameGuard", "Unable to delete GameGuard registry files", ex);
                 }
 
             }

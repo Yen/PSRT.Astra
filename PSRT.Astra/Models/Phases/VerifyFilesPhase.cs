@@ -53,7 +53,7 @@ namespace PSRT.Astra.Models.Phases
 
             Progress.TotalCount = toUpdate.Length;
 
-            App.Current.Logger.Info(nameof(VerifyFilesPhase), "Starting processing threads");
+            App.Logger.Info(nameof(VerifyFilesPhase), "Starting processing threads");
             Progress.IsIndeterminate = false;
             // TODO: processor affinity?
             var threads = Enumerable.Range(0, Environment.ProcessorCount).Select(i =>
@@ -63,17 +63,17 @@ namespace PSRT.Astra.Models.Phases
                     Interlocked.Increment(ref state.AtomicProcessCount);
                     try
                     {
-                        App.Current.Logger.Info(nameof(VerifyFilesPhase), $"Processing thread {i} started");
+                        App.Logger.Info(nameof(VerifyFilesPhase), $"Processing thread {i} started");
 
                         _ProcessAsync(state, toUpdate, processCancellationTokenSource.Token).GetAwaiter().GetResult();
                     }
                     catch (OperationCanceledException ex)
                     {
-                        App.Current.Logger.Error(nameof(VerifyFilesPhase), $"Processing thread {i} canceled", ex);
+                        App.Logger.Error(nameof(VerifyFilesPhase), $"Processing thread {i} canceled", ex);
                     }
                     catch (Exception ex)
                     {
-                        App.Current.Logger.Error(nameof(VerifyFilesPhase), $"Exception in processing thread {i}", ex);
+                        App.Logger.Error(nameof(VerifyFilesPhase), $"Exception in processing thread {i}", ex);
                         exceptions.Add(ex);
 
                         errorCancellationTokenSource.Cancel();
@@ -82,7 +82,7 @@ namespace PSRT.Astra.Models.Phases
                     {
                         Interlocked.Decrement(ref state.AtomicProcessCount);
 
-                        App.Current.Logger.Info(nameof(VerifyFilesPhase), $"Processing thread {i} ended");
+                        App.Logger.Info(nameof(VerifyFilesPhase), $"Processing thread {i} ended");
                     }
                 });
                 thread.Name = $"{nameof(VerifyFilesPhase)}({i})";
@@ -113,14 +113,14 @@ namespace PSRT.Astra.Models.Phases
 
             Progress.IsIndeterminate = true;
 
-            App.Current.Logger.Info(nameof(VerifyFilesPhase), "Joining processing threads");
+            App.Logger.Info(nameof(VerifyFilesPhase), "Joining processing threads");
             foreach (var t in threads)
                 await Task.Factory.StartNew(() => t.Join(), TaskCreationOptions.LongRunning);
 
             if (exceptions.Count > 0)
             {
                 var aggregate = new AggregateException("Error verifying files", exceptions);
-                App.Current.Logger.Error(nameof(VerifyFilesPhase), "Error verifying files", aggregate);
+                App.Logger.Error(nameof(VerifyFilesPhase), "Error verifying files", aggregate);
                 throw aggregate;
             }
         }
@@ -199,7 +199,7 @@ namespace PSRT.Astra.Models.Phases
                     }
                     catch (Exception ex)
                     {
-                        App.Current.Logger.Error(nameof(VerifyFilesPhase), "Error downloading file", ex);
+                        App.Logger.Error(nameof(VerifyFilesPhase), "Error downloading file", ex);
                         throw;
                     }
 

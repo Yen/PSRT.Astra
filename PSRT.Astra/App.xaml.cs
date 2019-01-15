@@ -23,7 +23,7 @@ namespace PSRT.Astra
     {
         public static new App Current => Application.Current as App;
 
-        public Logger Logger = new Logger();
+        public static Logger Logger = new Logger();
 
         public App()
         {
@@ -64,7 +64,7 @@ namespace PSRT.Astra
 
         public static void UploadAndOpenLog(Exception ex = null)
         {
-            App.Current.Logger.Info(nameof(App), "Uploading log");
+            Logger.Info(nameof(App), "Uploading log");
 
             var uploadResult = Task.Run(async () =>
             {
@@ -73,7 +73,7 @@ namespace PSRT.Astra
                 {
                     name = "Log",
                     syntax = "text",
-                    contents = App.Current.Logger.Content
+                    contents = Logger.Content
                 });
                 if (ex != null)
                 {
