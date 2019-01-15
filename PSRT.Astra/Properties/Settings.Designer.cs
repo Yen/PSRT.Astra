@@ -118,5 +118,17 @@ namespace PSRT.Astra.Properties {
                 this["ModFilesEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CloseOnLaunchEnabled {
+            get {
+                return ((bool)(this["CloseOnLaunchEnabled"]));
+            }
+            set {
+                this["CloseOnLaunchEnabled"] = value;
+            }
+        }
     }
 }

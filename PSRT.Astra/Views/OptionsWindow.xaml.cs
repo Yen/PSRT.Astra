@@ -32,6 +32,7 @@ namespace PSRT.Astra.Views
         {
             Properties.Settings.Default.TelepipeProxyUrl = _ViewModel.TelepipeProxyUrl;
             Properties.Settings.Default.LargeAddressAwareEnabled = _ViewModel.LargeAddressAwareEnabled;
+            Properties.Settings.Default.CloseOnLaunchEnabled = _ViewModel.CloseOnLaunchEnabled;
             Properties.Settings.Default.Save();
             DialogResult = true;
             Close();

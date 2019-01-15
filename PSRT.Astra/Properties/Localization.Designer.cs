@@ -753,6 +753,24 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close Astra on launch.
+        /// </summary>
+        internal static string OptionsWindow_CloseOnLaunch {
+            get {
+                return ResourceManager.GetString("OptionsWindow_CloseOnLaunch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close Astra on a successful launch of the game..
+        /// </summary>
+        internal static string OptionsWindow_CloseOnLaunchTooltip {
+            get {
+                return ResourceManager.GetString("OptionsWindow_CloseOnLaunchTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large Address Aware Patch.
         /// </summary>
         internal static string OptionsWindow_LargeAddressAware {

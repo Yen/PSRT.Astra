@@ -36,6 +36,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Content="{astra:LocaleBinding OptionsWindow_TelepipeProxyUrl}" ToolTip="{astra:LocaleBinding OptionsWindow_TelepipeProxyUrlTooltip}"/>
             <TextBox x:Name="TelepipeProxyUrlBox" ToolTip="{astra:LocaleBinding OptionsWindow_TelepipeProxyUrlTooltip}" Grid.Row="0" Grid.Column="1" Text="{Binding TelepipeProxyUrl, UpdateSourceTrigger=PropertyChanged}">
@@ -64,6 +65,9 @@
 
             <Label Grid.Row="1" Grid.Column="0" Content="{astra:LocaleBinding OptionsWindow_LargeAddressAware}" ToolTip="{astra:LocaleBinding OptionsWindow_LargeAddressAwareTooltip}"/>
             <CheckBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" IsChecked="{Binding LargeAddressAwareEnabled}" ToolTip="{astra:LocaleBinding OptionsWindow_LargeAddressAwareTooltip}"/>
+
+            <Label Grid.Row="2" Grid.Column="0" Content="{astra:LocaleBinding OptionsWindow_CloseOnLaunch}" ToolTip="{astra:LocaleBinding OptionsWindow_CloseOnLaunchTooltip}"/>
+            <CheckBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" IsChecked="{Binding CloseOnLaunchEnabled}" ToolTip="{astra:LocaleBinding OptionsWindow_CloseOnLaunchTooltip}"/>
         </Grid>
         <Button
             Grid.Row="3"

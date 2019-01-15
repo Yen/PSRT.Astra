@@ -487,4 +487,10 @@ no corruption occurs with game updates</value>
   <data name="MainWindow_UploadErrorLogButton" xml:space="preserve">
     <value>Upload error log</value>
   </data>
+  <data name="OptionsWindow_CloseOnLaunch" xml:space="preserve">
+    <value>Close Astra on launch</value>
+  </data>
+  <data name="OptionsWindow_CloseOnLaunchTooltip" xml:space="preserve">
+    <value>Close Astra on a successful launch of the game.</value>
+  </data>
 </root>

@@ -515,6 +515,9 @@ namespace PSRT.Astra.ViewModels
                         });
 
                         App.Logger.Info("Launch", "PSO2 launch process ended");
+
+                        if (Properties.Settings.Default.CloseOnLaunchEnabled)
+                            App.Current.Shutdown();
                     }
                     catch (OperationCanceledException)
                     {

@@ -18,6 +18,8 @@ namespace PSRT.Astra.ViewModels
 
         public bool LargeAddressAwareEnabled { get; set; } = Properties.Settings.Default.LargeAddressAwareEnabled;
 
+        public bool CloseOnLaunchEnabled { get; set; } = Properties.Settings.Default.CloseOnLaunchEnabled;
+
         public bool SettingsValid => TelepipeProxyUrlValid;
     }
 }
