@@ -17,6 +17,13 @@ namespace PSRT.Astra
             FindExInfoBasic = 1
         }
 
+        public enum FINDEX_SEARCH_OPS
+        {
+            FindExSearchNameMatch = 0,
+            FindExSearchLimitToDirectories = 1,
+            FindExSearchLimitToDevices = 2
+        }
+
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct WIN32_FIND_DATA
         {
@@ -34,10 +41,22 @@ namespace PSRT.Astra
             public string cAlternateFileName;
         }
 
+        public enum FindFirstFileExAditionalFlags
+        {
+            FIND_FIRST_EX_CASE_SENSITIVE = 1,
+            FIND_FIRST_EX_LARGE_FETCH = 2,
+            FIND_FIRST_EX_ON_DISK_ENTRIES_ONLY = 3
+        }
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr FindFirstFile(string lpFileName, out WIN32_FIND_DATA lpFindFileData);
+        public static extern IntPtr FindFirstFileEx(
+            string lpFileName,
+            FINDEX_INFO_LEVELS fInfoLevelId,
+            out WIN32_FIND_DATA lpFindFileData,
+            FINDEX_SEARCH_OPS fSearchOp,
+            IntPtr lpSearchFilter,
+            FindFirstFileExAditionalFlags dwAdditionalFlags);
 
         [SuppressUnmanagedCodeSecurity]
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]

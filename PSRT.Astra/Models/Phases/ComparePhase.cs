@@ -58,17 +58,11 @@ namespace PSRT.Astra.Models.Phases
 
             await Task.Run(() => _PreProcessPatches(preProcessData));
 
-            var internalPatchesShouldUpdateKeys = preProcessData
-                .Where(p => p.Value.ShouldUpdate)
-                .Select(p => p.Key)
-                .ToArray();
-
             var workingPatches = patches
-                .Where(p => internalPatchesShouldUpdateKeys.Any(k => k == p.Name))
                 .Select(p => new UpdateInfo
                 {
                     PatchInfo = p,
-                    ShouldUpdate = false
+                    ShouldUpdate = preProcessData.ContainsKey(p.Name) ? preProcessData[p.Name].ShouldUpdate : true
                 })
                 .ToArray();
 
@@ -114,23 +108,20 @@ namespace PSRT.Astra.Models.Phases
                                 {
                                     var modFilePath = Path.Combine(_InstallConfiguration.ModsDirectory, fileName);
                                     if (File.Exists(modFilePath))
+                                    {
+                                        patch.ShouldUpdate = false;
                                         continue;
+                                    }
                                 }
                             }
 
                             if (!cacheData.ContainsKey(patch.PatchInfo.Name))
-                            {
-                                patch.ShouldUpdate = true;
                                 continue;
-                            }
 
                             var cacheEntry = cacheData[patch.PatchInfo.Name];
 
                             if (patch.PatchInfo.Hash != cacheEntry.Hash)
-                            {
-                                patch.ShouldUpdate = true;
                                 continue;
-                            }
 
                             // skip pso2.exe if the file is large address aware patched
                             if (fileName == pso2ExecutableFileName
@@ -138,6 +129,7 @@ namespace PSRT.Astra.Models.Phases
                                 && Properties.Settings.Default.LargeAddressAwareEnabled
                                 && LargeAddressAware.IsLargeAddressAwarePactchApplied(_InstallConfiguration, patch.PatchInfo.Hash))
                             {
+                                patch.ShouldUpdate = false;
                                 continue;
                             }
 
@@ -176,7 +168,22 @@ namespace PSRT.Astra.Models.Phases
         private void _PreProcessPatches(Dictionary<string, PreProcessInfo> patches)
         {
             var findData = new Win32Bindings.WIN32_FIND_DATA();
-            var handle = Win32Bindings.FindFirstFile(Path.Combine(_InstallConfiguration.PSO2BinDirectory, @"data\win32\*"), out findData);
+
+            // faster options only exist in windows 7+
+            var infoLevel = Environment.OSVersion.Version > new Version(6, 1)
+                ? Win32Bindings.FINDEX_INFO_LEVELS.FindExInfoBasic
+                : Win32Bindings.FINDEX_INFO_LEVELS.FindExInfoStandard;
+            var aditionalFlags = Environment.OSVersion.Version > new Version(6, 1)
+                ? Win32Bindings.FindFirstFileExAditionalFlags.FIND_FIRST_EX_LARGE_FETCH
+                : 0;
+
+            var handle = Win32Bindings.FindFirstFileEx(
+                Path.Combine(_InstallConfiguration.PSO2BinDirectory, @"data\win32\*"),
+                infoLevel,
+                out findData,
+                Win32Bindings.FINDEX_SEARCH_OPS.FindExSearchNameMatch,
+                IntPtr.Zero,
+                aditionalFlags);
             if (handle.ToInt64() == -1)
                 return;
 
