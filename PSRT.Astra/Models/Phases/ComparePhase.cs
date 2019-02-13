@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -142,8 +143,13 @@ namespace PSRT.Astra.Models.Phases
                         }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    if (ex is OperationCanceledException)
+                        App.Logger.Info(nameof(ComparePhase), "Compare process canceled");
+                    else
+                        App.Logger.Error(nameof(ComparePhase), "Error during compare process", ex);
+
                     errorTokenSource.Cancel();
                     throw;
                 }
@@ -154,10 +160,20 @@ namespace PSRT.Astra.Models.Phases
             var processTask = Task.WhenAll(tasks);
 
             while (await Task.WhenAny(processTask, Task.Delay(200)) != processTask)
-                Progress.Progress = (progressValueAtomic / (double)workingPatches.Length);
+                Progress.Progress = progressValueAtomic / (double)workingPatches.Length;
             Progress.Progress = 1;
 
-            await processTask;
+            try
+            {
+                await processTask;
+            }
+            catch
+            {
+                // await flattens and only throws the first exception in an
+                // aggregate exception so this avoids that
+                ct.ThrowIfCancellationRequested();
+                ExceptionDispatchInfo.Capture(processTask.Exception).Throw();
+            }
 
             return workingPatches
                 .Where(p => p.ShouldUpdate)
