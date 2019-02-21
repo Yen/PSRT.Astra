@@ -77,7 +77,7 @@ namespace PSRT.Astra.ViewModels
                 var data = await client.GetStringAsync(githubLatestReleaseUrl);
                 var json = JsonConvert.DeserializeObject<GithubUpdateInformation>(data);
 
-                if (!Regex.IsMatch(json.TagName, @"^v(\d+(.\d){0,3})$"))
+                if (!Regex.IsMatch(json.TagName, @"^v(\d+(.\d+){0,3})$"))
                     throw new Exception("Tag is not a valid tag version format");
 
                 var cleanedTag = json.TagName.TrimStart('v');
