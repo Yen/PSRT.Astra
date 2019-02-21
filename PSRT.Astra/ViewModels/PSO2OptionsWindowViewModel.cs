@@ -71,11 +71,10 @@ namespace PSRT.Astra.ViewModels
                 return;
             }
 
-            var nested = table[keys.First()] as LuaTable;
-            if (nested == null)
-                return;
+            if (!(table[keys.First()] is LuaTable))
+                table[keys.First()] = new LuaTable();
 
-            SetValueEx(nested, keys.Skip(1), value);
+            SetValueEx(table[keys.First()] as LuaTable, keys.Skip(1), value);
         }
     }
 
@@ -250,7 +249,6 @@ namespace PSRT.Astra.ViewModels
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ReflectionQuality" }, 1);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ShadowQuality" }, 1);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "DitailModelNum" }, 5);
-                    _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, 0);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Blur" }, false);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightGeoGraphy" }, false);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Depth" }, false);
@@ -265,7 +263,6 @@ namespace PSRT.Astra.ViewModels
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ReflectionQuality" }, 2);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ShadowQuality" }, 2);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "DitailModelNum" }, 5);
-                    _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, 1);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Blur" }, false);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightGeoGraphy" }, false);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Depth" }, false);
@@ -280,7 +277,6 @@ namespace PSRT.Astra.ViewModels
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ReflectionQuality" }, 3);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ShadowQuality" }, 3);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "DitailModelNum" }, 12);
-                    _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, 1);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Blur" }, true);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightGeoGraphy" }, false);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Depth" }, false);
@@ -295,7 +291,6 @@ namespace PSRT.Astra.ViewModels
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ReflectionQuality" }, 4);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ShadowQuality" }, 4);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "DitailModelNum" }, 20);
-                    _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, 1);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Blur" }, true);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightGeoGraphy" }, false);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Depth" }, true);
@@ -310,7 +305,6 @@ namespace PSRT.Astra.ViewModels
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ReflectionQuality" }, 5);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ShadowQuality" }, 5);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "DitailModelNum" }, 30);
-                    _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, 1);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Blur" }, true);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightGeoGraphy" }, true);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Depth" }, true);
@@ -325,7 +319,6 @@ namespace PSRT.Astra.ViewModels
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ReflectionQuality" }, 5);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "ShadowQuality" }, 5);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Display", "DitailModelNum" }, 30);
-                    _Table.SetValueEx(new[] { "Config", "Draw", "TextureResolution" }, 2);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Blur" }, true);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "LightGeoGraphy" }, true);
                     _Table.SetValueEx(new[] { "Config", "Draw", "Function", "Depth" }, true);
