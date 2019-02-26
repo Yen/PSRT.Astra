@@ -47,8 +47,9 @@ namespace PSRT.Astra.Models
                 var file = File.ReadAllText(installConfiguration.LargeAddressAwareConfig);
                 return JsonConvert.DeserializeObject<Config>(file);
             }
-            catch
+            catch (Exception ex)
             {
+                App.Logger.Warning(nameof(LargeAddressAware), "Failed to read config", ex);
                 return null;
             }
         }
@@ -85,6 +86,7 @@ namespace PSRT.Astra.Models
 
         private static void _ApplyLargeAddressAwarePatch(string executablePath)
         {
+            App.Logger.Info(nameof(LargeAddressAware), "Creating temporary directory");
             var tempDirectory = Path.GetFullPath(Path.Combine(Path.GetTempPath(), $"PSRT.Astra-{Guid.NewGuid()}"));
             Directory.CreateDirectory(tempDirectory);
 
@@ -92,6 +94,7 @@ namespace PSRT.Astra.Models
             var linkExecutablePath = Path.Combine(tempDirectory, "LINK.EXE");
             var dllPath = Path.Combine(tempDirectory, "MSPDB60.DLL");
 
+            App.Logger.Info(nameof(LargeAddressAware), "Writing patch files");
             File.WriteAllBytes(editbinExecutablePath, Properties.Resources.LargeAddressAware_EDITBIN);
             File.WriteAllBytes(linkExecutablePath, Properties.Resources.LargeAddressAware_LINK);
             File.WriteAllBytes(dllPath, Properties.Resources.LargeAddressAware_MSPDB60);
@@ -107,10 +110,21 @@ namespace PSRT.Astra.Models
                 }
             };
 
+            App.Logger.Info(nameof(LargeAddressAware), "Running editbin executable");
             process.Start();
             process.WaitForExit();
 
-            Directory.Delete(tempDirectory, true);
+            // if this fails. it's not the end of the world, as windows will clear
+            // up the temp directory anyway
+            App.Logger.Info(nameof(LargeAddressAware), "Deleting temporary directory");
+            try
+            {
+                Directory.Delete(tempDirectory, true);
+            }
+            catch (Exception ex)
+            {
+                App.Logger.Warning(nameof(LargeAddressAware), "Failed to delete temporary directory", ex);
+            }
 
             if (process.ExitCode != 0)
                 throw new Exception($"Large address patching returned error code: {process.ExitCode}");
