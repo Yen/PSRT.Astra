@@ -347,24 +347,6 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancel launch.
-        /// </summary>
-        internal static string MainWindow_LaunchButton_Cancel {
-            get {
-                return ResourceManager.GetString("MainWindow_LaunchButton_Cancel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Stop all running operations and cancel the launch.
-        /// </summary>
-        internal static string MainWindow_LaunchButton_CancelTooltip {
-            get {
-                return ResourceManager.GetString("MainWindow_LaunchButton_CancelTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Launch PSO2.
         /// </summary>
         internal static string MainWindow_LaunchButton_Launch {
@@ -383,24 +365,6 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancel launch.
-        /// </summary>
-        internal static string MainWindow_LaunchButton_Loading {
-            get {
-                return ResourceManager.GetString("MainWindow_LaunchButton_Loading", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Astra is loading, please wait.
-        /// </summary>
-        internal static string MainWindow_LaunchButton_LoadingTooltip {
-            get {
-                return ResourceManager.GetString("MainWindow_LaunchButton_LoadingTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Waiting for PSO2 to exit.
         /// </summary>
         internal static string MainWindow_LaunchButton_PSO2Running {
@@ -415,6 +379,33 @@ namespace PSRT.Astra.Properties {
         internal static string MainWindow_LaunchButton_PSO2RunningTooltip {
             get {
                 return ResourceManager.GetString("MainWindow_LaunchButton_PSO2RunningTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string MainWindow_LaunchButton_Updating {
+            get {
+                return ResourceManager.GetString("MainWindow_LaunchButton_Updating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Progress will be resumed next launch).
+        /// </summary>
+        internal static string MainWindow_LaunchButton_UpdatingSubText {
+            get {
+                return ResourceManager.GetString("MainWindow_LaunchButton_UpdatingSubText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Astra is updating the game, canceling will not lose any update progress.
+        /// </summary>
+        internal static string MainWindow_LaunchButton_UpdatingTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_LaunchButton_UpdatingTooltip", resourceCulture);
             }
         }
         
@@ -695,6 +686,24 @@ namespace PSRT.Astra.Properties {
         internal static string MainWindow_UpdateAvailableMessage {
             get {
                 return ResourceManager.GetString("MainWindow_UpdateAvailableMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update without launching.
+        /// </summary>
+        internal static string MainWindow_UpdateButton {
+            get {
+                return ResourceManager.GetString("MainWindow_UpdateButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fully update the game and apply patches.
+        /// </summary>
+        internal static string MainWindow_UpdateButtonTooltip {
+            get {
+                return ResourceManager.GetString("MainWindow_UpdateButtonTooltip", resourceCulture);
             }
         }
         

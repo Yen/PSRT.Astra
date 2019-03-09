@@ -171,7 +171,7 @@
                             <Setter Property="ToolTip" Value="{astra:LocaleBinding MainWindow_LaunchButton_LaunchTooltip}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding State}" Value="Patching">
-                            <Setter Property="ToolTip" Value="{astra:LocaleBinding MainWindow_LaunchButton_LoadingTooltip}"/>
+                            <Setter Property="ToolTip" Value="{astra:LocaleBinding MainWindow_LaunchButton_UpdatingTooltip}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding State}" Value="GameRunning">
                             <Setter Property="ToolTip" Value="{astra:LocaleBinding MainWindow_LaunchButton_PSO2RunningTooltip}"/>
@@ -179,26 +179,47 @@
                     </Style.Triggers>
                 </Style>
             </Button.Style>
-            <TextBlock FontSize="48" FontWeight="Bold" TextWrapping="Wrap" TextAlignment="Center">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                        <Setter Property="Text" Value="{astra:LocaleBinding MainWindow_LaunchButton_Loading}"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding State}" Value="Idle">
-                                <Setter Property="Text" Value="{astra:LocaleBinding MainWindow_LaunchButton_Launch}"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding State}" Value="Patching">
-                                <Setter Property="Text" Value="{astra:LocaleBinding MainWindow_LaunchButton_Loading}"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding State}" Value="GameRunning">
-                                <Setter Property="Text" Value="{astra:LocaleBinding MainWindow_LaunchButton_PSO2Running}"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+            <StackPanel>
+                <TextBlock TextWrapping="Wrap" TextAlignment="Center" FontSize="48" FontWeight="Bold">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="{astra:LocaleBinding MainWindow_LaunchButton_Loading}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding State}" Value="Idle">
+                                    <Setter Property="Text" Value="{astra:LocaleBinding MainWindow_LaunchButton_Launch}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding State}" Value="Patching">
+                                    <Setter Property="Text" Value="{astra:LocaleBinding MainWindow_LaunchButton_Updating}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding State}" Value="GameRunning">
+                                    <Setter Property="Text" Value="{astra:LocaleBinding MainWindow_LaunchButton_PSO2Running}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap" TextAlignment="Center" FontSize="18" FontWeight="Bold" Text="{astra:LocaleBinding MainWindow_LaunchButton_UpdatingSubText}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding State}" Value="Patching">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
         </Button>
-        <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{astra:LocaleBinding MainWindow_PSO2Options}" ToolTip="{astra:LocaleBinding MainWindow_PSO2OptionsTooltip}" Grid.Row="2" FontSize="20" Click="_SettingsButton_Click"/>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{astra:LocaleBinding MainWindow_UpdateButton}" ToolTip="{astra:LocaleBinding MainWindow_UpdateButtonTooltip}" FontSize="14" Command="{Binding UpdateCommand}"/>
+            <Button IsEnabled="{Binding ConfigButtonsEnabled}" Content="{astra:LocaleBinding MainWindow_PSO2Options}" ToolTip="{astra:LocaleBinding MainWindow_PSO2OptionsTooltip}" FontSize="14" Grid.Row="1" Click="_SettingsButton_Click"/>
+        </Grid>
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition/>

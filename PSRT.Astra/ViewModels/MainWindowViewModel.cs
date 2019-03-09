@@ -31,6 +31,7 @@ namespace PSRT.Astra.ViewModels
     public partial class MainWindowViewModel
     {
         public RelayCommand LaunchCommand => new RelayCommand(async () => await LaunchAsync());
+        public RelayCommand UpdateCommand => new RelayCommand(async () => await LaunchAsync(false));
         public RelayCommand ResetGameGuardCommand => new RelayCommand(async () => await ResetGameGuardAsync());
 
         //
@@ -80,6 +81,8 @@ namespace PSRT.Astra.ViewModels
             => State == ApplicationState.Idle;
 
         public bool IsChangelogVisible { get; set; } = true;
+
+        public bool IsLaunchingPSO2 { get; set; }
 
         //
 
@@ -201,8 +204,10 @@ namespace PSRT.Astra.ViewModels
             state.State = PhaseControl.State.Success;
         }
 
-        public async Task LaunchAsync()
+        public async Task LaunchAsync(bool shouldLaunchPSO2 = true)
         {
+            IsLaunchingPSO2 = shouldLaunchPSO2;
+
             if (State == ApplicationState.Patching)
             {
                 App.Logger.Info(nameof(MainWindowViewModel), "Cancelling launch");
@@ -388,10 +393,10 @@ namespace PSRT.Astra.ViewModels
                         {
                             TitleKey = "MainWindow_Phase_LaunchPSO2"
                         };
-                        newPhases.Add(launchPSO2State);
+                        if (IsLaunchingPSO2)
+                            newPhases.Add(launchPSO2State);
 
                         Phases = newPhases;
-
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
@@ -488,6 +493,9 @@ namespace PSRT.Astra.ViewModels
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
+                        if (!IsLaunchingPSO2)
+                            break;
+
                         // cancellation no longer works after this point
 
                         App.Logger.Info("Launch", "Starting PSO2");
@@ -522,7 +530,6 @@ namespace PSRT.Astra.ViewModels
                     catch (OperationCanceledException)
                     {
                         App.Logger.Info("Launch", "Launch cancelled");
-                        return;
                     }
                     catch (Exception ex)
                     {

@@ -450,17 +450,11 @@ Would you like to upload the error information?</value>
     <comment>{0} is the number of files that have been verified.
 {1} is the total number that the phase has to do</comment>
   </data>
-  <data name="MainWindow_LaunchButton_Cancel" xml:space="preserve">
-    <value>Cancel launch</value>
+  <data name="MainWindow_LaunchButton_Updating" xml:space="preserve">
+    <value>Cancel</value>
   </data>
-  <data name="MainWindow_LaunchButton_CancelTooltip" xml:space="preserve">
-    <value>Stop all running operations and cancel the launch</value>
-  </data>
-  <data name="MainWindow_LaunchButton_Loading" xml:space="preserve">
-    <value>Cancel launch</value>
-  </data>
-  <data name="MainWindow_LaunchButton_LoadingTooltip" xml:space="preserve">
-    <value>Astra is loading, please wait</value>
+  <data name="MainWindow_LaunchButton_UpdatingTooltip" xml:space="preserve">
+    <value>Astra is updating the game, canceling will not lose any update progress</value>
   </data>
   <data name="MainWindow_LaunchButton_PSO2Running" xml:space="preserve">
     <value>Waiting for PSO2 to exit</value>
@@ -492,5 +486,14 @@ no corruption occurs with game updates</value>
   </data>
   <data name="OptionsWindow_CloseOnLaunchTooltip" xml:space="preserve">
     <value>Close Astra on a successful launch of the game.</value>
+  </data>
+  <data name="MainWindow_LaunchButton_UpdatingSubText" xml:space="preserve">
+    <value>(Progress will be resumed next launch)</value>
+  </data>
+  <data name="MainWindow_UpdateButton" xml:space="preserve">
+    <value>Update without launching</value>
+  </data>
+  <data name="MainWindow_UpdateButtonTooltip" xml:space="preserve">
+    <value>Fully update the game and apply patches</value>
   </data>
 </root>
