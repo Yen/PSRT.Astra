@@ -18,12 +18,7 @@ namespace PSRT.Astra.Models
         public string ModsDirectory { get; }
 
         public string DataDirectory { get; }
-        // TODO: might be able to remove these definitions as pso2 now uses
-        // more directory names without notice and astra generates the folders
-        // that are required
-        public string DataLicenseDirectory { get; }
         public string DataWin32Directory { get; }
-        public string DataWin32ScriptDirectory { get; }
 
         public string PSO2Executable { get; }
         public string PSO2LauncherExecutable { get; }
@@ -71,9 +66,7 @@ namespace PSRT.Astra.Models
             ModsDirectory = Path.Combine(PSO2BinDirectory, "mods");
 
             DataDirectory = Path.Combine(PSO2BinDirectory, "data");
-            DataLicenseDirectory = Path.Combine(DataDirectory, "license");
             DataWin32Directory = Path.Combine(DataDirectory, "win32");
-            DataWin32ScriptDirectory = Path.Combine(DataWin32Directory, "script");
 
             PSO2Executable = Path.Combine(PSO2BinDirectory, "pso2.exe");
             PSO2LauncherExecutable = Path.Combine(PSO2BinDirectory, "pso2launcher.exe");
