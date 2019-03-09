@@ -84,7 +84,7 @@ namespace PSRT.Astra.Models.Phases
 
                     while (true)
                     {
-                        var index = Interlocked.Increment(ref nextIndexAtomic);
+                        var index = Interlocked.Increment(ref nextIndexAtomic) - 1;
                         if (index >= workingPatches.Length)
                             return;
 
