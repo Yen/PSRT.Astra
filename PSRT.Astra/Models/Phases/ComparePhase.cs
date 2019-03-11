@@ -21,11 +21,11 @@ namespace PSRT.Astra.Models.Phases
             public bool ShouldUpdate;
         }
 
-        private struct PreProcessInfo
-        {
-            public long LastWriteTime;
-            public bool ShouldUpdate;
-        }
+        //private struct PreProcessInfo
+        //{
+        //    public long LastWriteTime;
+        //    public bool ShouldUpdate;
+        //}
 
         private InstallConfiguration _InstallConfiguration;
 
@@ -45,25 +45,33 @@ namespace PSRT.Astra.Models.Phases
             App.Logger.Info(nameof(ComparePhase), "Fetching cache data");
             var cacheData = await patchCache.SelectAllAsync();
 
-            var preProcessData = new Dictionary<string, PreProcessInfo>();
-            await Task.Run(() =>
-            {
-                foreach (var p in patches)
-                    if (cacheData.ContainsKey(p.Name))
-                        preProcessData[p.Name] = new PreProcessInfo
-                        {
-                            LastWriteTime = cacheData[p.Name].LastWriteTime,
-                            ShouldUpdate = true
-                        };
-            });
+            //var preProcessData = new Dictionary<string, PreProcessInfo>();
+            //await Task.Run(() =>
+            //{
+            //    foreach (var p in patches)
+            //        if (cacheData.ContainsKey(p.Name))
+            //            preProcessData[p.Name] = new PreProcessInfo
+            //            {
+            //                LastWriteTime = cacheData[p.Name].LastWriteTime,
+            //                ShouldUpdate = true
+            //            };
+            //});
 
-            await Task.Run(() => _PreProcessPatches(preProcessData));
+            //await Task.Run(() => _PreProcessPatches(preProcessData));
+
+            //var workingPatches = patches
+            //    .Select(p => new UpdateInfo
+            //    {
+            //        PatchInfo = p,
+            //        ShouldUpdate = preProcessData.ContainsKey(p.Name) ? preProcessData[p.Name].ShouldUpdate : true
+            //    })
+            //    .ToArray();
 
             var workingPatches = patches
                 .Select(p => new UpdateInfo
                 {
                     PatchInfo = p,
-                    ShouldUpdate = preProcessData.ContainsKey(p.Name) ? preProcessData[p.Name].ShouldUpdate : true
+                    ShouldUpdate = true
                 })
                 .ToArray();
 
@@ -155,7 +163,7 @@ namespace PSRT.Astra.Models.Phases
                 }
             }
 
-            var tasks = Enumerable.Range(0, Environment.ProcessorCount)
+            var tasks = Enumerable.Range(0, 1)
                 .Select(i => ConcurrencyUtils.RunOnDedicatedThreadAsync(ProcessLoop));
             var processTask = Task.WhenAll(tasks);
 
@@ -181,53 +189,55 @@ namespace PSRT.Astra.Models.Phases
                 .ToArray();
         }
 
-        private void _PreProcessPatches(Dictionary<string, PreProcessInfo> patches)
-        {
-            var findData = new Win32Bindings.WIN32_FIND_DATA();
+        // TODO: broken from a logical perspective, this marks files as complete
+        // before their hash has been compared which must be done before filetime
+        //private void _PreProcessPatches(Dictionary<string, PreProcessInfo> patches)
+        //{
+        //    var findData = new Win32Bindings.WIN32_FIND_DATA();
 
-            // faster options only exist in windows 7+
-            var infoLevel = Environment.OSVersion.Version > new Version(6, 1)
-                ? Win32Bindings.FINDEX_INFO_LEVELS.FindExInfoBasic
-                : Win32Bindings.FINDEX_INFO_LEVELS.FindExInfoStandard;
-            var aditionalFlags = Environment.OSVersion.Version > new Version(6, 1)
-                ? Win32Bindings.FindFirstFileExAditionalFlags.FIND_FIRST_EX_LARGE_FETCH
-                : 0;
+        //    // faster options only exist in windows 7+
+        //    var infoLevel = Environment.OSVersion.Version > new Version(6, 1)
+        //        ? Win32Bindings.FINDEX_INFO_LEVELS.FindExInfoBasic
+        //        : Win32Bindings.FINDEX_INFO_LEVELS.FindExInfoStandard;
+        //    var aditionalFlags = Environment.OSVersion.Version > new Version(6, 1)
+        //        ? Win32Bindings.FindFirstFileExAditionalFlags.FIND_FIRST_EX_LARGE_FETCH
+        //        : 0;
 
-            var handle = Win32Bindings.FindFirstFileEx(
-                Path.Combine(_InstallConfiguration.PSO2BinDirectory, @"data\win32\*"),
-                infoLevel,
-                out findData,
-                Win32Bindings.FINDEX_SEARCH_OPS.FindExSearchNameMatch,
-                IntPtr.Zero,
-                aditionalFlags);
-            if (handle.ToInt64() == -1)
-                return;
+        //    var handle = Win32Bindings.FindFirstFileEx(
+        //        Path.Combine(_InstallConfiguration.PSO2BinDirectory, @"data\win32\*"),
+        //        infoLevel,
+        //        out findData,
+        //        Win32Bindings.FINDEX_SEARCH_OPS.FindExSearchNameMatch,
+        //        IntPtr.Zero,
+        //        aditionalFlags);
+        //    if (handle.ToInt64() == -1)
+        //        return;
 
-            try
-            {
-                do
-                {
-                    if ((findData.dwFileAttributes & (FileAttributes.Directory | FileAttributes.Hidden)) != 0)
-                        continue;
+        //    try
+        //    {
+        //        do
+        //        {
+        //            if ((findData.dwFileAttributes & (FileAttributes.Directory | FileAttributes.Hidden)) != 0)
+        //                continue;
 
-                    var fileName = $"data/win32/{findData.cFileName}.pat";
-                    if (!patches.ContainsKey(fileName))
-                        continue;
+        //            var fileName = $"data/win32/{findData.cFileName}.pat";
+        //            if (!patches.ContainsKey(fileName))
+        //                continue;
 
-                    var lastWriteTimeLong = (long)(((ulong)findData.ftLastWriteTime.dwHighDateTime) << 32) | (uint)findData.ftLastWriteTime.dwLowDateTime;
+        //            var lastWriteTimeLong = (long)(((ulong)findData.ftLastWriteTime.dwHighDateTime) << 32) | (uint)findData.ftLastWriteTime.dwLowDateTime;
 
-                    var patch = patches[fileName];
-                    if (patch.LastWriteTime == lastWriteTimeLong)
-                    {
-                        patch.ShouldUpdate = false;
-                        patches[fileName] = patch;
-                    }
-                } while (Win32Bindings.FindNextFile(handle, out findData));
-            }
-            finally
-            {
-                Win32Bindings.FindClose(handle);
-            }
-        }
+        //            var patch = patches[fileName];
+        //            if (patch.LastWriteTime == lastWriteTimeLong)
+        //            {
+        //                patch.ShouldUpdate = false;
+        //                patches[fileName] = patch;
+        //            }
+        //        } while (Win32Bindings.FindNextFile(handle, out findData));
+        //    }
+        //    finally
+        //    {
+        //        Win32Bindings.FindClose(handle);
+        //    }
+        //}
     }
 }
