@@ -52,8 +52,8 @@ namespace PSRT.Astra
             Logger.Warning(nameof(Astra), "Entered dispatcher unhandled exception handler", e.Exception);
 
             var messageBoxResult = MessageBox.Show(
-                LocaleManager.Instance["Astra_UnhandledException_WindowTitle"],
                 LocaleManager.Instance["Astra_UnhandledException_WindowMessage"],
+                LocaleManager.Instance["Astra_UnhandledException_WindowTitle"],
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Error);
             if (messageBoxResult == MessageBoxResult.No)
@@ -101,8 +101,8 @@ namespace PSRT.Astra
             if (uploadResult.StatusCode != HttpStatusCode.Created)
             {
                 MessageBox.Show(
-                    LocaleManager.Instance["Astra_UploadLogError_WindowTitle"],
                     LocaleManager.Instance["Astra_UploadLogError_WindowMessage"],
+                    LocaleManager.Instance["Astra_UploadLogError_WindowTitle"],
                     MessageBoxButton.OK,
                     MessageBoxImage.Exclamation);
                 return;
