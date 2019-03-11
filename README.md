@@ -5,7 +5,7 @@
 [![Build Status](https://dev.azure.com/PSRT/PSRT.Astra/_apis/build/status/Yen.PSRT.Astra)](https://dev.azure.com/PSRT/PSRT.Astra/_build/latest?definitionId=1)
 [![Download Now](https://img.shields.io/github/downloads/Yen/PSRT.Astra/total.svg?style=popout)](https://github.com/Yen/PSRT.Astra/releases/latest)
 
-![PSRT.Astra](https://i.imgur.com/tDvBbNm.png)
+![PSRT.Astra](https://i.imgur.com/61Kuyj8.png)
 
 # Features
 
