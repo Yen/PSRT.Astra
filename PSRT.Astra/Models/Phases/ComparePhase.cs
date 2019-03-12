@@ -163,7 +163,7 @@ namespace PSRT.Astra.Models.Phases
                 }
             }
 
-            var tasks = Enumerable.Range(0, 1)
+            var tasks = Enumerable.Range(0, Environment.ProcessorCount)
                 .Select(i => ConcurrencyUtils.RunOnDedicatedThreadAsync(ProcessLoop));
             var processTask = Task.WhenAll(tasks);
 
