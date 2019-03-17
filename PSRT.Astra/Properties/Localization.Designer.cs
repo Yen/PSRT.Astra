@@ -142,6 +142,34 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string AboutWindow_Title {
+            get {
+                return ResourceManager.GetString("AboutWindow_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PSRT.Astra has a dedicated Discord for development, troubleshooting and general discussion. You can post the link to your error log here and get responses on how to solve your issue.
+        ///Would you like to join this Discord server now?.
+        /// </summary>
+        internal static string Astra_OpenDiscord_WindowMessage {
+            get {
+                return ResourceManager.GetString("Astra_OpenDiscord_WindowMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PSRT.Astra Discord.
+        /// </summary>
+        internal static string Astra_OpenDiscord_WindowTitle {
+            get {
+                return ResourceManager.GetString("Astra_OpenDiscord_WindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PSRT Astra has encountered an unrecoverable error.
         ///If this is a repeating issue, please click below to upload the error information and share it with a developer.
         ///Would you like to upload the error information?.

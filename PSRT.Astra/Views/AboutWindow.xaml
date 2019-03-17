@@ -4,8 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:astra="clr-namespace:PSRT.Astra"
-        xmlns:views="clr-namespace:PSRT.Astra.Views"
-        xmlns:viewModels="clr-namespace:PSRT.Astra.ViewModels"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         ShowInTaskbar="False"
@@ -13,7 +11,7 @@
         Width="350" SizeToContent="Height">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
-            <astra:LocaleBinding Path="AboutAstra" />
+            <astra:LocaleBinding Path="AboutWindow_Title" />
             <astra:LocaleBinding Path="PSRTAstra" />
         </MultiBinding>
     </Window.Title>

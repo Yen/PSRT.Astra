@@ -602,5 +602,12 @@ namespace PSRT.Astra.ViewModels
                 _ActivityCount -= 1;
             }
         }
+
+        public async Task CancelAndUploadErrorAsync()
+        {
+            _LaunchCancellationTokenSource?.Cancel();
+            UploadErrorButtonVisible = false;
+            await Task.Run(() => App.UploadAndOpenLog());
+        }
     }
 }

@@ -496,4 +496,14 @@ no corruption occurs with game updates</value>
   <data name="MainWindow_UpdateButtonTooltip" xml:space="preserve">
     <value>Fully update the game and apply patches</value>
   </data>
+  <data name="AboutWindow_Title" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Astra_OpenDiscord_WindowMessage" xml:space="preserve">
+    <value>PSRT.Astra has a dedicated Discord for development, troubleshooting and general discussion. You can post the link to your error log here and get responses on how to solve your issue.
+Would you like to join this Discord server now?</value>
+  </data>
+  <data name="Astra_OpenDiscord_WindowTitle" xml:space="preserve">
+    <value>PSRT.Astra Discord</value>
+  </data>
 </root>

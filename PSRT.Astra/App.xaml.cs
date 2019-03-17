@@ -111,6 +111,15 @@ namespace PSRT.Astra
             var resultJson = Task.Run(async () => await uploadResult.Content.ReadAsStringAsync()).Result;
             var resultObject = JsonConvert.DeserializeAnonymousType(resultJson, new { link = string.Empty });
             Process.Start(resultObject.link);
+
+            var discordResult = MessageBox.Show(
+                LocaleManager.Instance["Astra_OpenDiscord_WindowMessage"],
+                LocaleManager.Instance["Astra_OpenDiscord_WindowTitle"],
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (discordResult == MessageBoxResult.Yes)
+                Process.Start("https://discord.gg/sH2ZxPV");
         }
     }
 }

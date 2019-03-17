@@ -98,9 +98,7 @@ namespace PSRT.Astra.Views
 
         private async void _UploadErrorLogButton_Click(object sender, RoutedEventArgs e)
         {
-            _ViewModel.UploadErrorButtonVisible = false;
-
-            await Task.Run(() => App.UploadAndOpenLog());
+            await _ViewModel.CancelAndUploadErrorAsync();
         }
     }
 }
