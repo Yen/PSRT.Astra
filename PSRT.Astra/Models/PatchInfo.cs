@@ -58,7 +58,7 @@ namespace PSRT.Astra.Models
                             root = downloadConfiguration.RootMaster;
                             break;
                         default:
-                            throw new Exception("Patch list line contained unknown root type \"{type}\"");
+                            throw new Exception($"Patch list line contained unknown root type \"{type}\"");
                     }
 
                     infos.Add(new PatchInfo
