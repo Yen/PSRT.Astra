@@ -48,8 +48,7 @@ namespace PSRT.Astra.Models
         {
             using (var httpClient = new HttpClient())
             using (var response = await httpClient.GetAsync(ManagementFile, ct))
-            using (var stream = await response.Content.ReadAsStreamAsync())
-            using (var reader = new StreamReader(stream))
+            using (var reader = new StringReader(await response.Content.ReadAsStringAsync()))
             {
                 var lines = new List<string>();
                 for (var line = await reader.ReadLineAsync(); line != null; line = await reader.ReadLineAsync())

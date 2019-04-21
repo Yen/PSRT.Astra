@@ -26,8 +26,7 @@ namespace PSRT.Astra.Models
             // patchlist
             using (var client = new AquaHttpClient())
             using (var response = await client.GetAsync(downloadConfiguration.PatchesPatchList, ct))
-            using (var stream = await response.Content.ReadAsStreamAsync())
-            using (var reader = new StreamReader(stream))
+            using (var reader = new StringReader(await response.Content.ReadAsStringAsync()))
             {
                 while (true)
                 {
@@ -73,8 +72,7 @@ namespace PSRT.Astra.Models
             // launcherlist
             using (var client = new AquaHttpClient())
             using (var response = await client.GetAsync(downloadConfiguration.PatchesLauncherList, ct))
-            using (var stream = await response.Content.ReadAsStreamAsync())
-            using (var reader = new StreamReader(stream))
+            using (var reader = new StringReader(await response.Content.ReadAsStringAsync()))
             {
                 while (true)
                 {
@@ -91,7 +89,7 @@ namespace PSRT.Astra.Models
                     var name = parts[0];
                     // parts[1] is file size
                     var hash = parts[2];
-                    
+
                     infos.Add(new PatchInfo
                     {
                         Name = name,
