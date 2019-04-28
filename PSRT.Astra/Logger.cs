@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -37,7 +38,10 @@ namespace PSRT.Astra
             var line = $"{_GetPrefix(level, domain)} {message}";
 
             lock (_Lock)
+            {
                 _Builder.AppendLine(line);
+                Debug.WriteLine(line);
+            }
         }
 
         public void Info(string domain, string message, Exception exception) => Write(Level.Info, domain, message, exception);
@@ -53,6 +57,9 @@ namespace PSRT.Astra
             {
                 _Builder.AppendLine(line);
                 _Builder.AppendLine(exceptionString);
+
+                Debug.WriteLine(line);
+                Debug.WriteLine(exceptionString);
             }
         }
 

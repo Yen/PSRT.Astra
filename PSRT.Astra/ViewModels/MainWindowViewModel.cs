@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -80,9 +81,12 @@ namespace PSRT.Astra.ViewModels
         public bool ConfigButtonsEnabled
             => State == ApplicationState.Idle;
 
-        public bool IsChangelogVisible { get; set; } = true;
-
         public bool IsLaunchingPSO2 { get; set; }
+
+        public bool IsChangelogVisible { get; set; } = true;
+        public Version CurrentVersion { get; set; } = Assembly.GetExecutingAssembly().GetName().Version;
+        public UpdateChecker.UpdateInformation UpdatedVersionInformation { get; set; }
+        public bool IsUpdateAvailable => UpdatedVersionInformation.Version > CurrentVersion;
 
         //
 
@@ -101,9 +105,10 @@ namespace PSRT.Astra.ViewModels
 
         //
 
-        public MainWindowViewModel(string pso2BinDirectory)
+        public MainWindowViewModel(string pso2BinDirectory, UpdateChecker.UpdateInformation updateInformation)
         {
             InstallConfiguration = new InstallConfiguration(pso2BinDirectory);
+            UpdatedVersionInformation = updateInformation;
         }
 
         public async Task InitializeAsync()
@@ -113,9 +118,6 @@ namespace PSRT.Astra.ViewModels
             try
             {
                 App.Logger.Info(nameof(MainWindowViewModel), $"Game directory set to {Properties.Settings.Default.LastSelectedInstallLocation}");
-
-                // start update in the background
-                _CheckForUpdate();
 
                 // manually check once in case the game was running
                 // before the launcher was started and initialisation 

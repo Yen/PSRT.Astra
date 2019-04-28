@@ -1,4 +1,5 @@
-﻿using PSRT.Astra.ViewModels;
+﻿using PSRT.Astra.Models;
+using PSRT.Astra.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -24,18 +25,16 @@ namespace PSRT.Astra.Views
     public partial class InstallSelectorWindow : Window
     {
         private InstallSelectorWindowViewModel _ViewModel;
+        private UpdateChecker.UpdateInformation _UpdateInformation;
 
-        public InstallSelectorWindow()
+        public InstallSelectorWindow(InstallSelectorWindowViewModel viewModel, UpdateChecker.UpdateInformation updateInformation)
         {
+            _UpdateInformation = updateInformation;
+
             InitializeComponent();
 
-            _ViewModel = new InstallSelectorWindowViewModel();
+            _ViewModel = viewModel;
             DataContext = _ViewModel;
-
-            _ViewModel.SelectedPath = Properties.Settings.Default.LastSelectedInstallLocation;
-
-            if (_ViewModel.SelectedPathContainsPSO2Bin)
-                _OpenMainWindow();
         }
 
         private void _SelectDirectory_Click(object sender, RoutedEventArgs e)
@@ -72,7 +71,7 @@ namespace PSRT.Astra.Views
             Properties.Settings.Default.LastSelectedInstallLocation = _ViewModel.SelectedPath;
             Properties.Settings.Default.Save();
 
-            var mainWindow = new MainWindow(Path.Combine(_ViewModel.SelectedPath, "pso2_bin"));
+            var mainWindow = new MainWindow(Path.Combine(_ViewModel.SelectedPath, "pso2_bin"), _UpdateInformation);
             mainWindow.Show();
             Close();
         }

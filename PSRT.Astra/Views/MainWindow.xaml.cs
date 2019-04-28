@@ -1,4 +1,5 @@
-﻿using PSRT.Astra.ViewModels;
+﻿using PSRT.Astra.Models;
+using PSRT.Astra.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,11 +30,11 @@ namespace PSRT.Astra.Views
     {
         private MainWindowViewModel _ViewModel;
 
-        public MainWindow(string pso2BinPath)
+        public MainWindow(string pso2BinPath, UpdateChecker.UpdateInformation updateInformation)
         {
             InitializeComponent();
 
-            _ViewModel = new MainWindowViewModel(pso2BinPath);
+            _ViewModel = new MainWindowViewModel(pso2BinPath, updateInformation);
             DataContext = _ViewModel;
         }
 

@@ -48,7 +48,7 @@
                     <StackPanel x:Key="UpdateAvailableHeader">
                         <Label Foreground="Green" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Content="{astra:LocaleBinding MainWindow_UpdateAvailableMessage}"/>
                         <TextBlock FontSize="16" HorizontalAlignment="Center">
-                            <Hyperlink NavigateUri="{Binding UpdatedVersionInformation.GithubUri, Mode=OneWay}" RequestNavigate="_Hyperlink_RequestNavigateBrowser">
+                            <Hyperlink NavigateUri="{Binding UpdatedVersionInformation.GitHubUri, Mode=OneWay}" RequestNavigate="_Hyperlink_RequestNavigateBrowser">
                                 <Run Text="{astra:LocaleBinding MainWindow_UpdateAvailableDownload}"/>
                             </Hyperlink>
                         </TextBlock>
@@ -57,7 +57,7 @@
 
                     <StackPanel x:Key="ReleaseNotes">
                         <TextBlock Margin="18,8,18,0" HorizontalAlignment="Left" TextWrapping="NoWrap">
-                            <Run FontSize="32" Text="{Binding UpdatedVersionInformation.Version, StringFormat=Astra {0}}"/>
+                            <Run FontSize="32" Text="{Binding UpdatedVersionInformation.Version, Mode=OneWay, StringFormat=Astra {0}}"/>
                             <Run FontSize="16"> - </Run>
                             <Run FontSize="16" Text="{astra:LocaleBinding MainWindow_ReleaseNotes}"/>
                         </TextBlock>
@@ -76,33 +76,6 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-
-                    <StackPanel x:Key="UpdateChecking" VerticalAlignment="Center">
-                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16">
-                            <Label.Style>
-                                <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
-                                    <Setter Property="Content" Value="{astra:LocaleBinding MainWindow_UpdateChecking}"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ErrorFetchingUpdateInformation}" Value="True">
-                                            <Setter Property="Content" Value="{astra:LocaleBinding MainWindow_UpdateError}"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Label.Style>
-                        </Label>
-                        <ProgressBar Margin="16" Height="24" IsIndeterminate="True">
-                            <ProgressBar.Style>
-                                <Style TargetType="ProgressBar" BasedOn="{StaticResource {x:Type ProgressBar}}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ErrorFetchingUpdateInformation}" Value="True">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ProgressBar.Style>
-                        </ProgressBar>
-                    </StackPanel>
-
                 </Border.Resources>
                 <ContentControl>
                     <ContentControl.Style>
@@ -140,15 +113,6 @@
                                     </ScrollViewer>
                                 </Setter.Value>
                             </Setter>
-                            <Style.Triggers>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding UpdatedVersionInformation}" Value="{x:Null}"/>
-                                        <Condition Binding="{Binding IsChangelogVisible}" Value="True"/>
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Content" Value="{StaticResource UpdateChecking}"/>
-                                </MultiDataTrigger>
-                            </Style.Triggers>
                         </Style>
                     </ContentControl.Style>
                 </ContentControl>
