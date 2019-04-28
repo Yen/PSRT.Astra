@@ -506,4 +506,24 @@ Would you like to join this Discord server now?</value>
   <data name="Astra_OpenDiscord_WindowTitle" xml:space="preserve">
     <value>PSRT.Astra Discord</value>
   </data>
+  <data name="Astra_ErrorUpdating_WindowMessage" xml:space="preserve">
+    <value>An error occurred while trying to update Astra.
+If this is a repeat issue please click below to upload the error log information and share it with a developer.
+
+Would you like to upload the error information?</value>
+  </data>
+  <data name="Astra_InstanceAlreadyRunning_WindowMessage" xml:space="preserve">
+    <value>An instance of Astra is already running</value>
+  </data>
+  <data name="Astra_LaunchAnyway_WindowMessage" xml:space="preserve">
+    <value>Astra cannot ensure a valid PSO2 installation with an out of date client.
+
+Would you like to launch the current version of Astra anyway?</value>
+  </data>
+  <data name="Astra_ManualUpdate_WindowMessage" xml:space="preserve">
+    <value>An update for Astra is avaliable but the auto updater is unable to install it.
+Astra is unable to ensure a valid PSO2 installation with an out of date client.
+
+Would you like to open the latest Astra release page containing a manual download?</value>
+  </data>
 </root>

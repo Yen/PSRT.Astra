@@ -56,7 +56,9 @@ namespace PSRT.Astra
             var astraAlreadyRunning = Process.GetProcesses().Any(p => p.ProcessName == Process.GetCurrentProcess().ProcessName && p.Id != Process.GetCurrentProcess().Id);
             if (astraAlreadyRunning)
             {
-                MessageBox.Show("An instance of Astra is already running", "PSRT Astra");
+                MessageBox.Show(
+                    LocaleManager.Instance["Astra_InstanceAlreadyRunning_WindowMessage"],
+                    LocaleManager.Instance["PSRTAstra"]);
                 Shutdown();
                 return;
             }
@@ -98,8 +100,8 @@ namespace PSRT.Astra
             if (updateInformation.ExecutableAsset == null)
             {
                 var manualUpdateResult = MessageBox.Show(
-                    "An update for Astra is avaliable but the auto updater is unable to install it.\nAstra is unable to ensure a valid PSO2 installation with an out of date client.\n\nWould you like to open the latest Astra release page containing a manual download?",
-                    "PSRT Astra",
+                    LocaleManager.Instance["Astra_ManualUpdate_WindowMessage"],
+                    LocaleManager.Instance["PSRTAstra"],
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning);
 
@@ -152,8 +154,8 @@ namespace PSRT.Astra
                     Logger.Error(nameof(App), "Error updating Astra", ex);
 
                     var errorMessageResult = MessageBox.Show(
-                        "An error occurred while trying to update Astra.\n\nIf this is a repeat issue please click below to upload the error log information and share it with a developer.\nWould you like to upload the error information?",
-                        "PSRT Astra",
+                        LocaleManager.Instance["Astra_ErrorUpdating_WindowMessage"],
+                        LocaleManager.Instance["PSRTAstra"],
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Error);
 
@@ -163,8 +165,8 @@ namespace PSRT.Astra
             }
 
             var launchAnywayResult = MessageBox.Show(
-                "Astra cannot ensure a valid PSO2 installation with an out of date client.\n\nWould you like to launch the current version of Astra anyway?",
-                "PSRT Astra",
+                LocaleManager.Instance["Astra_LaunchAnyway_WindowMessage"],
+                LocaleManager.Instance["PSRTAstra"],
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);
             return launchAnywayResult == MessageBoxResult.Yes;

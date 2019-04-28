@@ -151,6 +151,50 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while trying to update Astra.
+        ///If this is a repeat issue please click below to upload the error log information and share it with a developer.
+        ///
+        ///Would you like to upload the error information?.
+        /// </summary>
+        internal static string Astra_ErrorUpdating_WindowMessage {
+            get {
+                return ResourceManager.GetString("Astra_ErrorUpdating_WindowMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An instance of Astra is already running.
+        /// </summary>
+        internal static string Astra_InstanceAlreadyRunning_WindowMessage {
+            get {
+                return ResourceManager.GetString("Astra_InstanceAlreadyRunning_WindowMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Astra cannot ensure a valid PSO2 installation with an out of date client.
+        ///
+        ///Would you like to launch the current version of Astra anyway?.
+        /// </summary>
+        internal static string Astra_LaunchAnyway_WindowMessage {
+            get {
+                return ResourceManager.GetString("Astra_LaunchAnyway_WindowMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An update for Astra is avaliable but the auto updater is unable to install it.
+        ///Astra is unable to ensure a valid PSO2 installation with an out of date client.
+        ///
+        ///Would you like to open the latest Astra release page containing a manual download?.
+        /// </summary>
+        internal static string Astra_ManualUpdate_WindowMessage {
+            get {
+                return ResourceManager.GetString("Astra_ManualUpdate_WindowMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PSRT.Astra has a dedicated Discord for development, troubleshooting and general discussion. You can post the link to your error log here and get responses on how to solve your issue.
         ///Would you like to join this Discord server now?.
         /// </summary>
