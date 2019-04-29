@@ -124,6 +124,12 @@ namespace PSRT.Astra.ViewModels
                 // finishes before the async task detects it
                 await Task.Run(() => _CheckGameWatcher());
                 _InitializeGameWatcher();
+
+                if (Environment.GetCommandLineArgs().Any(arg => arg.Equals("--auto-launch", StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    App.Logger.Info(nameof(MainWindowViewModel), "Auto launching application for command line flag");
+                    await LaunchAsync();
+                }
             }
             finally
             {

@@ -95,8 +95,6 @@ namespace PSRT.Astra
 
         private async Task<bool> _UpdateClientAsync(UpdateChecker.UpdateInformation updateInformation)
         {
-            // TODO: localisation
-
             if (updateInformation.ExecutableAsset == null)
             {
                 var manualUpdateResult = MessageBox.Show(
@@ -146,7 +144,11 @@ namespace PSRT.Astra
                         }
                     }
 
-                    Process.Start(executableLocation);
+                    // preserve command line arguments on restart
+                    var commandLine = Environment.CommandLine
+                        .Replace($"\"{Environment.GetCommandLineArgs()[0]}\"", string.Empty)
+                        .TrimStart();
+                    Process.Start(executableLocation, commandLine);
                     return false;
                 }
                 catch (Exception ex)
