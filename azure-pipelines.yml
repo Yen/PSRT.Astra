@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 pool:
-  vmImage: 'VS2017-Win2016'
+  vmImage: 'windows-2019'
 
 variables:
   solution: '**/*.sln'
@@ -24,17 +24,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     
-- task: CopyFiles@2
-  inputs:
-    sourceFolder: '$(Build.SourcesDirectory)/PSRT.Astra/bin/Release'
-    targetFolder: '$(Build.ArtifactStagingDirectory)'
-    cleanTargetFolder: true
-    
-- task: DeleteFiles@1
-  inputs:
-    sourceFolder: '$(Build.ArtifactStagingDirectory)'
-    contents: '*.+(pdb|xml)'
-
 - task: PublishBuildArtifacts@1
   inputs:
     artifactName: 'PSRT.Astra'
+    pathtoPublish: '$(Build.SourcesDirectory)/PSRT.Astra/bin/Release/PSRT.Astra.exe'
