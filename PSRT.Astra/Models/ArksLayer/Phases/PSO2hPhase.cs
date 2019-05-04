@@ -30,10 +30,9 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
 
         private async Task _InstallAsync(PluginInfo pluginInfo, CancellationToken ct = default)
         {
-            App.Logger.Info(nameof(PSO2hPhase), "Validating pso2h dlls");
+            App.Logger.Info(nameof(PSO2hPhase), "Validating plugin loader");
 
-            await pluginInfo.DDrawDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.DDrawDll, ct);
-            await pluginInfo.PSO2hDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PSO2hDll, ct);
+            await pluginInfo.PluginLoader.ValidateAsync(_InstallConfiguration, ct);
 
             App.Logger.Info(nameof(PSO2hPhase), "Writing tweaker.bin");
             var magic = await Task.Run(() => TweakerBin.GenerateFileContents(_InstallConfiguration.PSO2BinDirectory));

@@ -53,9 +53,9 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
                     File.WriteAllBytes(_InstallConfiguration.ArksLayer.TelepipeProxyPublicKey, publicKey));
             }
 
-            App.Logger.Info(nameof(TelepipeProxyPhase), "Validating telepipe plugin dll");
+            App.Logger.Info(nameof(TelepipeProxyPhase), "Validating telepipe plugin");
 
-            await pluginInfo.TelepipeProxyDll.ValidateFileAsync(_InstallConfiguration.ArksLayer.PluginTelepipeProxyDll, ct);
+            await pluginInfo.ProxyLoader.ValidateAsync(_InstallConfiguration, ct);
         }
 
         private async Task _RemoveAsync(CancellationToken ct = default)

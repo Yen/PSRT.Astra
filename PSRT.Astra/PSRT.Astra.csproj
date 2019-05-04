@@ -156,7 +156,6 @@
     <Compile Include="Models\PatchCacheEntry.cs" />
     <Compile Include="Models\PatchInfo.cs" />
     <Compile Include="Models\ArksLayer\ProxyInfo.cs" />
-    <Compile Include="Models\ArksLayer\TranslationInfo.cs" />
     <Compile Include="Properties\Localization.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

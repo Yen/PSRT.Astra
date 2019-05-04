@@ -12,10 +12,7 @@ namespace PSRT.Astra.Models
     public class DownloadConfiguration
     {
         public static readonly Uri ManagementFile = new Uri("http://patch01.pso2gs.net/patch_prod/patches/management_beta.txt");
-        public static readonly Uri TranslationsFile = new Uri("https://pso2.acf.me.uk/Translations/Translations.json");
-
-        public static readonly Uri PluginsRoot = new Uri("https://pso2.acf.me.uk/Plugins/");
-        public static readonly Uri PluginsFile = new Uri("https://pso2.acf.me.uk/Plugins/plugins.json");
+        public static readonly Uri TranslationsFile = new Uri("https://pso2.acf.me.uk/Tweaker/Translations.json");
 
         public Uri RootMaster { get; }
         public Uri RootPatches { get; }
