@@ -85,6 +85,13 @@ namespace PSRT.Astra.Views
             window.ShowDialog();
         }
 
+        private void _ModsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new ModsWindow();
+            window.Owner = this;
+            window.ShowDialog();
+        }
+
         private void _Hyperlink_RequestNavigateBrowser(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(e.Uri.ToString());

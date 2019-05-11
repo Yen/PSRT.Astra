@@ -113,7 +113,10 @@
     </ApplicationDefinition>
     <Compile Include="ConcurrencyUtils.cs" />
     <Compile Include="Models\GitHubHttpClient.cs" />
+    <Compile Include="Models\Mods\ModEntry.cs" />
+    <Compile Include="Models\Mods\ModEntryType.cs" />
     <Compile Include="Models\UpdateChecker.cs" />
+    <Compile Include="ViewModels\ModsWindowViewModel.cs" />
     <Compile Include="Views\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
@@ -137,6 +140,9 @@
     <Compile Include="Models\Phases\PSO2DirectoriesPhase.cs" />
     <Compile Include="Models\Phases\VerifyFilesPhase.cs" />
     <Compile Include="Models\Phases\VerifyFilesProgress.cs" />
+    <Compile Include="Views\ModsWindow.xaml.cs">
+      <DependentUpon>ModsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
@@ -173,6 +179,10 @@
     <Page Include="Views\AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ModsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\OptionsWindow.xaml">
       <SubType>Designer</SubType>
