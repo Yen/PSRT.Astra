@@ -41,6 +41,7 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.2</LangVersion>
     <DebugSymbols>true</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -114,6 +115,7 @@
     <Compile Include="ConcurrencyUtils.cs" />
     <Compile Include="Models\GitHubHttpClient.cs" />
     <Compile Include="Models\UpdateChecker.cs" />
+    <Compile Include="NtBindings.cs" />
     <Compile Include="Views\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
