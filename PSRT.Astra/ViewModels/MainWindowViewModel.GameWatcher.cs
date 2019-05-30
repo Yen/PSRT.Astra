@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -29,18 +30,34 @@ namespace PSRT.Astra.ViewModels
             }
         }
 
-        private void _CheckGameWatcher()
+        private unsafe void _CheckGameWatcher()
         {
-            var processes = Process.GetProcessesByName("pso2");
-            if (processes.Length > 0)
+            uint bufferSize = 1024 * 1024 * 50;
+            fixed (byte* buffer = new byte[bufferSize])
             {
-                IsPSO2Running = true;
-            }
-            else
-            {
+                var processInfo = (NtBindings.SYSTEM_PROCESS_INFO*)buffer;
+
+                // SEGA is hiding pso2 from the process list now by hooking
+                // the system calls but they did a bad job
+                if (!NtBindings.NT_SUCCESS(NtBindings.NtQuerySystemInformation(NtBindings.SYSTEM_INFORMATION_CLASS.SystemExtendedProcessInformation, processInfo, bufferSize, null)))
+                    throw new Exception("Failed to query system information");
+
+                while (processInfo->NextEntryOffset != 0)
+                {
+                    if (processInfo->ImageName.Buffer != null)
+                    {
+                        var processName = new string(processInfo->ImageName.Buffer, 0, processInfo->ImageName.Length / 2);
+                        if (processName == "pso2.exe")
+                        {
+                            IsPSO2Running = true;
+                            return;
+                        }
+                    }
+                    processInfo = (NtBindings.SYSTEM_PROCESS_INFO*)((byte*)processInfo + processInfo->NextEntryOffset);
+                }
                 // set IsChangelogVisible to true if the state was changed
                 // from running to not running
-                if (IsPSO2Running == true)
+                if (IsPSO2Running)
                     IsChangelogVisible = true;
                 IsPSO2Running = false;
             }

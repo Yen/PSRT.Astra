@@ -46,5 +46,10 @@ namespace PSRT.Astra.Views
             Process.Start(Application.ResourceAssembly.Location);
             Application.Current.Shutdown();
         }
+
+        private void _UploadLogButton_Click(object sender, RoutedEventArgs e)
+        {
+            App.UploadAndOpenLog();
+        }
     }
 }

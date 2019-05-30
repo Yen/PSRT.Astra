@@ -535,20 +535,23 @@ namespace PSRT.Astra.ViewModels
                         if (Properties.Settings.Default.CloseOnLaunchEnabled)
                             App.Current.Shutdown();
                     }
-                    catch (OperationCanceledException)
+                    catch (OperationCanceledException ex)
                     {
-                        App.Logger.Info("Launch", "Launch cancelled");
+                        App.Logger.Info("Launch", "Launch cancelled", ex);
                     }
                     catch (Exception ex)
                     {
-                        App.Logger.Info("Launch", "Error during launch phases", ex);
+                        App.Logger.Error("Launch", "Error during launch phases", ex);
                         UploadErrorButtonVisible = true;
 
                         try
                         {
                             await Task.Delay(TimeSpan.FromSeconds(10), _LaunchCancellationTokenSource.Token);
                         }
-                        catch (OperationCanceledException) { }
+                        catch (OperationCanceledException)
+                        {
+                            App.Logger.Info("Launch", "Launch was canceled during the auto-restart period");
+                        }
 
                         continue;
                     }

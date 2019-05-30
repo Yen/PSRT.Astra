@@ -897,6 +897,15 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upload Current Application Log.
+        /// </summary>
+        internal static string OptionsWindow_UploadLog {
+            get {
+                return ResourceManager.GetString("OptionsWindow_UploadLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Borderless Fullscreen.
         /// </summary>
         internal static string PSO2OptionsWindow_BorderlessFullscreen {

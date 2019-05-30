@@ -24,10 +24,13 @@ namespace PSRT.Astra.Models
             var infos = new List<PatchInfo>();
 
             // patchlist
+            App.Logger.Info(nameof(PatchInfo), "Downloading patch list");
             using (var client = new AquaHttpClient())
             using (var response = await client.GetAsync(downloadConfiguration.PatchesPatchList, ct))
             using (var reader = new StringReader(await response.Content.ReadAsStringAsync()))
             {
+                App.Logger.Info(nameof(PatchInfo), "Parsing patch list");
+
                 while (true)
                 {
                     ct.ThrowIfCancellationRequested();
@@ -70,10 +73,13 @@ namespace PSRT.Astra.Models
             }
 
             // launcherlist
+            App.Logger.Info(nameof(PatchInfo), "Downloading launcher list");
             using (var client = new AquaHttpClient())
             using (var response = await client.GetAsync(downloadConfiguration.PatchesLauncherList, ct))
             using (var reader = new StringReader(await response.Content.ReadAsStringAsync()))
             {
+                App.Logger.Info(nameof(PatchInfo), "Parsing launcher list");
+
                 while (true)
                 {
                     ct.ThrowIfCancellationRequested();
