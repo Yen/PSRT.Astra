@@ -189,7 +189,6 @@
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
-                <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -204,10 +203,35 @@
             <CheckBox Grid.Row="1" IsEnabled="{Binding ConfigButtonsEnabled}" ToolTip="{astra:LocaleBinding MainWindow_TelepipeCheckboxTooltip}" IsChecked="{Binding ArksLayerTelepipeProxyEnabled}">
                 <TextBlock Text="{astra:LocaleBinding MainWindow_TelepipeCheckbox}" />
             </CheckBox>
-            <CheckBox Grid.Row="2" IsEnabled="{Binding ConfigButtonsEnabled}" ToolTip="{astra:LocaleBinding MainWindow_ModFilesCheckboxTooltip}" IsChecked="{Binding ModFilesEnabled}">
+            <!--<CheckBox Grid.Row="2" IsEnabled="{Binding ConfigButtonsEnabled}" ToolTip="{astra:LocaleBinding MainWindow_ModFilesCheckboxTooltip}" IsChecked="{Binding ModFilesEnabled}">
                 <TextBlock Text="{astra:LocaleBinding MainWindow_ModFilesCheckbox}" />
-            </CheckBox>
-            <Button Grid.Row="3" Grid.ColumnSpan="2" Click="_ModsButton_Click">Open Mod Manager</Button>
+            </CheckBox>-->
+            <Button Grid.Row="2" Click="_ModsButton_Click">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <TextBlock>
+                                    <Run>Mod Manager</Run>
+                                    <Run Foreground="#997301" FontWeight="SemiBold">(Disabled)</Run>
+                                </TextBlock>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ModFilesEnabled}" Value="True">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <TextBlock>
+                                            <Run>Mod Manager</Run>
+                                            <Run Foreground="#118e1f" FontWeight="SemiBold">(Enabled)</Run>
+                                        </TextBlock>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
     </Grid>
 </Window>

@@ -9,7 +9,8 @@
         d:DataContext="{d:DesignInstance viewModels:ModsWindowViewModel}"
         Title="Mods - PSRT Astra"
         MinWidth="540" MinHeight="360"
-        Width="540" Height="360">
+        Width="540" Height="360"
+        Closed="Window_Closed">
     <Window.Resources>
         <DataTemplate x:Key="IconFile">
             <Canvas Width="24" Height="24">
@@ -40,11 +41,12 @@
             </Grid.ColumnDefinitions>
 
             <Label HorizontalAlignment="Center" FontWeight="SemiBold" Content="{Binding ModsEnabledBarMessage}"/>
-            <ToggleButton Grid.Column="1" Padding="2" Margin="4" IsChecked="{Binding ModsEnabled}" Content="{Binding ModsEnabledBarToggleText}"/>
+            <ToggleButton Grid.Column="1" Padding="2" Margin="4" IsChecked="{Binding ModFilesEnabled}" Content="{Binding ModsEnabledBarToggleText}"/>
         </Grid>
 
-        <Grid Grid.Row="1" IsEnabled="{Binding ModsEnabled}">
+        <Grid Grid.Row="1" IsEnabled="{Binding ModFilesEnabled}">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
@@ -55,41 +57,12 @@
             </Grid.ColumnDefinitions>
             <Label Grid.ColumnSpan="2">Text or something</Label>
 
-            <Button Grid.Row="1" Grid.Column="0">Move Up</Button>
-            <Button Grid.Row="1" Grid.Column="1">Move Down</Button>
+            <Button Grid.Row="1" Grid.ColumnSpan="2" Click="OpenModsDirectoryButton_Click">Open mods directory</Button>
 
-            <!--<ListView Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding ModEntries}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <ContentControl VerticalAlignment="Center">
-                                <ContentControl.Style>
-                                    <Style TargetType="ContentControl">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Type}" Value="File">
-                                                <Setter Property="ContentTemplate" Value="{StaticResource IconFile}"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Type}" Value="Directory">
-                                                <Setter Property="ContentTemplate" Value="{StaticResource IconDirectory}"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ContentControl.Style>
-                            </ContentControl>
-                            <CheckBox VerticalAlignment="Center" Grid.Column="1" IsChecked="{Binding Enabled}"/>
-                            <TextBlock VerticalAlignment="Center" Grid.Column="2" Text="{Binding Path}"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>-->
+            <Button Grid.Row="2" Grid.Column="0" IsEnabled="{Binding MoveButtonsEnabled}">Move Up</Button>
+            <Button Grid.Row="2" Grid.Column="1" IsEnabled="{Binding MoveButtonsEnabled}">Move Down</Button>
 
-            <!--TODO: make this a scrollable grid, not a listview/gridview-->
-            <ListView Grid.Row="2" Grid.ColumnSpan="2" SelectionMode="Single" SnapsToDevicePixels="True" ItemsSource="{Binding ModEntries}">
+            <ListView Grid.Row="3" Grid.ColumnSpan="2" SelectionMode="Single" SnapsToDevicePixels="True" ItemsSource="{Binding ModEntries}" SelectedItem="{Binding SelectedModEntry}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

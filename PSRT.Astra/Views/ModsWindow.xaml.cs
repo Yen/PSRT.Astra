@@ -1,6 +1,8 @@
-﻿using PSRT.Astra.ViewModels;
+﻿using PSRT.Astra.Models;
+using PSRT.Astra.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,12 +24,23 @@ namespace PSRT.Astra.Views
     {
         private ModsWindowViewModel _ViewModel;
 
-        public ModsWindow()
+        public ModsWindow(InstallConfiguration installConfiguration)
         {
             InitializeComponent();
 
-            _ViewModel = new ModsWindowViewModel();
+            _ViewModel = new ModsWindowViewModel(installConfiguration);
             DataContext = _ViewModel;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Save();
+            _ViewModel.Dispose();
+        }
+
+        private void OpenModsDirectoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(_ViewModel.InstallConfiguration.ModsDirectory);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -29,19 +30,22 @@ using SharpCompress.Archives.Rar;
 namespace PSRT.Astra.ViewModels
 {
     [AddINotifyPropertyChangedInterface]
-    public partial class MainWindowViewModel
+    public partial class MainWindowViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public RelayCommand LaunchCommand => new RelayCommand(async () => await LaunchAsync());
         public RelayCommand UpdateCommand => new RelayCommand(async () => await LaunchAsync(false));
         public RelayCommand ResetGameGuardCommand => new RelayCommand(async () => await ResetGameGuardAsync());
 
         //
 
+        public bool ModFilesEnabled => Properties.Settings.Default.ModFilesEnabled;
+
         public InstallConfiguration InstallConfiguration { get; set; }
 
         public bool ArksLayerEnglishPatchEnabled { get; set; } = Properties.Settings.Default.EnglishPatchEnabled;
         public bool ArksLayerTelepipeProxyEnabled { get; set; } = Properties.Settings.Default.TelepipeProxyEnabled;
-        public bool ModFilesEnabled { get; set; } = Properties.Settings.Default.ModFilesEnabled;
 
         private CancellationTokenSource _LaunchCancellationTokenSource { get; set; }
 
@@ -238,7 +242,6 @@ namespace PSRT.Astra.ViewModels
                 {
                     Properties.Settings.Default.EnglishPatchEnabled = ArksLayerEnglishPatchEnabled;
                     Properties.Settings.Default.TelepipeProxyEnabled = ArksLayerTelepipeProxyEnabled;
-                    Properties.Settings.Default.ModFilesEnabled = ModFilesEnabled;
                     Properties.Settings.Default.Save();
                 });
 
@@ -619,6 +622,11 @@ namespace PSRT.Astra.ViewModels
             _LaunchCancellationTokenSource?.Cancel();
             UploadErrorButtonVisible = false;
             await Task.Run(() => App.UploadAndOpenLog());
+        }
+
+        public void UpdateModFilesEnabledProperty()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ModFilesEnabled)));
         }
     }
 }

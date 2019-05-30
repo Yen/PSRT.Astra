@@ -87,9 +87,10 @@ namespace PSRT.Astra.Views
 
         private void _ModsButton_Click(object sender, RoutedEventArgs e)
         {
-            var window = new ModsWindow();
+            var window = new ModsWindow(_ViewModel.InstallConfiguration);
             window.Owner = this;
             window.ShowDialog();
+            _ViewModel.UpdateModFilesEnabledProperty();
         }
 
         private void _Hyperlink_RequestNavigateBrowser(object sender, RequestNavigateEventArgs e)
