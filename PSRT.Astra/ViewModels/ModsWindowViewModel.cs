@@ -1,9 +1,11 @@
-﻿using PropertyChanged;
+﻿using Newtonsoft.Json;
+using PropertyChanged;
 using PSRT.Astra.Models;
 using PSRT.Astra.Models.Mods;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,16 +15,12 @@ using System.Windows.Media;
 
 namespace PSRT.Astra.ViewModels
 {
-    public class FileNameComparer : IEqualityComparer<string>
-    {
-        public bool Equals(string x, string y) => x.Equals(y, StringComparison.InvariantCultureIgnoreCase);
-        public int GetHashCode(string obj) => obj.GetHashCode();
-    }
-
     [AddINotifyPropertyChangedInterface]
-    public class ModsWindowViewModel : IDisposable
+    public class ModsWindowViewModel : INotifyPropertyChanged
     {
-        private CancellationTokenSource _FileWatcherTokenSource = new CancellationTokenSource();
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private CancellationTokenSource _BackgroundTokenSource = new CancellationTokenSource();
 
         public InstallConfiguration InstallConfiguration;
 
@@ -41,36 +39,74 @@ namespace PSRT.Astra.ViewModels
         public ObservableCollection<ModEntry> ModEntries { get; private set; } = new ObservableCollection<ModEntry>();
         public ModEntry SelectedModEntry { get; set; }
 
-        public bool MoveButtonsEnabled => SelectedModEntry != null;
+        public bool MoveUpButtonEnabled => SelectedModEntry != null && ModEntries.IndexOf(SelectedModEntry) > 0;
+        public bool MoveDownButtonEnabled => SelectedModEntry != null && ModEntries.IndexOf(SelectedModEntry) < ModEntries.Count - 1;
+
+        private Task _FileWatcherLoopTask;
 
         public ModsWindowViewModel(InstallConfiguration installConfiguration)
         {
             InstallConfiguration = installConfiguration;
 
-            Task.Factory.StartNew(_FileWatcherLoopAsync, TaskCreationOptions.LongRunning);
+            _FileWatcherLoopTask = Task.Factory.StartNew(_FileWatcherLoopAsync, TaskCreationOptions.LongRunning);
         }
 
         private async Task _FileWatcherLoopAsync()
         {
             try
             {
-                while (!_FileWatcherTokenSource.IsCancellationRequested)
+                while (!_BackgroundTokenSource.IsCancellationRequested)
                 {
                     await _FileWatcherCheckAsync();
 
-                    await Task.Delay(1000);
+                    try
+                    {
+                        await Task.Delay(1000, _BackgroundTokenSource.Token);
+                    }
+                    catch
+                    {
+                        // dont care
+                    }
                 }
+                await _FileWatcherCheckAsync();
             }
             catch (Exception ex)
             {
                 App.Logger.Error(nameof(MainWindowViewModel), "Error in file watcher loop", ex);
+                throw;
             }
         }
 
         private async Task _FileWatcherCheckAsync()
         {
+            if (File.Exists(InstallConfiguration.ModsConfigurationFile))
+            {
+                using (var fs = File.OpenRead(InstallConfiguration.ModsConfigurationFile))
+                using (var reader = new StreamReader(fs))
+                {
+                    var json = await reader.ReadToEndAsync();
+                    var entryRecords = JsonConvert.DeserializeObject<ModEntryRecord[]>(json);
+
+                    await App.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        foreach (var record in entryRecords)
+                        {
+                            var existingEntry = ModEntries.FirstOrDefault(e => e.Name == record.Name);
+                            if (existingEntry == null)
+                                ModEntries.Add(new ModEntry()
+                                {
+                                    Name = record.Name,
+                                    Type = record.Type,
+                                    Enabled = record.Enabled
+                                });
+                        }
+                    });
+                }
+            }
+
             var files = Directory.GetFiles(InstallConfiguration.ModsDirectory)
                 .Select(f => Path.GetFileName(f))
+                .Where(f => !f.Equals(Path.GetFileName(InstallConfiguration.ModsConfigurationFile), StringComparison.InvariantCultureIgnoreCase))
                 .ToArray();
             var directories = Directory.GetDirectories(InstallConfiguration.ModsDirectory)
                 .Select(d => Path.GetFileName(d))
@@ -78,26 +114,26 @@ namespace PSRT.Astra.ViewModels
 
             var combinedEntries = files
                 .Concat(directories)
-                .Distinct(new FileNameComparer())
+                .Distinct(new FileNameEqualityComparer())
                 .ToArray();
 
             // have to update the mod entries from the UI thread
             await App.Current.Dispatcher.InvokeAsync(() =>
             {
                 var addedEntries = combinedEntries
-                    .Except(ModEntries.Select(e => e.Path), new FileNameComparer())
+                    .Except(ModEntries.Select(e => e.Name), new FileNameEqualityComparer())
                     .ToArray();
 
                 var deletedEntries = ModEntries
-                    .Select(e => e.Path)
-                    .Except(combinedEntries, new FileNameComparer())
+                    .Select(e => e.Name)
+                    .Except(combinedEntries, new FileNameEqualityComparer())
                     .ToArray();
 
                 var newFiles = files
-                    .Where(f => addedEntries.Contains(f, new FileNameComparer()))
+                    .Where(f => addedEntries.Contains(f, new FileNameEqualityComparer()))
                     .ToArray();
                 var newDirectories = directories
-                    .Where(d => addedEntries.Contains(d, new FileNameComparer()))
+                    .Where(d => addedEntries.Contains(d, new FileNameEqualityComparer()))
                     .ToArray();
 
                 foreach (var file in newFiles)
@@ -105,7 +141,7 @@ namespace PSRT.Astra.ViewModels
                     {
                         Enabled = true,
                         Type = ModEntryType.File,
-                        Path = file
+                        Name = file
                     });
 
                 foreach (var directory in newDirectories)
@@ -113,37 +149,67 @@ namespace PSRT.Astra.ViewModels
                     {
                         Enabled = true,
                         Type = ModEntryType.Directory,
-                        Path = directory
+                        Name = directory
                     });
 
                 foreach (var entry in deletedEntries)
                 {
-                    var modEntry = ModEntries.FirstOrDefault(e => e.Path.Equals(entry, StringComparison.InvariantCultureIgnoreCase));
+                    var modEntry = ModEntries.FirstOrDefault(e => e.Name.Equals(entry, StringComparison.InvariantCultureIgnoreCase));
                     if (modEntry != null)
                         ModEntries.Remove(modEntry);
                 }
             });
 
-            //var fileEntries = files.Select(f => new ModEntry
-            //{
-            //    Enabled = true,
-            //    Type = ModEntryType.File,
-            //    Path = Path.GetFileName(f)
-            //});
+            {
+                var entries = await App.Current.Dispatcher.InvokeAsync(() => ModEntries.ToArray());
+                var json = JsonConvert.SerializeObject(entries.Select(e => new ModEntryRecord
+                {
+                    Name = e.Name,
+                    Type = e.Type,
+                    Enabled = e.Enabled
+                }), Formatting.Indented);
 
-            //var directoryEntries = directories.Select(d => new ModEntry
-            //{
-            //    Enabled = true,
-            //    Type = ModEntryType.Directory,
-            //    Path = Path.GetDirectoryName(d)
-            //});
-
-            //ModEntries = new ObservableCollection<ModEntry>(directoryEntries.Concat(fileEntries));
+                using (var fs = File.Create(InstallConfiguration.ModsConfigurationFile))
+                using (var writer = new StreamWriter(fs))
+                    await writer.WriteAsync(json);
+            }
         }
 
-        public void Dispose()
+        public void MoveUpEntry()
         {
-            _FileWatcherTokenSource.Cancel();
+            if (SelectedModEntry == null)
+                return;
+
+            var index = ModEntries.IndexOf(SelectedModEntry);
+            if (index > 0)
+            {
+                ModEntries.Move(index, index - 1);
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MoveUpButtonEnabled)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MoveDownButtonEnabled)));
+            }
+        }
+
+        public void MoveDownEntry()
+        {
+            if (SelectedModEntry == null)
+                return;
+
+            var index = ModEntries.IndexOf(SelectedModEntry);
+            if (index < ModEntries.Count - 1)
+            {
+                ModEntries.Move(index, index + 1);
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MoveUpButtonEnabled)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MoveDownButtonEnabled)));
+            }
+        }
+
+        public async Task DisposeAsync()
+        {
+            _BackgroundTokenSource.Cancel();
+
+            await _FileWatcherLoopTask;
         }
     }
 }

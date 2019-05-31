@@ -29,7 +29,7 @@ namespace PSRT.Astra.Models.Phases
             _InstallConfiguration = installConfiguration;
         }
 
-        public async Task<PatchInfo[]> RunAsync(DownloadConfiguration downloadConfiguration, PatchCache patchCache, CancellationToken ct = default)
+        public async Task<PatchInfo[]> RunAsync(DownloadConfiguration downloadConfiguration, PatchCache patchCache, string[] modFiles, CancellationToken ct = default)
         {
             Progress.Progress = 0;
             Progress.IsIndeterminate = true;
@@ -86,19 +86,11 @@ namespace PSRT.Astra.Models.Phases
                             var filePath = Path.Combine(_InstallConfiguration.PSO2BinDirectory, relativeFilePath);
                             var fileName = Path.GetFileName(relativeFilePath);
 
-                            // skip this if mod files are not enabled so they are marked as invalid
-                            if (Properties.Settings.Default.ModFilesEnabled)
+                            // skip anything passed to us as a mod file
+                            if (modFiles != null && modFiles.Any(f => f.Equals(fileName, StringComparison.InvariantCultureIgnoreCase)))
                             {
-                                // skip file if a file with the same name exists in the mods folder
-                                if (Path.GetDirectoryName(filePath).ToLower() == _InstallConfiguration.DataWin32Directory.ToLower())
-                                {
-                                    var modFilePath = Path.Combine(_InstallConfiguration.ModsDirectory, fileName);
-                                    if (File.Exists(modFilePath))
-                                    {
-                                        patch.ShouldUpdate = false;
-                                        continue;
-                                    }
-                                }
+                                patch.ShouldUpdate = false;
+                                continue;
                             }
 
                             if (!cacheData.ContainsKey(patch.PatchInfo.Name))

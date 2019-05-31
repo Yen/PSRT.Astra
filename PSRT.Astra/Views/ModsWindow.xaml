@@ -59,8 +59,8 @@
 
             <Button Grid.Row="1" Grid.ColumnSpan="2" Click="OpenModsDirectoryButton_Click">Open mods directory</Button>
 
-            <Button Grid.Row="2" Grid.Column="0" IsEnabled="{Binding MoveButtonsEnabled}">Move Up</Button>
-            <Button Grid.Row="2" Grid.Column="1" IsEnabled="{Binding MoveButtonsEnabled}">Move Down</Button>
+            <Button Grid.Row="2" Grid.Column="0" IsEnabled="{Binding MoveUpButtonEnabled}" Click="MoveUpButton_Click">Move Up</Button>
+            <Button Grid.Row="2" Grid.Column="1" IsEnabled="{Binding MoveDownButtonEnabled}" Click="MoveDownButton_Click">Move Down</Button>
 
             <ListView Grid.Row="3" Grid.ColumnSpan="2" SelectionMode="Single" SnapsToDevicePixels="True" ItemsSource="{Binding ModEntries}" SelectedItem="{Binding SelectedModEntry}">
                 <ListView.ItemContainerStyle>
@@ -100,7 +100,7 @@
                         <GridViewColumn Header="Name">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Path}"/>
+                                    <TextBlock Text="{Binding Name}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

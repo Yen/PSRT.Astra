@@ -12,6 +12,6 @@ namespace PSRT.Astra.Models.Mods
     {
         public bool Enabled { get; set; }
         public ModEntryType Type { get; set; }
-        public string Path { get; set; }
+        public string Name { get; set; }
     }
 }

@@ -32,15 +32,19 @@ namespace PSRT.Astra.Views
             DataContext = _ViewModel;
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        private async void Window_Closed(object sender, EventArgs e)
         {
             Properties.Settings.Default.Save();
-            _ViewModel.Dispose();
+            await _ViewModel.DisposeAsync();
         }
 
         private void OpenModsDirectoryButton_Click(object sender, RoutedEventArgs e)
         {
             Process.Start(_ViewModel.InstallConfiguration.ModsDirectory);
         }
+
+        private void MoveUpButton_Click(object sender, RoutedEventArgs e) => _ViewModel.MoveUpEntry();
+        private void MoveDownButton_Click(object sender, RoutedEventArgs e) => _ViewModel.MoveDownEntry();
+
     }
 }

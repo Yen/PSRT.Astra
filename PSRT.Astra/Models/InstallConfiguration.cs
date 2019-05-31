@@ -16,6 +16,7 @@ namespace PSRT.Astra.Models
         public string PSO2BinDirectory { get; }
 
         public string ModsDirectory { get; }
+        public string ModsConfigurationFile { get; }
 
         public string DataDirectory { get; }
         public string DataWin32Directory { get; }
@@ -64,6 +65,7 @@ namespace PSRT.Astra.Models
             PSO2BinDirectory = pso2BinDirectory;
 
             ModsDirectory = Path.Combine(PSO2BinDirectory, "mods");
+            ModsConfigurationFile = Path.Combine(ModsDirectory, "mods.json");
 
             DataDirectory = Path.Combine(PSO2BinDirectory, "data");
             DataWin32Directory = Path.Combine(DataDirectory, "win32");

@@ -417,10 +417,11 @@ namespace PSRT.Astra.ViewModels
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
+                        string[] modFiles = null;
                         if (modFilesPhase != null && modFilesPhaseState != null)
                         {
                             App.Logger.Info("Launch", $"Running {nameof(ModFilesPhase)}");
-                            await _AttemptPhase(modFilesPhaseState,
+                            modFiles = await _AttemptPhase(modFilesPhaseState,
                                 () => modFilesPhase.RunAsync(_LaunchCancellationTokenSource.Token));
                         }
 
@@ -455,7 +456,7 @@ namespace PSRT.Astra.ViewModels
 
                             App.Logger.Info("Launch", $"Running {nameof(ComparePhase)}");
                             var toUpdate = await _AttemptPhase(comparePhaseState,
-                                () => comparePhase.RunAsync(downloadConfiguration, patchCache, _LaunchCancellationTokenSource.Token));
+                                () => comparePhase.RunAsync(downloadConfiguration, patchCache, modFiles, _LaunchCancellationTokenSource.Token));
                             if (toUpdate.Length == 0)
                             {
                                 verifyFilesPhaseState.State = PhaseControl.State.Success;
