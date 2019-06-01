@@ -71,9 +71,7 @@ namespace PSRT.Astra.Models.Phases
             var modFiles = new List<string>();
             await Task.Run(() =>
             {
-                // go in reverse because we are gonna skip existing files
-                // instead of "overriding" them
-                foreach (var entry in modEntries.Reverse())
+                foreach (var entry in modEntries)
                 {
                     if (entry.Type == ModEntryType.File)
                     {
