@@ -120,7 +120,6 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AquaHttpClient.cs" />
-    <Compile Include="Models\ArksLayer\ArksLayerDownloadConfiguration.cs" />
     <Compile Include="Models\ArksLayer\ArksLayerHttpClient.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.GameWatcher.cs" />
