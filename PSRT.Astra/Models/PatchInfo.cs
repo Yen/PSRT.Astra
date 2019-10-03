@@ -41,7 +41,7 @@ namespace PSRT.Astra.Models
 
                     var parts = line.Split();
                     if (parts.Length < 4)
-                        throw new Exception("Patch list line contained less than four parts");
+                        throw new Exception($"Patch list line contained less than four parts: \"{line}\"");
 
                     var name = parts[0];
                     var hash = parts[1];
@@ -90,7 +90,7 @@ namespace PSRT.Astra.Models
 
                     var parts = line.Split();
                     if (parts.Length < 3)
-                        throw new Exception("Launcher list line contained less than three parts");
+                        throw new Exception($"Launcher list line contained less than three parts: \"{line}\"");
 
                     var name = parts[0];
                     // parts[1] is file size
