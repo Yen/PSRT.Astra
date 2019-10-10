@@ -1,4 +1,5 @@
-﻿using PSRT.Astra.ViewModels;
+﻿using PSRT.Astra.Models;
+using PSRT.Astra.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,11 +21,11 @@ namespace PSRT.Astra.Views
     {
         private OptionsWindowViewModel _ViewModel;
 
-        public OptionsWindow()
+        public OptionsWindow(InstallConfiguration installConfiguration)
         {
             InitializeComponent();
 
-            _ViewModel = new OptionsWindowViewModel();
+            _ViewModel = new OptionsWindowViewModel(installConfiguration);
             DataContext = _ViewModel;
         }
 
@@ -50,6 +51,24 @@ namespace PSRT.Astra.Views
         private void _UploadLogButton_Click(object sender, RoutedEventArgs e)
         {
             App.UploadAndOpenLog();
+        }
+
+        public void _DeletePatchCacheButton_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show(
+                LocaleManager.Instance["OptionsWindow_DeletePatchCacheConfirm"],
+                LocaleManager.Instance["PSRTAstra"],
+                MessageBoxButton.OKCancel,
+                MessageBoxImage.Warning);
+            if (result == MessageBoxResult.OK)
+            {
+                _ViewModel.DeletePatcheCache();
+                MessageBox.Show(
+                    LocaleManager.Instance["OptionsWindow_DeletePatchCacheComplete"],
+                    LocaleManager.Instance["PSRTAstra"],
+                    MessageBoxButton.OK,
+                    MessageBoxImage.None);
+            }
         }
     }
 }

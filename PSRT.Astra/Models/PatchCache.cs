@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PSRT.Astra.Models
 {
-    public class PatchCache
+    public class PatchCache : IDisposable
     {
         private SQLiteConnection _Connection;
 
@@ -84,6 +84,11 @@ namespace PSRT.Astra.Models
 
                 await Task.Run(() => transaction.Commit());
             }
+        }
+
+        public void Dispose()
+        {
+            _Connection.Dispose();
         }
     }
 }

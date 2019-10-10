@@ -73,7 +73,7 @@ namespace PSRT.Astra.Views
 
         private void _AstraSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            var window = new OptionsWindow();
+            var window = new OptionsWindow(_ViewModel.InstallConfiguration);
             window.Owner = this;
             window.ShowDialog();
         }

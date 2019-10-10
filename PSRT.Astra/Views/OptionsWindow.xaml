@@ -24,13 +24,15 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Button Content="{astra:LocaleBinding OptionsWindow_ChangePSO2Directory}" Click="_ChangePSO2DirectoryButton_Click"/>
         <Button Grid.Row="1" Content="{astra:LocaleBinding OptionsWindow_UploadLog}" Click="_UploadLogButton_Click"/>
-        <Separator Grid.Row="2"/>
-        <Grid Grid.Row="3">
+        <Button Grid.Row="2" Content="{astra:LocaleBinding OptionsWindow_DeletePatchCache}" Click="_DeletePatchCacheButton_Click"/>
+        <Separator Grid.Row="3"/>
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="1*"/>
@@ -72,7 +74,7 @@
             <CheckBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" IsChecked="{Binding CloseOnLaunchEnabled}" ToolTip="{astra:LocaleBinding OptionsWindow_CloseOnLaunchTooltip}"/>
         </Grid>
         <Button
-            Grid.Row="4"
+            Grid.Row="5"
             Content="Save Settings"
             Click="_SaveSettingsButton_Click"
             FontSize="24"
