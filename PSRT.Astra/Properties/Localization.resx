@@ -542,8 +542,10 @@ This file will start its regeneration upon your next attempt to launch PSO2 via 
 If you believe this to be corrupted, this option will delete this file and cause it to be regenerated using your current PSO2 installation.
 
 Be warned that this can take a long time as it requires scanning and validating of your entire PSO2 installation, it is the same operation that would have occurred if you ran PSRT Astra the first time on an existing PSO2 installation.
+If you have not already, try disabling plugins and mods to see if this can help resolve your issue first. This is a last resort.
+
 Once the patch cache file has been removed, the full scan must be completed before PSO2 will be able to launch again.
-This operation, like everything in PSRT Astra, is pausable at any point, and will resume it's progress in the case of applicaiton restart.
+This operation, like everything in PSRT Astra, is pausable at any point, and will resume its progress in the case of applicaiton restart.
 
 Are you sure you would like to delete the existing patch cache file?</value>
   </data>
