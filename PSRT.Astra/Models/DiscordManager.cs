@@ -25,7 +25,7 @@ namespace PSRT.Astra.Models
 
         private Discord.Discord _CreateDiscordClient()
         {
-            var discord = new Discord.Discord(630023869389996044, (long)Discord.CreateFlags.Default);
+            var discord = new Discord.Discord(630023869389996044, (long)Discord.CreateFlags.NoRequireDiscord);
             App.Logger.Info(nameof(DiscordManager), "Discord client created");
             discord.SetLogHook(Discord.LogLevel.Debug, (level, message) =>
             {
