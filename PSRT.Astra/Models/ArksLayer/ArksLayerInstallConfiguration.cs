@@ -15,6 +15,7 @@ namespace PSRT.Astra.Models.ArksLayer
         public string PatchesDirectory { get; }
 
         public string TweakerBin { get; }
+        public string VersionFile { get; }
 
         public string DDrawDll { get; }
         public string PSO2hDll { get; }
@@ -43,6 +44,7 @@ namespace PSRT.Astra.Models.ArksLayer
             PatchesDirectory = Path.Combine(configuration.PSO2BinDirectory, "patches/");
 
             TweakerBin = Path.Combine(configuration.PSO2BinDirectory, "tweaker.bin");
+            VersionFile = Path.Combine(configuration.PSO2BinDirectory, "version.ver");
 
             DDrawDll = Path.Combine(configuration.PSO2BinDirectory, "ddraw.dll");
             PSO2hDll = Path.Combine(configuration.PSO2BinDirectory, "pso2h.dll");

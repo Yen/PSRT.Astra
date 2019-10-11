@@ -11,7 +11,16 @@ namespace PSRT.Astra.ViewModels
 {
     public partial class MainWindowViewModel
     {
-        public bool IsPSO2Running { get; set; } = true;
+        private bool _IsPSO2Running = true;
+        public bool IsPSO2Running
+        {
+            get => _IsPSO2Running;
+            set
+            {
+                _IsPSO2Running = value;
+                App.DiscordManager.StatusVisible = !IsPSO2Running;
+            }
+        }
 
         private CancellationTokenSource _GameWatcherToken = new CancellationTokenSource();
 

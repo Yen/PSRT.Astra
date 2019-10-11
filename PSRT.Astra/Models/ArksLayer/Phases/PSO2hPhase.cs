@@ -40,6 +40,19 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
             using (var fs = File.Create(_InstallConfiguration.ArksLayer.TweakerBin, 4096, FileOptions.Asynchronous))
             using (var writer = new StreamWriter(fs))
                 await writer.WriteLineAsync(magic);
+
+            App.Logger.Info(nameof(PSO2hPhase), "Getting version.ver contents");
+            using (var client = new ArksLayerHttpClient())
+            using (var response = await client.GetAsync(DownloadConfiguration.VersionFile, ct))
+            {
+                response.EnsureSuccessStatusCode();
+                var content = await response.Content.ReadAsStringAsync();
+
+                App.Logger.Info(nameof(PSO2hPhase), "Writing version.ver");
+                using (var fs = File.Create(_InstallConfiguration.ArksLayer.VersionFile, 4096, FileOptions.Asynchronous))
+                using (var writer = new StreamWriter(fs))
+                    await writer.WriteAsync(content);
+            }
         }
 
         private async Task _RemoveAsync(CancellationToken ct = default)
@@ -47,13 +60,14 @@ namespace PSRT.Astra.Models.ArksLayer.Phases
             await Task.Run(() =>
             {
                 App.Logger.Info(nameof(PSO2hPhase), "Removing pso2h dlls");
-
                 File.Delete(_InstallConfiguration.ArksLayer.DDrawDll);
                 File.Delete(_InstallConfiguration.ArksLayer.PSO2hDll);
 
                 App.Logger.Info(nameof(PSO2hPhase), "Removing tweaker.bin");
-
                 File.Delete(_InstallConfiguration.ArksLayer.TweakerBin);
+
+                App.Logger.Info(nameof(PSO2hPhase), "Removing version.ver");
+                File.Delete(_InstallConfiguration.ArksLayer.VersionFile);
             });
         }
     }

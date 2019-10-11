@@ -440,19 +440,18 @@ namespace PSRT.Astra.ViewModels
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                         App.Logger.Info("Launch", "Connecting to patch cache database");
-                        var patchCache = await _AttemptPhase(patchCacheState,
-                            () => PatchCache.CreateAsync(InstallConfiguration));
-
-                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
-
-                        // loop this block so files that were updated while a possibly long
-                        // verify phase took place are not missed
-                        while (true)
+                        using (var patchCache = await _AttemptPhase(patchCacheState, () => PatchCache.CreateAsync(InstallConfiguration)))
                         {
-                            comparePhaseState.State = PhaseControl.State.Queued;
-                            verifyFilesPhaseState.State = PhaseControl.State.Queued;
-
                             _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                            // loop this block so files that were updated while a possibly long
+                            // verify phase took place are not missed
+                            while (true)
+                            {
+                                comparePhaseState.State = PhaseControl.State.Queued;
+                                verifyFilesPhaseState.State = PhaseControl.State.Queued;
+
+                                _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
                             App.Logger.Info("Launch", $"Running {nameof(ComparePhase)}");
                             var toUpdate = await _AttemptPhase(comparePhaseState,
@@ -463,48 +462,48 @@ namespace PSRT.Astra.ViewModels
                                 break;
                             }
 
+                                _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                                App.Logger.Info("Launch", $"Running {nameof(VerifyFilesPhase)}");
+                                await _AttemptPhase(verifyFilesPhaseState,
+                                    () => verifyFilesPhase.RunAsync(toUpdate, patchCache, _LaunchCancellationTokenSource.Token));
+                            }
+
                             _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                            App.Logger.Info("Launch", $"Running {nameof(VerifyFilesPhase)}");
-                            await _AttemptPhase(verifyFilesPhaseState,
-                                () => verifyFilesPhase.RunAsync(toUpdate, patchCache, _LaunchCancellationTokenSource.Token));
+                            App.Logger.Info("Launch", "Fetching plugin info");
+                            var pluginInfo = await _AttemptPhase(pluginInfoState,
+                                () => PluginInfo.FetchAsync(_LaunchCancellationTokenSource.Token));
+
+                            _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                            App.Logger.Info("Launch", $"Running {nameof(PSO2hPhase)}");
+                            await _AttemptPhase(pso2hPhaseState,
+                                () => pso2hPhase.RunAsync(pluginInfo, _LaunchCancellationTokenSource.Token));
+
+                            _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                            App.Logger.Info("Launch", $"Running {nameof(TelepipeProxyPhase)}");
+                            await _AttemptPhase(telepipeProxyPhaseState,
+                                () => telepipeProxyPhase.RunAsync(pluginInfo, _LaunchCancellationTokenSource.Token));
+
+                            _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                            App.Logger.Info("Launch", $"Running {nameof(EnglishPatchPhase)}");
+                            await _AttemptPhase(englishPatchPhaseState,
+                                () => englishPatchPhase.RunAsync(patchCache, pluginInfo, _LaunchCancellationTokenSource.Token));
+
+                            _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                            if (largeAddressAwarePhaseState != null && largeAddressAwarePhase != null)
+                            {
+                                App.Logger.Info("Launch", $"Running {nameof(LargeAddressAwarePhase)}");
+                                await _AttemptPhase(largeAddressAwarePhaseState,
+                                    () => largeAddressAwarePhase.RunAsync(_LaunchCancellationTokenSource.Token));
+                            }
                         }
 
                         _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
-
-                        App.Logger.Info("Launch", "Fetching plugin info");
-                        var pluginInfo = await _AttemptPhase(pluginInfoState,
-                            () => PluginInfo.FetchAsync(_LaunchCancellationTokenSource.Token));
-
-                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
-
-                        App.Logger.Info("Launch", $"Running {nameof(PSO2hPhase)}");
-                        await _AttemptPhase(pso2hPhaseState,
-                            () => pso2hPhase.RunAsync(pluginInfo, _LaunchCancellationTokenSource.Token));
-
-                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
-
-                        App.Logger.Info("Launch", $"Running {nameof(TelepipeProxyPhase)}");
-                        await _AttemptPhase(telepipeProxyPhaseState,
-                            () => telepipeProxyPhase.RunAsync(pluginInfo, _LaunchCancellationTokenSource.Token));
-
-                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
-
-                        App.Logger.Info("Launch", $"Running {nameof(EnglishPatchPhase)}");
-                        await _AttemptPhase(englishPatchPhaseState,
-                            () => englishPatchPhase.RunAsync(patchCache, pluginInfo, _LaunchCancellationTokenSource.Token));
-
-                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
-
-                        if (largeAddressAwarePhaseState != null && largeAddressAwarePhase != null)
-                        {
-                            App.Logger.Info("Launch", $"Running {nameof(LargeAddressAwarePhase)}");
-                            await _AttemptPhase(largeAddressAwarePhaseState,
-                                () => largeAddressAwarePhase.RunAsync(_LaunchCancellationTokenSource.Token));
-                        }
-
-                        _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
-
                         if (!IsLaunchingPSO2)
                             break;
 

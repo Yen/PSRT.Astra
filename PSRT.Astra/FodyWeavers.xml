@@ -4,9 +4,11 @@
   <Costura>
     <Unmanaged32Assemblies>
       SQLite.Interop
+      discord_game_sdk
     </Unmanaged32Assemblies>
     <Unmanaged64Assemblies>
       SQLite.Interop
+      discord_game_sdk
     </Unmanaged64Assemblies>
   </Costura>
 </Weavers>

@@ -852,6 +852,38 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Revalidate PSO2 Installation Cache.
+        /// </summary>
+        internal static string OptionsWindow_DeletePatchCache {
+            get {
+                return ResourceManager.GetString("OptionsWindow_DeletePatchCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Patch cache deleted.
+        ///
+        ///This file will start its regeneration upon your next attempt to launch PSO2 via PSRT Astra..
+        /// </summary>
+        internal static string OptionsWindow_DeletePatchCacheComplete {
+            get {
+                return ResourceManager.GetString("OptionsWindow_DeletePatchCacheComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PSRT Astra uses a file caching algorithm to ensure your PSO2 installation is in a valid state each time you launch. This database is almost impossible to corrupt without manual tampering of the cache file.
+        ///If you believe this to be corrupted, this option will delete this file and cause it to be regenerated using your current PSO2 installation.
+        ///
+        ///Be warned that this can take a long time as it requires scanning and validating of your entire PSO2 installation, it is the same operation that would have occurre [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string OptionsWindow_DeletePatchCacheConfirm {
+            get {
+                return ResourceManager.GetString("OptionsWindow_DeletePatchCacheConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large Address Aware Patch.
         /// </summary>
         internal static string OptionsWindow_LargeAddressAware {

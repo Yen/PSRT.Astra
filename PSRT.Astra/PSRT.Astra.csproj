@@ -125,10 +125,17 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AquaHttpClient.cs" />
-    <Compile Include="Models\ArksLayer\ArksLayerDownloadConfiguration.cs" />
     <Compile Include="Models\ArksLayer\ArksLayerHttpClient.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.GameWatcher.cs" />
+    <Compile Include="Discord\ActivityManager.cs" />
+    <Compile Include="Discord\Constants.cs" />
+    <Compile Include="Discord\Core.cs" />
+    <Compile Include="Discord\ImageManager.cs" />
+    <Compile Include="Discord\LobbyManager.cs" />
+    <Compile Include="Discord\StorageManager.cs" />
+    <Compile Include="Discord\StoreManager.cs" />
+    <Compile Include="Models\DiscordManager.cs" />
     <Compile Include="Models\ArksLayer\ArksLayerInstallConfiguration.cs" />
     <Compile Include="Models\ArksLayer\Phases\EnglishPatchPhase.cs" />
     <Compile Include="Models\ArksLayer\TweakerBin.cs" />
@@ -267,6 +274,8 @@
   <ItemGroup>
     <EmbeddedResource Include="costura64\SQLite.Interop.dll" />
     <EmbeddedResource Include="costura32\SQLite.Interop.dll" />
+    <EmbeddedResource Include="costura32\discord_game_sdk.dll" />
+    <EmbeddedResource Include="costura64\discord_game_sdk.dll" />
     <Content Include="Resources\LargeAddressAware\EDITBIN.EXE" />
     <Content Include="Resources\LargeAddressAware\LINK.EXE" />
     <Content Include="Resources\LargeAddressAware\MSPDB60.DLL" />

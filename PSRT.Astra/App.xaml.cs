@@ -29,6 +29,8 @@ namespace PSRT.Astra
 
         public static Logger Logger = new Logger();
 
+        public static DiscordManager DiscordManager;
+
         public App()
         {
             // older version of .net (or perhaps just windows) use a different
@@ -49,6 +51,15 @@ namespace PSRT.Astra
             }
 
             DispatcherUnhandledException += _UnhandledException;
+
+            DiscordManager = new DiscordManager();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+
+            DiscordManager.Dispose();
         }
 
         private async void _Application_Startup(object sender, StartupEventArgs e)
