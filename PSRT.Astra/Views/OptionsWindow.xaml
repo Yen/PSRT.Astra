@@ -9,10 +9,11 @@
     x:Class="PSRT.Astra.Views.OptionsWindow"
     d:DataContext="{d:DesignInstance viewModels:OptionsWindowViewModel}"
     mc:Ignorable="d"
-    Height="240"
+    Height="320"
     Width="480"
-    MinHeight="240"
-    MinWidth="480">
+    MinHeight="320"
+    MinWidth="480"
+    ResizeMode="NoResize">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
             <astra:LocaleBinding Path="OptionsWindow_Title" />
