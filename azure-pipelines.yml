@@ -40,3 +40,4 @@ steps:
     GITHUB_API_KEY: $(GitHubApiKey)
     ASTRA_EXECUTABLE_PATH: '$(Build.SourcesDirectory)/PSRT.Astra/bin/Release/PSRT.Astra.exe'
     GITHUB_RELEASE_MESSAGE: '$(Build.SourceVersionMessage)'
+    GITHUB_COMMIT_ID: '$(Build.SourceVersion)'
