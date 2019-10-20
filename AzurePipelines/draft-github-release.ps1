@@ -22,7 +22,7 @@ try {
     Invoke-RestMethod `
         -Uri "https://api.github.com/repos/Yen/PSRT.Astra/releases/tags/$($gitTag)" `
         -Authentication OAuth `
-        -Token $secureToken ` | Out-Null
+        -Token $secureToken | Out-Null
     Write-Host "Existing release found with this tag, skipping release creation"
     exit
 } catch {
@@ -52,10 +52,10 @@ $createDraftResponse = Invoke-RestMethod `
     -Body ($createDraftForm | ConvertTo-Json)
 
 Write-Host "Uploading Astra executable asset to release $($createDraftResponse.id)"
-$uploadAssetResponse = Invoke-WebRequest `
+Invoke-WebRequest `
     -Uri "https://uploads.github.com/repos/Yen/PSRT.Astra/releases/$($createDraftResponse.id)/assets?name=PSRT.Astra.exe" `
     -Authentication OAuth `
     -Token $secureToken `
     -Method Post `
     -InFile $executablePath `
-    -ContentType "application/octet-stream"
+    -ContentType "application/octet-stream" | Out-Null
