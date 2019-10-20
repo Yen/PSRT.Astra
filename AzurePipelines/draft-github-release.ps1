@@ -39,7 +39,7 @@ try {
 $createDraftForm = @{ 
     "tag_name" = $gitTag
     "name" = "Version $($prettyVersionNumber)"
-    "body" = "Version $($prettyVersionNumber)" # TODO: place git commit and date and stuff in here
+    "body" = $env:GITHUB_RELEASE_MESSAGE
     "draft" = $true
 }
 
