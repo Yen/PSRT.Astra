@@ -28,3 +28,13 @@ steps:
   inputs:
     artifactName: 'PSRT.Astra'
     pathtoPublish: '$(Build.SourcesDirectory)/PSRT.Astra/bin/Release/PSRT.Astra.exe'
+
+- task: PowerShell@2
+  displayName: "Create GitHub release draft"
+  inputs:
+    targetType: filePath
+    filePath: 'AzurePipelines/draft-github-release.ps1'
+    pwsh: true
+  env:
+    GITHUB_API_KEY: $(GitHubApiKey)
+    ASTRA_EXECUTABLE_PATH: '$(Build.SourcesDirectory)/PSRT.Astra/bin/Release/PSRT.Astra.exe'
