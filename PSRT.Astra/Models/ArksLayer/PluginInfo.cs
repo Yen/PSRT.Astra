@@ -151,7 +151,7 @@ namespace PSRT.Astra.Models.ArksLayer
                         ProxyLoader = downloadJson["Proxy Loader"],
                         BlockTranslation = downloadJson["Translate Blocks"],
                         ItemTranslation = downloadJson["Translate Items"],
-                        TextTranslation = downloadJson["Translate Interface/Dialogue"],
+                        TextTranslation = downloadJson["Translate Text"],
                         TitleTranslation = downloadJson["Translate Titles"]
                     };
                 }
