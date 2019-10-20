@@ -40,6 +40,7 @@ $createDraftForm = @{
     "tag_name" = $gitTag
     "name" = "Version $($prettyVersionNumber)"
     "body" = $env:GITHUB_RELEASE_MESSAGE
+    "target_commitish" = $env:GITHUB_COMMIT_ID
     "draft" = $true
 }
 
