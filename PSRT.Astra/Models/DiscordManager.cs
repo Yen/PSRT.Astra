@@ -53,7 +53,7 @@ namespace PSRT.Astra.Models
         {
             _DisposedTokenSource.Token.ThrowIfCancellationRequested();
             discord.RunCallbacks();
-            Thread.Sleep(200);
+            Thread.Sleep(250);
         }
 
         private void _BackgroundLoop()
@@ -111,6 +111,8 @@ namespace PSRT.Astra.Models
                         }
                         LastStatusVisible = workingVisible;
                     }
+
+                    Thread.Sleep(250);
                 }
             }
             catch (OperationCanceledException)
