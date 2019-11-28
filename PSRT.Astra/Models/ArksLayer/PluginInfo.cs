@@ -66,15 +66,18 @@ namespace PSRT.Astra.Models.ArksLayer
                     {
                         response.EnsureSuccessStatusCode();
 
+                        App.Logger.Info(nameof(PluginInfo), $"Reading plugin data: \"{relativePath}\"");
                         using (var ns = await response.Content.ReadAsStreamAsync())
                         {
                             if (Path.GetExtension(new Uri(url).LocalPath).ToLowerInvariant() != ".rar")
                             {
+                                App.Logger.Info(nameof(PluginInfo), $"Writing file: \"{relativePath}\"");
                                 using (var fs = File.Create(path, 4096, FileOptions.Asynchronous))
                                     await ns.CopyToAsync(fs);
                                 return;
                             }
 
+                            App.Logger.Info(nameof(PluginInfo), $"Extracting archive file: \"{relativePath}\"");
                             // when the file is an archive we hash against the file named the same
                             using (var archive = RarArchive.Open(ns))
                             {
