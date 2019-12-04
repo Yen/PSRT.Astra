@@ -9,10 +9,10 @@ namespace PSRT.Astra
 {
     public static class ConcurrencyUtils
     {
-        public static Task RunOnDedicatedThreadAsync(Action action)
+        public static Task RunOnDedicatedThreadAsync(Action action, string threadName = null)
         {
             var source = new TaskCompletionSource<bool>();
-            new Thread(() =>
+            var thread = new Thread(() =>
             {
                 try
                 {
@@ -27,7 +27,10 @@ namespace PSRT.Astra
                 {
                     source.SetException(ex);
                 }
-            }).Start();
+            });
+            if (!string.IsNullOrWhiteSpace(threadName))
+                thread.Name = threadName;
+            thread.Start();
             return source.Task;
         }
     }

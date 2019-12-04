@@ -47,49 +47,41 @@ namespace PSRT.Astra.Models.Phases
                 UpdateBuckets = new ConcurrentQueue<List<PatchCacheEntry>>()
             };
 
-            var exceptions = new ConcurrentBag<Exception>();
-            var errorCancellationTokenSource = new CancellationTokenSource();
-            var processCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(errorCancellationTokenSource.Token, ct);
+            var processCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct);
 
             Progress.TotalCount = toUpdate.Length;
 
             App.Logger.Info(nameof(VerifyFilesPhase), "Starting processing threads");
             Progress.IsIndeterminate = false;
             // TODO: processor affinity?
-            var threads = Enumerable.Range(0, Environment.ProcessorCount).Select(i =>
-            {
-                var thread = new Thread(() =>
+            var threadTasks = Enumerable.Range(0, Environment.ProcessorCount)
+                .Select(i => ConcurrencyUtils.RunOnDedicatedThreadAsync(() =>
                 {
                     Interlocked.Increment(ref state.AtomicProcessCount);
                     try
                     {
                         App.Logger.Info(nameof(VerifyFilesPhase), $"Processing thread {i} started");
 
-                        _ProcessAsync(state, toUpdate, processCancellationTokenSource.Token).GetAwaiter().GetResult();
+                        _Process(state, toUpdate, processCancellationTokenSource.Token);
                     }
-                    catch (OperationCanceledException ex)
+                    catch (OperationCanceledException)
                     {
-                        App.Logger.Error(nameof(VerifyFilesPhase), $"Processing thread {i} canceled", ex);
+                        App.Logger.Error(nameof(VerifyFilesPhase), $"Processing thread {i} canceled");
+                        processCancellationTokenSource.Cancel();
+                        throw;
                     }
                     catch (Exception ex)
                     {
                         App.Logger.Error(nameof(VerifyFilesPhase), $"Exception in processing thread {i}", ex);
-                        exceptions.Add(ex);
-
-                        errorCancellationTokenSource.Cancel();
+                        processCancellationTokenSource.Cancel();
+                        throw;
                     }
                     finally
                     {
                         Interlocked.Decrement(ref state.AtomicProcessCount);
-
                         App.Logger.Info(nameof(VerifyFilesPhase), $"Processing thread {i} ended");
                     }
-                });
-                thread.Name = $"{nameof(VerifyFilesPhase)}({i})";
-                thread.Start();
-
-                return thread;
-            }).ToArray();
+                }, $"{nameof(VerifyFilesPhase)}({i})")).ToArray();
 
             await Task.Run(async () =>
             {
@@ -114,18 +106,18 @@ namespace PSRT.Astra.Models.Phases
             Progress.IsIndeterminate = true;
 
             App.Logger.Info(nameof(VerifyFilesPhase), "Joining processing threads");
-            foreach (var t in threads)
-                await Task.Factory.StartNew(() => t.Join(), TaskCreationOptions.LongRunning);
-
-            if (exceptions.Count > 0)
+            try
             {
-                var aggregate = new AggregateException("Error verifying files", exceptions);
-                App.Logger.Error(nameof(VerifyFilesPhase), "Error verifying files", aggregate);
-                throw aggregate;
+                await Task.WhenAll(threadTasks);
+            }
+            catch (Exception ex)
+            {
+                App.Logger.Error(nameof(VerifyFilesPhase), "Error verifying files", ex);
+                throw;
             }
         }
 
-        private async Task _ProcessAsync(ProcessState state, PatchInfo[] toUpdate, CancellationToken ct = default)
+        private void _Process(ProcessState state, PatchInfo[] toUpdate, CancellationToken ct = default)
         {
             using (var md5 = MD5.Create())
             using (var client = new AquaHttpClient())
@@ -135,7 +127,7 @@ namespace PSRT.Astra.Models.Phases
 
                 var entries = new List<PatchCacheEntry>();
 
-                async Task<bool> ProcessSingleFileAsync()
+                bool ProcessSingleFile()
                 {
                     ct.ThrowIfCancellationRequested();
 
@@ -192,14 +184,25 @@ namespace PSRT.Astra.Models.Phases
 
                     try
                     {
+                        // perhaps we should look for a synchronous version of the network requests, or we
+                        // should restructure this whole phase to be async only using thread pool work 
+                        // for the CPU intensive tasks
                         Directory.CreateDirectory(Path.GetDirectoryName(path));
-                        using (var responseStream = await client.GetStreamAsync(patch.DownloadPath))
-                        using (var fs = File.Create(path, 4096, FileOptions.Asynchronous))
-                            await responseStream.CopyToAsync(fs, 4096, ct);
+                        var task = Task.Run(async () =>
+                        {
+                            using (var response = await client.GetAsync(patch.DownloadPath, ct))
+                            {
+                                response.EnsureSuccessStatusCode();
+                                using (var responseStream = await response.Content.ReadAsStreamAsync())
+                                using (var fs = File.Create(path, 4096, FileOptions.Asynchronous))
+                                    await responseStream.CopyToAsync(fs, 4096, ct);
+                            }
+                        });
+                        task.GetAwaiter().GetResult();
                     }
                     catch (Exception ex)
                     {
-                        App.Logger.Error(nameof(VerifyFilesPhase), "Error downloading file", ex);
+                        App.Logger.Error(nameof(VerifyFilesPhase), $"Error downloading file: \"{patch.DownloadPath}\"", ex);
                         throw;
                     }
 
@@ -215,7 +218,7 @@ namespace PSRT.Astra.Models.Phases
 
                 while (true)
                 {
-                    if (await ProcessSingleFileAsync())
+                    if (ProcessSingleFile())
                         break;
                     Interlocked.Increment(ref state.AtomicCompletedCount);
                 }
