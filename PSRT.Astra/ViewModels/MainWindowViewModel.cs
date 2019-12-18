@@ -534,7 +534,8 @@ namespace PSRT.Astra.ViewModels
                         if (Properties.Settings.Default.CloseOnLaunchEnabled)
                             App.Current.Shutdown();
                     }
-                    catch (OperationCanceledException ex)
+                    // only properly cancel the launch if it was canceled by us
+                    catch (OperationCanceledException ex) when (_LaunchCancellationTokenSource.IsCancellationRequested)
                     {
                         App.Logger.Info("Launch", "Launch cancelled", ex);
                     }
