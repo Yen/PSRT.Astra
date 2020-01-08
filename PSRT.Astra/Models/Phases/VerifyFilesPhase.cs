@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -190,7 +191,7 @@ namespace PSRT.Astra.Models.Phases
                         Directory.CreateDirectory(Path.GetDirectoryName(path));
                         var task = Task.Run(async () =>
                         {
-                            using (var response = await client.GetAsync(patch.DownloadPath, ct))
+                            using (var response = await client.GetAsync(patch.DownloadPath, HttpCompletionOption.ResponseHeadersRead, ct))
                             {
                                 response.EnsureSuccessStatusCode();
                                 using (var responseStream = await response.Content.ReadAsStreamAsync())
