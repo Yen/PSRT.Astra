@@ -64,6 +64,7 @@ namespace PSRT.Astra.Models.ArksLayer
                     using (var client = new ArksLayerHttpClient())
                     using (var response = await client.GetAsync(url, ct))
                     {
+                        App.Logger.Info(nameof(PluginInfo), $"Download plugin file english data status code: {response.StatusCode}");
                         response.EnsureSuccessStatusCode();
 
                         App.Logger.Info(nameof(PluginInfo), $"Reading plugin data: \"{relativePath}\"");
