@@ -23,6 +23,7 @@ using PSRT.Astra.Models;
 using PSRT.Astra.Models.ArksLayer;
 using PSRT.Astra.Models.ArksLayer.Phases;
 using PSRT.Astra.Models.Phases;
+using PSRT.Astra.Properties;
 using PSRT.Astra.Views;
 using SharpCompress.Archives.Rar;
 
@@ -242,7 +243,8 @@ namespace PSRT.Astra.ViewModels
                     Properties.Settings.Default.Save();
                 });
 
-                while (true)
+                bool shouldRetry = true;
+                while (shouldRetry)
                 {
                     try
                     {
@@ -467,29 +469,58 @@ namespace PSRT.Astra.ViewModels
 
                             _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                            App.Logger.Info("Launch", "Fetching plugin info");
-                            var pluginInfo = await _AttemptPhase(pluginInfoState,
-                                () => PluginInfo.FetchAsync(_LaunchCancellationTokenSource.Token));
+                            try
+                            {
+                                App.Logger.Info("Launch", "Fetching plugin info");
+                                var pluginInfo = await _AttemptPhase(pluginInfoState,
+                                    () => PluginInfo.FetchAsync(_LaunchCancellationTokenSource.Token));
 
-                            _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+                                _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                            App.Logger.Info("Launch", $"Running {nameof(PSO2hPhase)}");
-                            await _AttemptPhase(pso2hPhaseState,
-                                () => pso2hPhase.RunAsync(pluginInfo, _LaunchCancellationTokenSource.Token));
+                                App.Logger.Info("Launch", $"Running {nameof(PSO2hPhase)}");
+                                await _AttemptPhase(pso2hPhaseState,
+                                    () => pso2hPhase.RunAsync(pluginInfo, _LaunchCancellationTokenSource.Token));
 
-                            _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+                                _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                            App.Logger.Info("Launch", $"Running {nameof(TelepipeProxyPhase)}");
-                            await _AttemptPhase(telepipeProxyPhaseState,
-                                () => telepipeProxyPhase.RunAsync(pluginInfo, _LaunchCancellationTokenSource.Token));
+                                App.Logger.Info("Launch", $"Running {nameof(TelepipeProxyPhase)}");
+                                await _AttemptPhase(telepipeProxyPhaseState,
+                                    () => telepipeProxyPhase.RunAsync(pluginInfo, _LaunchCancellationTokenSource.Token));
 
-                            _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+                                _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                            App.Logger.Info("Launch", $"Running {nameof(EnglishPatchPhase)}");
-                            await _AttemptPhase(englishPatchPhaseState,
-                                () => englishPatchPhase.RunAsync(patchCache, pluginInfo, _LaunchCancellationTokenSource.Token));
+                                App.Logger.Info("Launch", $"Running {nameof(EnglishPatchPhase)}");
+                                await _AttemptPhase(englishPatchPhaseState,
+                                    () => englishPatchPhase.RunAsync(patchCache, pluginInfo, _LaunchCancellationTokenSource.Token));
 
-                            _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+                                _LaunchCancellationTokenSource.Token.ThrowIfCancellationRequested();
+                            }
+                            catch (OperationCanceledException)
+                            {
+                                throw;
+                            }
+                            catch (Exception ex)
+                            {
+                                App.Logger.Error("Launch", "Error in Arks-Layer tasks", ex);
+
+                                // only bother the user about this stuff if anything related to arks-layer is currently enabled
+                                // (currently this wont attempt to clean up anything arks-layer related so if someone was to decide
+                                // they no longer want to use the one of the plugins here, the disabling of them would not work)
+                                if (ArksLayerEnglishPatchEnabled || ArksLayerTelepipeProxyEnabled)
+                                {
+                                    var skipArksLayerResult = MessageBox.Show(
+                                        LocaleManager.Instance["MainWindow_ArksLayerErrorMessage"],
+                                        LocaleManager.Instance["PSRTAstra"],
+                                        MessageBoxButton.YesNo,
+                                        MessageBoxImage.Exclamation);
+
+                                    if (skipArksLayerResult == MessageBoxResult.No)
+                                    {
+                                        shouldRetry = false;
+                                        throw;
+                                    }
+                                }
+                            }
 
                             if (largeAddressAwarePhaseState != null && largeAddressAwarePhase != null)
                             {
@@ -544,13 +575,16 @@ namespace PSRT.Astra.ViewModels
                         App.Logger.Error("Launch", "Error during launch phases", ex);
                         UploadErrorButtonVisible = true;
 
-                        try
+                        if (shouldRetry)
                         {
-                            await Task.Delay(TimeSpan.FromSeconds(10), _LaunchCancellationTokenSource.Token);
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            App.Logger.Info("Launch", "Launch was canceled during the auto-restart period");
+                            try
+                            {
+                                await Task.Delay(TimeSpan.FromSeconds(10), _LaunchCancellationTokenSource.Token);
+                            }
+                            catch (OperationCanceledException)
+                            {
+                                App.Logger.Info("Launch", "Launch was canceled during the auto-restart period");
+                            }
                         }
 
                         continue;

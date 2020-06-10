@@ -383,6 +383,19 @@ namespace PSRT.Astra.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while verifying the Arks-Layer tools. The game should still launch, but translations and proxy functionality may not be updated, and may not work if they&apos;re out of date.
+        ///
+        ///Launch the game without verifying Arks-Layer tools?
+        ///
+        ///(If this issue happens consistently, please select &quot;No&quot; and file a report with the PSRT.Astra developers!).
+        /// </summary>
+        internal static string MainWindow_ArksLayerErrorMessage {
+            get {
+                return ResourceManager.GetString("MainWindow_ArksLayerErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Astra Options.
         /// </summary>
         internal static string MainWindow_AstraOptions {

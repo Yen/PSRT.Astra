@@ -549,4 +549,11 @@ This operation, like everything in PSRT Astra, is pausable at any point, and wil
 
 Are you sure you would like to delete the existing patch cache file?</value>
   </data>
+  <data name="MainWindow_ArksLayerErrorMessage" xml:space="preserve">
+    <value>An error occurred while verifying the Arks-Layer tools. The game should still launch, but translations and proxy functionality may not be updated, and may not work if they're out of date.
+
+Launch the game without verifying Arks-Layer tools?
+
+(If this issue happens consistently, please select "No" and file a report with the PSRT.Astra developers!)</value>
+  </data>
 </root>
