@@ -1,3 +1,5 @@
+### PSRT.Astra only works for the Japanese release of PSO2!
+
 ### [**Download Latest Release**](https://github.com/Yen/PSRT.Astra/releases/latest) / [**最新バージョンのダウンロード**](https://github.com/Yen/PSRT.Astra/releases/latest)
 
 # PSRT.Astra - a lean, lightweight PSO2 launcher
