@@ -286,7 +286,7 @@ namespace PSRT.Astra
                     client.DefaultRequestHeaders.Add("X-Auth-Token", "ahDhbbK8esumH1uZgcvIwFjk2yMC4DhKZykRHoYDW");
                     var json = JsonConvert.SerializeObject(new
                     {
-                        description = $"PSRT.Astra {Assembly.GetExecutingAssembly().GetName().Version} | {DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ")}",
+                        description = $"PSRT.Astra {Assembly.GetExecutingAssembly().GetName().Version} | {DateTime.UtcNow:yyyy-MM-ddTHH:mm:ssZ}",
                         expiration = "never",
                         sections
                     });
