@@ -1,8 +1,14 @@
+# Project no longer maintained
+
+With the release of PSO2 on NA and changes/improvements to other tools, the justification for maintaining is no longer enough to keep support for this project alive.
+
+If anyone wishes to maintain the project under this original repo instead of forking and subsequently use the update methods in the existing astra clients out there, please contact me through any of the means on my GitHub profile.
+
+# PSRT.Astra - a lean, lightweight PSO2 launcher
+
 ### PSRT.Astra only works for the Japanese release of PSO2!
 
 ### [**Download Latest Release**](https://github.com/Yen/PSRT.Astra/releases/latest) / [**最新バージョンのダウンロード**](https://github.com/Yen/PSRT.Astra/releases/latest)
-
-# PSRT.Astra - a lean, lightweight PSO2 launcher
 
 [![Build Status](https://dev.azure.com/PSRT/PSRT.Astra/_apis/build/status/Yen.PSRT.Astra)](https://dev.azure.com/PSRT/PSRT.Astra/_build/latest?definitionId=1)
 [![Download Now](https://img.shields.io/github/downloads/Yen/PSRT.Astra/total.svg?style=popout)](https://github.com/Yen/PSRT.Astra/releases/latest)
